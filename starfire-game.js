@@ -100,14 +100,24 @@ const TRACKS={
       if(s===0)[293.66,369.99,440].forEach(f=>n(f,t,sd*2,0.04,'sawtooth'));
       if(s===16)[261.63,329.63,392].forEach(f=>n(f,t,sd*2,0.04,'sawtooth'));
     }},
-  // PISTE 2 — MAP 0 : vide sidéral, 45 BPM, sine pur, zéro percussion
-  map0:{stepDur:60/45/4, steps:16,
+  // PISTE 2 — MAP 0 : espace profond, 70 BPM, triangle+sine, ambiant rythmé
+  map0:{stepDur:60/70/4, steps:32,
     tick(s,t){const sd=this.stepDur;
-      if(s===0){ n(55,t,sd*16,0.06,'sine'); n(27.5,t,sd*16,0.03,'sine'); }
-      if(s===4) n(82.41,t,sd*4,0.04,'sine');
-      if(s===8) n(110,t,sd*3,0.03,'sine');
-      const mel=[null,null,null,null,null,null,220,null,null,null,null,null,null,261.63,null,null];
-      if(mel[s]) n(mel[s],t,sd*2,0.025,'sine');
+      // Kick discret sur les temps forts
+      if(s===0||s===16) kk(t);
+      if(s===8||s===24) hh(t,0.18,0.025);
+      if(s%4===2) hh(t,0.10,0.012);
+      // Basse grave audible en triangle
+      const bass=[55,null,null,null,55,null,65.41,null,55,null,null,null,49,null,null,null,
+                  55,null,null,null,55,null,73.42,null,65.41,null,null,null,55,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*3,0.22,'triangle');
+      // Mélodie spatiale en sine
+      const mel=[null,null,null,null,220,null,null,null,null,null,246.94,null,null,null,null,null,
+                 null,null,null,null,261.63,null,null,null,null,null,220,null,null,null,null,null];
+      if(mel[s]) n(mel[s],t,sd*2.5,0.09,'sine');
+      // Nappe de fond
+      if(s===0)[110,138.59,164.81].forEach(f=>n(f,t,sd*8,0.06,'sine'));
+      if(s===16)[98,123.47,146.83].forEach(f=>n(f,t,sd*8,0.06,'sine'));
     }},
   // PISTE 3 — MAP 1 : désert exotique, 105 BPM, square, Sol mineur groove
   map1:{stepDur:60/105/4, steps:32,
@@ -1959,7 +1969,7 @@ function update(){
   updBg();
 
   const _df=getDiff();const maxE=_df.maxE[currentWorld]??_df.maxE[_df.maxE.length-1];const sr=_df.spawnRate[currentWorld]??_df.spawnRate[_df.spawnRate.length-1];
-  isBW=(currentWorld>0&&wave>0&&wave%10===0)||(currentWorld===0&&wave===50);
+  isBW=wave>0&&wave%10===0;
   if(!boss||bDefeated){
     if(enemies.length<maxE&&eTimer++>=sr){spawnEnemy();eTimer=0;}
     // Squad : formation de 3 vaisseaux foncant tout droit
