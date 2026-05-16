@@ -1,11 +1,145 @@
-<!DOCTYPE html>
+Voilà le code complet à coller :
+html<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=Starfire.html">
-<title>STARFIRE — Flozer Games</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jeux Flozer — Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0d0d0d;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px 40px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #a78bfa;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      margin-top: 12px;
+      color: #888;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #a78bfa;
+      margin: 40px 0 20px;
+      letter-spacing: 1px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #a78bfa;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      color: #e2e2e2;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #888;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .card a {
+      display: inline-block;
+      background: #a78bfa;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .card a:hover { background: #7c3aed; }
+
+    .tag {
+      display: inline-block;
+      background: #2a2a2a;
+      color: #a78bfa;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #444;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
-<script>window.location.replace('Starfire.html');</script>
+
+  <header>
+    <h1>jeux Flozer</h1>
+    <p>Mes jeux & projets — fait avec passion 🎮</p>
+  </header>
+
+  <h2 class="section-title">🎮 Jeux</h2>
+  <div class="grid" id="jeux">
+
+    <div class="card">
+      <span class="tag">Jeu</span>
+      <h3>Starfire — Saga Stellaire</h3>
+      <p>Shoot'em up spatial. Choisis ton vaisseau, explore 5 mondes et survie aux vagues ennemies.</p>
+      <a href="Starfire.html">Jouer ▶</a>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">🛠 Projets</h2>
+  <div class="grid" id="projets">
+
+    <div class="card">
+      <span class="tag">Projet</span>
+      <h3>Mon premier projet</h3>
+      <p>Description courte du projet. Ce que ça fait, comment ça marche.</p>
+      <a href="#">Voir le projet →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    Fait par jeux Flozer · <a href="https://github.com/flozer-games" style="color:#a78bfa">GitHub</a>
+  </footer>
+
 </body>
 </html>
