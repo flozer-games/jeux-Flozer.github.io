@@ -392,13 +392,19 @@ async function saveScore(s,w,sh,mp,ps,wd){
     await Store.set('starfire:scores',JSON.stringify(arr.slice(0,10)));}catch(e){}
   }
 }
-async function loadScores(){
+async function loadScores(mapName){
   if(sb){
-    try{const{data,error}=await sb.from('scores').select('*').order('score',{ascending:false}).limit(10);
-    if(!error&&data)return data;}catch(e){console.warn('Supabase select failed',e);}
+    try{
+      let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(10);
+      if(mapName)q=q.eq('map',mapName);
+      const{data,error}=await q;
+      if(!error&&data)return data;
+    }catch(e){console.warn('Supabase select failed',e);}
   }
   // fallback local
-  try{const r=await Store.get('starfire:scores');return r?JSON.parse(r.value):[];}catch(e){return[];}
+  try{const r=await Store.get('starfire:scores');if(r){let arr=JSON.parse(r.value);if(mapName)arr=arr.filter(s=>s.map===mapName);return arr.slice(0,10);}
+  }catch(e){}
+  return[];
 }
 async function loadTopScore(){
   if(sb){
@@ -712,48 +718,77 @@ function showMPVictory(){
   document.getElementById('bmpMn').onclick=()=>{mpMode=false;if(mpPeer)try{mpPeer.destroy();}catch(e){}mpPeer=null;mpConn=null;showMenu();};
 }
 
-async function showScores(){
-  // Affiche d'abord un état de chargement
-  OVel.innerHTML=`
-    <div class="pick-title">⟡ MEILLEURS SCORES ⟡</div>
-    <div class="pick-sub" id="sc-sub">${sb?'🌐 TOP 10 MONDIAL — chargement…':'💾 Scores locaux'}</div>
-    <div style="color:#9944cc;font-family:'Courier New',monospace;font-size:13px;letter-spacing:4px;margin:30px 0;">⟳ CHARGEMENT…</div>
-    <button class="sb back" id="bbk">← RETOUR</button>`;
+async function showScores(mapIdx){
+  if(mapIdx===undefined)mapIdx=0;
+  const curMap=MAPS[mapIdx];
+
+  // Affiche skeleton + onglets immédiatement
+  const renderShell=(loadingMsg)=>{
+    const tabs=MAPS.map((m,i)=>{
+      const active=i===mapIdx;
+      return `<button onclick="showScores(${i})" style="
+        font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:2px;
+        padding:7px 14px;border-radius:3px 3px 0 0;cursor:pointer;white-space:nowrap;
+        border:1px solid ${active?'#ff00cc':'#440055'};border-bottom:${active?'1px solid #0a001a':'1px solid #440055'};
+        background:${active?'rgba(40,0,55,.95)':'rgba(15,0,22,.7)'};
+        color:${active?'#ffd87a':'#9944cc'};
+        ${active?'text-shadow:0 0 8px rgba(255,216,122,.5);margin-bottom:-1px;position:relative;z-index:2;':''}
+        transition:all .12s;">
+        ${m.name}
+      </button>`;
+    }).join('');
+    return `
+      <div class="pick-title" style="font-size:15px;margin-bottom:6px;">⟡ MEILLEURS SCORES ⟡</div>
+      <div style="font-family:'VT323',monospace;font-size:13px;letter-spacing:3px;color:${sb?'#00e5ff':'#9944cc'};margin-bottom:10px;">
+        ${sb?'🌐 TOP 10 MONDIAL':'💾 SCORES LOCAUX'}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;width:620px;padding-bottom:0;border-bottom:1px solid #440055;margin-bottom:0;">
+        ${tabs}
+      </div>
+      <div style="width:620px;background:rgba(8,0,18,.92);border:1px solid #440055;border-top:none;border-radius:0 0 4px 4px;min-height:280px;display:flex;flex-direction:column;">
+        <div style="padding:6px 10px;background:rgba(30,0,45,.7);border-bottom:1px solid #330044;display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'VT323',monospace;font-size:16px;color:#ffd87a;letter-spacing:3px;">${curMap.name}</span>
+          <span style="font-family:'VT323',monospace;font-size:13px;color:#660088;letter-spacing:2px;">— ${curMap.tag}</span>
+        </div>
+        <div id="sc-body" style="padding:8px;flex:1;">${loadingMsg}</div>
+      </div>
+      <button class="sb back" id="bbk" style="margin-top:12px;">← RETOUR</button>`;
+  };
+
+  OVel.innerHTML=renderShell(`<div style="color:#9944cc;font-family:'Courier New',monospace;font-size:12px;letter-spacing:4px;padding:40px;text-align:center;">⟳ CHARGEMENT…</div>`);
   OVel.style.display='flex';
   document.getElementById('bbk').onclick=()=>showMenu();
 
-  const sc=await loadScores();
+  const sc=await loadScores(curMap.name);
   const medal=['🥇','🥈','🥉'];
   const rows=sc.length===0
-    ?`<tr><td colspan="5" style="color:#555;padding:20px;text-align:center;letter-spacing:2px;font-size:13px;">— Aucune entrée dans les annales —</td></tr>`
+    ?`<tr><td colspan="5" style="color:#444;padding:28px;text-align:center;letter-spacing:2px;font-size:12px;font-family:'Courier New',monospace;">— Aucune entrée sur cette map —</td></tr>`
     :sc.map((s,i)=>{
-      const rank=medal[i]||(String(i+1).padStart(2,'0'));
-      const rowCol=i===0?'rgba(255,216,80,.07)':i===1?'rgba(200,200,200,.04)':i===2?'rgba(205,127,50,.05)':'';
-      return `<tr style="border-bottom:1px solid rgba(80,40,120,.3);background:${rowCol};">
-        <td style="color:#ffd87a;text-align:center;padding:7px 4px;font-size:15px;">${rank}</td>
-        <td style="color:#ffe8a0;padding:7px 6px;font-family:'VT323',monospace;font-size:17px;letter-spacing:2px;">${(s.pseudo||'—').toUpperCase().slice(0,10)}</td>
-        <td style="color:#00e5ff;text-align:right;padding:7px 6px;font-family:'Courier New',monospace;font-size:12px;font-weight:bold;">${s.score.toLocaleString()}</td>
-        <td style="color:#cc88ff;text-align:center;padding:7px 4px;font-size:11px;">S${s.world||1}·V${s.wave}</td>
-        <td style="color:#556688;text-align:center;font-size:10px;padding:7px 4px;">${s.date||''}</td>
+      const rank=medal[i]||`<span style="color:#9944cc;">${String(i+1).padStart(2,'0')}</span>`;
+      const bg=i===0?'rgba(255,200,50,.06)':i===1?'rgba(180,180,180,.04)':i===2?'rgba(180,100,30,.05)':'';
+      return `<tr style="border-bottom:1px solid rgba(80,0,120,.25);background:${bg};">
+        <td style="text-align:center;padding:6px 4px;font-size:14px;width:36px;">${rank}</td>
+        <td style="color:#ffe8a0;padding:6px 8px;font-family:'VT323',monospace;font-size:18px;letter-spacing:2px;">${(s.pseudo||'—').toUpperCase().slice(0,10)}</td>
+        <td style="color:#00e5ff;text-align:right;padding:6px 8px;font-family:'Courier New',monospace;font-size:12px;font-weight:bold;">${Number(s.score).toLocaleString()}</td>
+        <td style="color:#cc88ff;text-align:center;padding:6px 4px;font-size:11px;white-space:nowrap;">V${s.wave}</td>
+        <td style="color:#445566;text-align:center;font-size:10px;padding:6px 4px;white-space:nowrap;">${s.date||''}</td>
       </tr>`;
     }).join('');
 
-  OVel.innerHTML=`
-    <div class="pick-title" style="font-size:16px;">⟡ MEILLEURS SCORES ⟡</div>
-    <div class="pick-sub">${sb?'🌐 TOP 10 MONDIAL':'💾 Scores locaux'}</div>
-    <div style="margin:10px 0 4px;width:560px;overflow-x:auto;">
-      <table style="border-collapse:collapse;width:100%;min-width:400px;font-family:'Courier New',monospace;font-size:12px;background:rgba(8,0,18,.85);border:1px solid #440066;border-radius:4px;overflow:hidden;">
-        <thead><tr style="border-bottom:1px solid #550088;background:rgba(40,0,60,.9);">
-          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">#</th>
-          <th style="color:#ff00cc;text-align:left;padding:8px 6px;font-size:10px;letter-spacing:2px;">PILOTE</th>
-          <th style="color:#ff00cc;text-align:right;padding:8px 6px;font-size:10px;letter-spacing:2px;">SCORE</th>
-          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">VAGUE</th>
-          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">DATE</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-    <button class="sb back" id="bbk" style="margin-top:10px;">← RETOUR</button>`;
+  const table=`
+    <table style="border-collapse:collapse;width:100%;font-family:'Courier New',monospace;font-size:12px;">
+      <thead><tr style="border-bottom:1px solid #330044;">
+        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;width:36px;">#</th>
+        <th style="color:#550077;text-align:left;padding:5px 8px;font-size:9px;letter-spacing:2px;">PILOTE</th>
+        <th style="color:#550077;text-align:right;padding:5px 8px;font-size:9px;letter-spacing:2px;">SCORE</th>
+        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;">VAGUE</th>
+        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;">DATE</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+
+  // Injecte seulement le corps du tableau (les onglets sont déjà là)
+  OVel.innerHTML=renderShell(table);
   document.getElementById('bbk').onclick=()=>showMenu();
 }
 
