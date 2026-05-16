@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><title>STARFIRE — Saga Stellaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{overflow:hidden;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;}
+body{background:#000;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'VT323','Courier New',monospace;}
+#wrap{position:relative;width:760px;height:880px;overflow:hidden !important;isolation:isolate;clip-path:inset(0);transform-origin:top center;}
+canvas{display:block;}
+
+/* ── MENU CHROME — NEON ARCADE ───────────────────────────────────── */
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;z-index:10;
+  background:radial-gradient(ellipse at 50% 30%,rgba(60,0,80,.65) 0%,rgba(0,0,14,.96) 55%,rgba(0,0,8,1) 100%);
+}
+#ov::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(circle at 15% 20%,rgba(220,0,255,.07) 0%,transparent 30%),
+  radial-gradient(circle at 85% 80%,rgba(0,220,255,.06) 0%,transparent 30%);
+  pointer-events:none;}
+
+/* Titre */
+.title{font-family:'Press Start 2P','Courier New',monospace;font-size:42px;letter-spacing:6px;color:#ffd87a;
+  text-shadow:0 0 12px rgba(255,200,80,.9),0 0 30px rgba(255,0,200,.45),0 0 60px rgba(200,0,255,.2),0 3px 0 #3a1d00;
+  position:relative;line-height:1.3;animation:titleGlow 3.2s ease-in-out infinite;}
+.title::after{content:'';position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);width:280px;height:2px;
+  background:linear-gradient(90deg,transparent,#ff00cc,#ffd87a,#ff00cc,transparent);animation:lineSweep 3.2s ease-in-out infinite;}
+@keyframes titleGlow{
+  0%,100%{text-shadow:0 0 12px rgba(255,200,80,.9),0 0 30px rgba(255,0,200,.45),0 0 60px rgba(200,0,255,.2),0 3px 0 #3a1d00;}
+  50%{text-shadow:0 0 22px rgba(255,220,120,1),0 0 50px rgba(255,0,220,.7),0 0 90px rgba(200,0,255,.4),0 3px 0 #3a1d00;}}
+@keyframes lineSweep{0%,100%{width:240px;opacity:.7;}50%{width:360px;opacity:1;}}
+
+.menu-shell{position:relative;display:flex;flex-direction:column;align-items:center;gap:16px;padding:0 30px;}
+.menu-side{position:absolute;top:50%;width:90px;height:1px;background:linear-gradient(90deg,transparent,#ff00cc,transparent);}
+.menu-side.l{left:-110px;}.menu-side.r{right:-110px;transform:scaleX(-1);}
+
+/* Tag strip */
+.tag-strip{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:3px;color:#cc00ff;margin-top:4px;max-width:520px;}
+.tag-strip span{display:flex;align-items:center;gap:6px;}
+.tag-strip i{display:inline-block;width:6px;height:6px;background:#00ff88;border-radius:50%;animation:blink 1.4s steps(2) infinite;box-shadow:0 0 8px #00ff88;}
+.tag-strip span:nth-child(2) i{animation-delay:.45s;background:#00e5ff;box-shadow:0 0 8px #00e5ff;}
+.tag-strip span:nth-child(3) i{animation-delay:.9s;background:#ff00cc;box-shadow:0 0 8px #ff00cc;}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:.2;}}
+
+/* Vaisseau hero */
+.hero-ship{position:relative;width:140px;height:88px;margin:4px 0 2px;}
+.hero-ship svg{width:100%;height:100%;animation:hover 3.4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(255,0,200,.55));}
+@keyframes hover{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-6px) rotate(1deg);}}
+.hero-ring{position:absolute;inset:-12px;border:1px dashed rgba(255,0,200,.3);border-radius:50%;animation:spin 18s linear infinite;}
+.hero-ring.r2{inset:-22px;border-color:rgba(0,220,255,.22);animation-duration:26s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hero-orbit{position:absolute;inset:-12px;animation:spin 9s linear infinite;}
+.hero-orbit i{position:absolute;width:4px;height:4px;border-radius:50%;background:#ff00cc;box-shadow:0 0 8px #ff00cc;top:50%;left:-2px;}
+.hero-orbit.b{animation-duration:14s;animation-direction:reverse;inset:-22px;}
+.hero-orbit.b i{background:#00e5ff;box-shadow:0 0 8px #00e5ff;left:auto;right:-2px;}
+
+/* Scan line : magenta */
+.scan{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,0,200,.8),transparent);animation:scan 5s linear infinite;pointer-events:none;}
+@keyframes scan{0%{transform:translateY(-2px);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(880px);opacity:0;}}
+
+.btn-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:4px;}
+
+/* Brackets */
+.brackets{display:flex;align-items:center;gap:14px;font-family:'VT323','Courier New',monospace;font-size:15px;letter-spacing:4px;color:#cc00ff;}
+.brackets::before,.brackets::after{content:'';width:60px;height:1px;background:linear-gradient(90deg,transparent,#ff00cc);}
+.brackets::after{background:linear-gradient(90deg,#ff00cc,transparent);}
+
+.peek{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:3px;color:#cc00ff;margin-top:10px;min-height:28px;}
+.peek b{color:#ffd87a;font-size:16px;letter-spacing:4px;}
+.peek small{color:#9944cc;font-size:12px;letter-spacing:2px;}
+
+.subtitle{font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:7px;color:#00e5ff;margin-top:-2px;}
+.qt{font-family:'Georgia',serif;font-style:italic;font-size:14px;color:#cfdfff;text-align:center;line-height:1.7;max-width:380px;padding:0 24px;}
+.qt::before,.qt::after{content:'"';color:#ff00cc;opacity:.7;}
+.au{font-family:'VT323','Courier New',monospace;font-size:13px;color:#9944cc;letter-spacing:4px;margin-top:-6px;text-transform:uppercase;}
+
+/* Boutons — néon magenta / cyan */
+.sb{font-family:'VT323','Courier New',monospace;padding:12px 36px;font-size:20px;letter-spacing:5px;
+  background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));color:#ffd87a;
+  border:2px solid #ff00cc;border-radius:3px;cursor:pointer;text-transform:uppercase;
+  box-shadow:0 0 12px rgba(255,0,200,.25) inset,0 0 18px rgba(255,0,200,.15);
+  transition:all .18s ease;position:relative;}
+.sb:hover{background:linear-gradient(180deg,rgba(80,0,90,.95),rgba(30,0,40,.98));color:#fffad0;
+  border-color:#ffd87a;box-shadow:0 0 20px rgba(255,200,0,.4) inset,0 0 28px rgba(255,200,0,.3);transform:translateY(-2px);}
+.sb.alt{font-size:17px;padding:9px 24px;letter-spacing:3px;color:#00e5ff;border-color:#0099cc;
+  box-shadow:0 0 10px rgba(0,200,255,.2) inset,0 0 14px rgba(0,180,255,.1);}
+.sb.alt:hover{color:#ffffff;border-color:#00e5ff;box-shadow:0 0 18px rgba(0,220,255,.4) inset,0 0 22px rgba(0,200,255,.3);}
+.sb.back{background:transparent;border-color:#660088;color:#9944cc;}
+.sb.back:hover{border-color:#cc00ff;color:#dd44ff;}
+
+/* Sélection grille */
+.pick-title{font-family:'Press Start 2P','Courier New',monospace;font-size:18px;letter-spacing:4px;color:#ffd87a;text-align:center;
+  text-shadow:0 0 12px rgba(255,200,80,.6),0 0 24px rgba(255,0,200,.3);}
+.pick-sub{font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:4px;color:#cc00ff;margin-top:5px;text-transform:uppercase;}
+.grid{display:grid;gap:10px;width:420px;}
+.grid.g2{grid-template-columns:1fr 1fr;}
+.grid.g5{grid-template-columns:1fr 1fr;}
+.card{background:linear-gradient(180deg,rgba(25,0,35,.88),rgba(8,0,15,.94));border:1px solid #550077;border-radius:3px;
+  padding:11px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.card:hover{border-color:#ff00cc;transform:translateY(-2px);box-shadow:0 0 18px rgba(255,0,200,.3);}
+.card.sel{border-color:#ffd87a;background:linear-gradient(180deg,rgba(45,20,5,.9),rgba(20,8,0,.95));box-shadow:0 0 22px rgba(255,200,80,.35) inset,0 0 14px rgba(255,200,80,.4);}
+.card-name{font-family:'VT323','Courier New',monospace;font-size:17px;letter-spacing:3px;color:#ffd87a;margin-top:7px;}
+.card-desc{font-family:'VT323','Courier New',monospace;font-size:13px;color:#cc88ff;letter-spacing:1px;margin-top:6px;line-height:1.5;}
+.card-stats{display:flex;gap:4px;margin-top:7px;font-size:12px;color:#9944cc;letter-spacing:1px;flex-wrap:wrap;}
+.stat{background:rgba(255,0,200,.08);padding:1px 5px;border-radius:2px;border:1px solid rgba(255,0,200,.22);}
+.stat b{color:#ffd87a;font-weight:700;}
+.thumb{width:100%;height:66px;border-radius:2px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+
+#wrap canvas#c{position:absolute;top:0;left:0;z-index:0;}
+#wrap canvas#cm{position:absolute;inset:0;z-index:1;pointer-events:none;}
+
+/* ── HUD / IN-GAME ───────────────────────────────────────────────── */
+#bbar{position:absolute;left:50%;transform:translateX(-50%);bottom:36px;width:340px;display:none;flex-direction:column;align-items:center;gap:3px;z-index:5;}
+#bbar span{font-family:'Courier New',monospace;font-size:12px;color:#ff8888;letter-spacing:3px;}
+#bbo{width:100%;height:12px;background:#1a0010;border:1px solid #a33;border-radius:6px;overflow:hidden;}
+#bbi{height:100%;width:100%;background:#f44;}
+#blog{position:absolute;right:6px;top:52px;display:flex;flex-direction:column;gap:4px;pointer-events:none;z-index:5;}
+.bl{font-family:'Courier New',monospace;font-size:12px;padding:2px 8px;border-radius:4px;background:rgba(0,0,0,.7);animation:fo 2.3s forwards;letter-spacing:0px;}
+@keyframes fo{0%{opacity:1;transform:translateY(0)}80%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+
+#rov{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,0,14,.96);color:#fff;z-index:20;}
+.reels{display:flex;gap:12px;padding:10px 14px;background:#050515;border:2px solid #fa0;border-radius:12px;}
+.reel-wrap{width:84px;height:210px;overflow:hidden;position:relative;border-radius:6px;border:1px solid #333;}
+.reel-hl{position:absolute;top:70px;left:0;right:0;height:70px;border-top:2px solid rgba(255,180,0,.8);border-bottom:2px solid rgba(255,180,0,.8);background:rgba(255,160,0,.06);pointer-events:none;z-index:2;}
+.reel-strip{position:absolute;top:0;width:100%;}
+.reel-item{height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.reel-item span{font-size:9px;letter-spacing:1px;}
+#rres{font-size:13px;color:#aaa;height:22px;text-align:center;font-family:'Courier New',monospace;letter-spacing:2px;}
+/* Masque la scrollbar sur la grille des maps sans bloquer le scroll */
+#map-grid{scrollbar-width:none;-ms-overflow-style:none;}
+#map-grid::-webkit-scrollbar{display:none;}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="760" height="880"></canvas>
+  <canvas id="cm" width="760" height="880"></canvas>
+  <div id="bbar"><span id="bname">⚠ BOSS</span><div id="bbo"><div id="bbi"></div></div></div>
+  <div id="blog"></div>
+  <div id="ov"></div>
+  <div id="rov">
+    <div style="font-family:'Courier New',monospace;font-size:18px;color:#fa0;letter-spacing:5px;">⚡ ARME SPÉCIALE</div>
+    <div id="rwave" style="font-size:11px;color:#888;letter-spacing:2px;"></div>
+    <div class="reels" id="reels-el"></div>
+    <div id="rres">— SPIN EN COURS —</div>
+    <button class="sb" id="btn-roul" style="display:none;">LANCER LA VAGUE</button>
+  </div>
+</div>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script src="starfire-config.js"></script>
+<script src="starfire-game.js"></script>
+<script>
+function scaleGame(){
+  const wrap=document.getElementById('wrap');
+  const scaleX=window.innerWidth/760;
+  const scaleY=window.innerHeight/880;
+  const scale=Math.min(scaleX,scaleY);
+  wrap.style.transform=`scale(${scale})`;
+  const marginTop=Math.max(0,(window.innerHeight-880*scale)/2);
+  wrap.style.marginTop=marginTop+'px';
+}
+window.addEventListener('resize',scaleGame);
+window.addEventListener('orientationchange',scaleGame);
+scaleGame();
+</script>
+</body>
+</html>
