@@ -452,9 +452,14 @@ async function showMenu(){
   startMenuBg();
   const pb=document.getElementById('pbtn');if(pb)pb.style.display='none';
   curQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
-  // top score peek
-  let topRow='';try{const top=await loadTopScore();if(top)topRow=`<b>★ ${top.pseudo||'PILOTE'} — ${top.score.toLocaleString()}</b>`;}catch(e){}
-  if(!topRow)topRow=`<small style="opacity:.5;">&nbsp;</small>`;
+  // top score : placeholder immédiat, chargé en arrière-plan
+  const topRow=`<small style="opacity:.4;font-size:11px;letter-spacing:3px;">— chargement —</small>`;
+  // charge le vrai top score en arrière-plan sans bloquer le rendu
+  loadTopScore().then(top=>{
+    const el=document.getElementById('top-score-peek');
+    if(el&&top)el.innerHTML=`<b>★ ${top.pseudo||'PILOTE'} — ${Number(top.score).toLocaleString()}</b>`;
+    else if(el)el.innerHTML=`<small style="opacity:.5;">&nbsp;</small>`;
+  }).catch(()=>{});
   // hero ship svg (selected)
   const sh=chosenShip,p=sh.palette;
   const heroSvg=`<svg viewBox="-50 -42 100 84">
@@ -494,7 +499,8 @@ async function showMenu(){
         </div>
       </div>
       <div class="peek" style="margin-top:22px;">
-        ${topRow?`<small style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:5px;color:#5b8acc;text-transform:uppercase;">— Meilleur Score —</small><span style="font-family:'Courier New',monospace;font-size:16px;letter-spacing:3px;color:#ffd87a;">${topRow}</span>`:topRow}
+        <small style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:5px;color:#5b8acc;text-transform:uppercase;">— Meilleur Score —</small>
+        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:16px;letter-spacing:3px;color:#ffd87a;">${topRow}</span>
       </div>
       <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
