@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{overflow:hidden;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;}
-body{background:#000;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'VT323','Courier New',monospace;}
-#wrap{position:relative;width:760px;height:880px;overflow:hidden !important;isolation:isolate;clip-path:inset(0);transform-origin:top center;}
+html,body{width:100%;height:100%;overflow:hidden;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;background:#000;}
+body{font-family:'VT323','Courier New',monospace;}
+#wrap{position:fixed;width:760px;height:880px;overflow:hidden !important;isolation:isolate;clip-path:inset(0);transform-origin:0 0;}
 canvas{display:block;}
 
 /* ── MENU CHROME — NEON ARCADE ───────────────────────────────────── */
@@ -156,12 +156,13 @@ canvas{display:block;}
 <script>
 function scaleGame(){
   const wrap=document.getElementById('wrap');
-  const scaleX=window.innerWidth/760;
-  const scaleY=window.innerHeight/880;
-  const scale=Math.min(scaleX,scaleY);
+  const vw=window.innerWidth, vh=window.innerHeight;
+  const scale=Math.min(vw/760, vh/880);
+  const x=Math.round((vw-760*scale)/2);
+  const y=Math.round((vh-880*scale)/2);
   wrap.style.transform=`scale(${scale})`;
-  const marginTop=Math.max(0,(window.innerHeight-880*scale)/2);
-  wrap.style.marginTop=marginTop+'px';
+  wrap.style.left=x+'px';
+  wrap.style.top=y+'px';
 }
 window.addEventListener('resize',scaleGame);
 window.addEventListener('orientationchange',scaleGame);

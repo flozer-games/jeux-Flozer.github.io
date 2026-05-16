@@ -2591,7 +2591,14 @@ document.addEventListener('keyup',e=>keys[e.key]=false);
 let tx=null,ty=null;
 const WE=document.getElementById('wrap');
 // Touch swipe — désactivé sur mobile (remplacé par le joystick virtuel)
-WE.addEventListener('touchstart',e=>{if(joystick.active)return;tx=e.touches[0].clientX;ty=e.touches[0].clientY;e.preventDefault();},{passive:false});
+WE.addEventListener('touchstart',e=>{
+  if(joystick.active)return;
+  // Ne pas bloquer les taps sur boutons/cards (menu, overlay)
+  if(e.target.closest('button,a,.card,.diff-card,[onclick]'))return;
+  if(GS!=='playing')return;
+  tx=e.touches[0].clientX;ty=e.touches[0].clientY;
+  e.preventDefault();
+},{passive:false});
 WE.addEventListener('touchmove',e=>{
   if(joystick.active){e.preventDefault();return;}
   if(GS==='playing'&&tx!==null){const dx=e.touches[0].clientX-tx,dy=e.touches[0].clientY-ty;tx=e.touches[0].clientX;ty=e.touches[0].clientY;player.x=Math.max(22,Math.min(W-22,player.x+dx*1.6));player.y=Math.max(44,Math.min(H-28,player.y+dy*1.6));}
