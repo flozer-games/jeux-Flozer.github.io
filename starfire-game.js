@@ -376,13 +376,39 @@ const FRAGS_NEEDED=3;
 
 function logB(t){const b=BD.find(x=>x.type===t),d=document.createElement('div');d.className='bl';d.style.color=b.color;d.textContent=b.label;BLel.appendChild(d);setTimeout(()=>d.remove(),2300);}
 
+// ── SUPABASE CLIENT ────────────────────────────────────────────────
+const sbReady=typeof SUPABASE_URL==='string'&&SUPABASE_URL.startsWith('https://');
+const sb=sbReady&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+
 // ── HIGH SCORES ────────────────────────────────────────────────────
 async function saveScore(s,w,sh,mp,ps,wd){
-  try{let arr=[];try{const r=await Store.get('starfire:scores');if(r)arr=JSON.parse(r.value);}catch(e){}
-  arr.push({score:s,wave:w,ship:sh,map:mp,pseudo:ps||'ANONYME',world:wd||1,date:new Date().toLocaleDateString('fr-FR')});arr.sort((a,b)=>b.score-a.score);
-  await Store.set('starfire:scores',JSON.stringify(arr.slice(0,10)));}catch(e){}
+  const entry={pseudo:(ps||'ANONYME').toUpperCase().slice(0,10),score:s,wave:w,ship:sh,map:mp,world:wd||1,date:new Date().toLocaleDateString('fr-FR')};
+  if(sb){
+    try{await sb.from('scores').insert(entry);}catch(e){console.warn('Supabase insert failed',e);}
+  } else {
+    // fallback local
+    try{let arr=[];try{const r=await Store.get('starfire:scores');if(r)arr=JSON.parse(r.value);}catch(e){}
+    arr.push(entry);arr.sort((a,b)=>b.score-a.score);
+    await Store.set('starfire:scores',JSON.stringify(arr.slice(0,10)));}catch(e){}
+  }
 }
-async function loadScores(){try{const r=await Store.get('starfire:scores');return r?JSON.parse(r.value):[];}catch(e){return[];}}
+async function loadScores(){
+  if(sb){
+    try{const{data,error}=await sb.from('scores').select('*').order('score',{ascending:false}).limit(10);
+    if(!error&&data)return data;}catch(e){console.warn('Supabase select failed',e);}
+  }
+  // fallback local
+  try{const r=await Store.get('starfire:scores');return r?JSON.parse(r.value):[];}catch(e){return[];}
+}
+async function loadTopScore(){
+  if(sb){
+    try{const{data,error}=await sb.from('scores').select('pseudo,score').order('score',{ascending:false}).limit(1);
+    if(!error&&data&&data[0])return data[0];}catch(e){}
+  }
+  try{const r=await Store.get('starfire:scores');if(r){const arr=JSON.parse(r.value);if(arr&&arr[0])return arr[0];}
+  }catch(e){}
+  return null;
+}
 
 // ── MENU SCREENS ───────────────────────────────────────────────────
 let menuStarsAnim=null;
@@ -421,7 +447,7 @@ async function showMenu(){
   const pb=document.getElementById('pbtn');if(pb)pb.style.display='none';
   curQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
   // top score peek
-  let topRow='';try{const r=await Store.get('starfire:scores');if(r){const arr=JSON.parse(r.value);if(arr&&arr[0])topRow=`<b>★ ${arr[0].pseudo||'PILOTE'} — ${arr[0].score.toLocaleString()}</b>`;}}catch(e){}
+  let topRow='';try{const top=await loadTopScore();if(top)topRow=`<b>★ ${top.pseudo||'PILOTE'} — ${top.score.toLocaleString()}</b>`;}catch(e){}
   if(!topRow)topRow=`<small style="opacity:.5;">&nbsp;</small>`;
   // hero ship svg (selected)
   const sh=chosenShip,p=sh.palette;
@@ -687,15 +713,47 @@ function showMPVictory(){
 }
 
 async function showScores(){
-  const sc=await loadScores();
-  const rows=sc.length===0?'<tr><td colspan="6" style="color:#555;padding:14px;text-align:center;letter-spacing:2px;">— Aucune entrée dans les annales —</td></tr>':sc.map((s,i)=>`<tr style="border-bottom:1px solid rgba(60,80,120,.3);"><td style="color:#ffd87a;text-align:center;padding:5px;">${String(i+1).padStart(2,'0')}</td><td style="color:#fff4b8;padding:5px;font-family:'Courier New',monospace;font-size:11px;">${(s.pseudo||'—').slice(0,10)}</td><td style="color:#7af;text-align:right;padding:5px;">${s.score.toLocaleString()}</td><td style="color:#ffd87a;text-align:center;padding:5px;">S${s.world||1}-W${s.wave}</td><td style="color:#9ec3ff;font-size:10px;padding:5px;">${(s.ship||'—').slice(0,7)}</td><td style="color:#555;text-align:center;font-size:10px;padding:5px;">${s.date}</td></tr>`).join('');
+  // Affiche d'abord un état de chargement
   OVel.innerHTML=`
     <div class="pick-title">⟡ MEILLEURS SCORES ⟡</div>
-    <div class="pick-sub">Top 10 — Toutes nefs confondues</div>
-    <table style="border-collapse:collapse;width:420px;font-family:'Courier New',monospace;font-size:12px;background:rgba(10,18,38,.6);border:1px solid #2a4570;">
-      <thead><tr style="border-bottom:1px solid #2a4570;background:rgba(20,35,70,.7);"><th style="color:#7a98c4;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">#</th><th style="color:#7a98c4;text-align:left;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">PILOTE</th><th style="color:#7a98c4;text-align:right;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">SCORE</th><th style="color:#7a98c4;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">VAGUE</th><th style="color:#7a98c4;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">NEF</th><th style="color:#7a98c4;padding:6px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;">DATE</th></tr></thead>
-      <tbody>${rows}</tbody></table>
+    <div class="pick-sub" id="sc-sub">${sb?'🌐 TOP 10 MONDIAL — chargement…':'💾 Scores locaux'}</div>
+    <div style="color:#9944cc;font-family:'Courier New',monospace;font-size:13px;letter-spacing:4px;margin:30px 0;">⟳ CHARGEMENT…</div>
     <button class="sb back" id="bbk">← RETOUR</button>`;
+  OVel.style.display='flex';
+  document.getElementById('bbk').onclick=()=>showMenu();
+
+  const sc=await loadScores();
+  const medal=['🥇','🥈','🥉'];
+  const rows=sc.length===0
+    ?`<tr><td colspan="5" style="color:#555;padding:20px;text-align:center;letter-spacing:2px;font-size:13px;">— Aucune entrée dans les annales —</td></tr>`
+    :sc.map((s,i)=>{
+      const rank=medal[i]||(String(i+1).padStart(2,'0'));
+      const rowCol=i===0?'rgba(255,216,80,.07)':i===1?'rgba(200,200,200,.04)':i===2?'rgba(205,127,50,.05)':'';
+      return `<tr style="border-bottom:1px solid rgba(80,40,120,.3);background:${rowCol};">
+        <td style="color:#ffd87a;text-align:center;padding:7px 4px;font-size:15px;">${rank}</td>
+        <td style="color:#ffe8a0;padding:7px 6px;font-family:'VT323',monospace;font-size:17px;letter-spacing:2px;">${(s.pseudo||'—').toUpperCase().slice(0,10)}</td>
+        <td style="color:#00e5ff;text-align:right;padding:7px 6px;font-family:'Courier New',monospace;font-size:12px;font-weight:bold;">${s.score.toLocaleString()}</td>
+        <td style="color:#cc88ff;text-align:center;padding:7px 4px;font-size:11px;">S${s.world||1}·V${s.wave}</td>
+        <td style="color:#556688;text-align:center;font-size:10px;padding:7px 4px;">${s.date||''}</td>
+      </tr>`;
+    }).join('');
+
+  OVel.innerHTML=`
+    <div class="pick-title" style="font-size:16px;">⟡ MEILLEURS SCORES ⟡</div>
+    <div class="pick-sub">${sb?'🌐 TOP 10 MONDIAL':'💾 Scores locaux'}</div>
+    <div style="margin:10px 0 4px;width:560px;overflow-x:auto;">
+      <table style="border-collapse:collapse;width:100%;min-width:400px;font-family:'Courier New',monospace;font-size:12px;background:rgba(8,0,18,.85);border:1px solid #440066;border-radius:4px;overflow:hidden;">
+        <thead><tr style="border-bottom:1px solid #550088;background:rgba(40,0,60,.9);">
+          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">#</th>
+          <th style="color:#ff00cc;text-align:left;padding:8px 6px;font-size:10px;letter-spacing:2px;">PILOTE</th>
+          <th style="color:#ff00cc;text-align:right;padding:8px 6px;font-size:10px;letter-spacing:2px;">SCORE</th>
+          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">VAGUE</th>
+          <th style="color:#ff00cc;padding:8px 4px;font-size:10px;letter-spacing:2px;">DATE</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <button class="sb back" id="bbk" style="margin-top:10px;">← RETOUR</button>`;
   document.getElementById('bbk').onclick=()=>showMenu();
 }
 

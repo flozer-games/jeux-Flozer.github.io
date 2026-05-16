@@ -2,6 +2,12 @@
 // STARFIRE — Ships, Maps, Weapons configuration
 // ═══════════════════════════════════════════════════════════════════
 
+// ── SUPABASE ────────────────────────────────────────────────────────
+// Remplace ces deux valeurs par celles de ton projet Supabase
+// (Settings → API dans le dashboard Supabase)
+const SUPABASE_URL     = 'REMPLACE_PAR_TON_URL';
+const SUPABASE_ANON_KEY = 'REMPLACE_PAR_TA_CLE_ANON';
+
 // ── SHIPS ──────────────────────────────────────────────────────────
 const SHIPS = [
   {
