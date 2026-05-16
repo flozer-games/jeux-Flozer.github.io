@@ -418,7 +418,7 @@ async function loadScores(mapName){
 }
 async function loadTopScore(){
   if(sb){
-    try{const{data,error}=await sb.from('scores').select('pseudo,score').order('score',{ascending:false}).limit(1);
+    try{const{data,error}=await sb.from('scores').select('pseudo,score,map').order('score',{ascending:false}).limit(1);
     if(!error&&data&&data[0])return data[0];}catch(e){}
   }
   try{const r=await Store.get('starfire:scores');if(r){const arr=JSON.parse(r.value);if(arr&&arr[0])return arr[0];}
@@ -467,8 +467,10 @@ async function showMenu(){
   // charge le vrai top score en arrière-plan sans bloquer le rendu
   loadTopScore().then(top=>{
     const el=document.getElementById('top-score-peek');
-    if(el&&top)el.innerHTML=`<b>★ ${top.pseudo||'PILOTE'} — ${Number(top.score).toLocaleString()}</b>`;
-    else if(el)el.innerHTML=`<small style="opacity:.5;">&nbsp;</small>`;
+    if(el&&top){
+      const mapLabel=top.map?`<span style="color:#9944cc;font-size:13px;letter-spacing:2px;"> · ${top.map}</span>`:'';
+      el.innerHTML=`<b>★ ${top.pseudo||'PILOTE'} — ${Number(top.score).toLocaleString()}</b>${mapLabel}`;
+    } else if(el)el.innerHTML=`<small style="opacity:.5;">&nbsp;</small>`;
   }).catch(()=>{});
   // hero ship svg (selected)
   const sh=chosenShip,p=sh.palette;
