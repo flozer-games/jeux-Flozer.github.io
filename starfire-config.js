@@ -5,8 +5,8 @@
 // ── SUPABASE ────────────────────────────────────────────────────────
 // Remplace ces deux valeurs par celles de ton projet Supabase
 // (Settings → API dans le dashboard Supabase)
-const SUPABASE_URL     = 'REMPLACE_PAR_TON_URL';
-const SUPABASE_ANON_KEY = 'REMPLACE_PAR_TA_CLE_ANON';
+const SUPABASE_URL     = 'https://sfuslwevoqbmbsqqneay.supabase.com';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmdXNsd2V2b3FibWJzcXFuZWF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NDE1NTUsImV4cCI6MjA5NDUxNzU1NX0.SJfK4_qSQz3FZxj5Lv-n1GmGvNA1z8wsA40BX7breWI';
 
 // ── SHIPS ──────────────────────────────────────────────────────────
 const SHIPS = [
