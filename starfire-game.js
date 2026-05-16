@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
-const W=560,H=1000;
+const W=560,H=1200;
 // ── MOBILE ────────────────────────────────────────────────────────
 const isMobile='ontouchstart' in window||navigator.maxTouchPoints>0;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
