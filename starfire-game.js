@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
-const W=760,H=1000;
+const W=560,H=1000;
 // ── MOBILE ────────────────────────────────────────────────────────
 const isMobile='ontouchstart' in window||navigator.maxTouchPoints>0;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
@@ -2266,7 +2266,7 @@ function draw(){
     ctx.restore();
   });
 
-  bullets.filter(b=>!b.f).forEach(b=>{
+  bullets.forEach(b=>{if(b.f)return;
     const ang=Math.atan2(b.vy,b.vx)+Math.PI/2;
     ctx.save();ctx.translate(b.x,b.y);ctx.rotate(ang);
     // Halo externe large
@@ -2282,7 +2282,7 @@ function draw(){
     ctx.fillStyle='#ffffff';ctx.fill();
     ctx.restore();
   });
-  bullets.filter(b=>b.f).forEach(b=>{
+  bullets.forEach(b=>{if(!b.f)return;
     ctx.save();ctx.shadowBlur=7;ctx.shadowColor=b.col;ctx.fillStyle=b.col;
     if(b.type==='homing'){
       const ang=Math.atan2(b.vy,b.vx);
@@ -2657,7 +2657,10 @@ window.addEventListener('gamepaddisconnected',e=>{
 {
   let _gpFocus=0,_gpMenuKey='';
   let _gpNavUp=false,_gpNavDown=false,_gpNavA=false,_gpNavStart=false;
-  setInterval(()=>{
+  let _gpNavInt=null;
+  function startGpNav(){
+    if(_gpNavInt)return; // déjà actif
+    _gpNavInt=setInterval(()=>{
     if(gpIndex===null||OVel.style.display==='none')return;
     const gp=navigator.getGamepads()[gpIndex];
     if(!gp)return;
@@ -2691,7 +2694,14 @@ window.addEventListener('gamepaddisconnected',e=>{
       if(nxt){if(AC&&AC.state==='suspended')AC.resume();nxt.click();}
     }
     _gpNavUp=up;_gpNavDown=down;_gpNavA=a;_gpNavStart=startBtn;
-  },130);
+    },130);
+  }
+  function stopGpNav(){if(_gpNavInt){clearInterval(_gpNavInt);_gpNavInt=null;}}
+  // Démarre la nav manette uniquement quand le menu est visible
+  const _gpObs=new MutationObserver(()=>{
+    if(OVel.style.display!=='none')startGpNav();else stopGpNav();
+  });
+  _gpObs.observe(OVel,{attributes:true,attributeFilter:['style']});
 }
 document.addEventListener('keydown',e=>{
   keys[e.key]=true;
