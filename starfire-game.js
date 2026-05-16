@@ -9,6 +9,7 @@ const isMobile='ontouchstart' in window||navigator.maxTouchPoints>0;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpFiring=false,gpRT=false,gpStart=false;
 let inputMode='keyboard'; // 'keyboard' | 'gamepad'
+let sensitivity=1.0; // multiplicateur de vitesse joueur (0.5 – 2.0)
 let difficulty='normal'; // 'easy' | 'normal' | 'hard'
 const OVel=document.getElementById('ov');
 const BBel=document.getElementById('bbar'),BBIel=document.getElementById('bbi'),BNel=document.getElementById('bname');
@@ -476,6 +477,12 @@ async function showMenu(){
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
           ${gpIndex!==null?'● MANETTE CONNECTÉE':'○ AUCUNE MANETTE'}
         </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
+          <span style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:3px;color:#9944cc;">SENSIBILITÉ</span>
+          <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
+          <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:56px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
+          <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+        </div>
       </div>
     </div>
     <div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
@@ -493,6 +500,11 @@ async function showMenu(){
   document.getElementById('bmp').onclick=()=>{snd.sel&&snd.sel();showMPMenu();};
   document.getElementById('bsc').onclick=()=>showScores();
   document.getElementById('bcr').onclick=()=>showCredits();
+}
+
+function adjustSensitivity(delta){
+  sensitivity=Math.round(Math.min(2.0,Math.max(0.5,sensitivity+delta))*4)/4;
+  document.querySelectorAll('.sens-display').forEach(el=>el.textContent=`🎯 ${Math.round(sensitivity*100)}%`);
 }
 
 function setInputMode(mode){
@@ -1791,7 +1803,7 @@ function update(){
   if(player.weapon!=='default'&&player.wTimer>0){player.wTimer--;if(player.wTimer===0)player.weapon='default';}
   if(player.iframes>0)player.iframes--;
 
-  const spd=player.speed*(player.bonuses.speed>0?1.22:1);
+  const spd=player.speed*sensitivity*(player.bonuses.speed>0?1.22:1);
   if((keys['ArrowLeft']||keys['a']||keys['A']||keys['q']||keys['Q'])&&player.x-22>0)player.x-=spd;
   if((keys['ArrowRight']||keys['d']||keys['D'])&&player.x+22<W)player.x+=spd;
   // Mouvement vertical avec inertie marquée : haut = boost, bas = freinage
@@ -2357,6 +2369,11 @@ function togglePause(){
         <button onclick="adjustVolume(-0.0125,'volDisplay')" style="background:#1a1a2e;color:#fff;border:1px solid #4fc3f7;border-radius:6px;padding:5px 14px;font-size:15px;cursor:pointer;">−</button>
         <span id="volDisplay" style="color:#4fc3f7;font-family:'Courier New',monospace;font-size:13px;min-width:50px;text-align:center;">🔊 ${Math.round(masterVolume*400)}%</span>
         <button onclick="adjustVolume(0.0125,'volDisplay')" style="background:#1a1a2e;color:#fff;border:1px solid #4fc3f7;border-radius:6px;padding:5px 14px;font-size:15px;cursor:pointer;">+</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin-top:10px;">
+        <button onclick="adjustSensitivity(-0.25)" style="background:#1a1a2e;color:#fff;border:1px solid #ff00cc;border-radius:6px;padding:5px 14px;font-size:15px;cursor:pointer;">−</button>
+        <span class="sens-display" style="color:#ff00cc;font-family:'Courier New',monospace;font-size:13px;min-width:80px;text-align:center;">🎯 ${Math.round(sensitivity*100)}%</span>
+        <button onclick="adjustSensitivity(0.25)" style="background:#1a1a2e;color:#fff;border:1px solid #ff00cc;border-radius:6px;padding:5px 14px;font-size:15px;cursor:pointer;">+</button>
       </div>`;
     OVel.style.display='flex';
     document.getElementById('pres').onclick=()=>resumeGame();
