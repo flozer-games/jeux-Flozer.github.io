@@ -169,19 +169,35 @@ canvas{display:block;}
 <script src="starfire-config.js"></script>
 <script src="starfire-game.js"></script>
 <script>
+// Calcul hauteur selon viewport
+var vw = window.innerWidth, vh = window.innerHeight;
+var _H = (vw * 1200 <= vh * 560) ? 1200 : 880;
+window._gameH = _H;
+
 function scaleGame(){
-  const wrap=document.getElementById('wrap');
-  const vw=window.innerWidth, vh=window.innerHeight;
-  const H=window._gameH||1200;
-  const scale=Math.min(vw/560, vh/H);
-  const x=Math.round((vw-560*scale)/2);
-  const y=Math.round((vh-H*scale)/2);
-  wrap.style.transform=`scale(${scale})`;
-  wrap.style.left=x+'px';
-  wrap.style.top=y+'px';
+  var wrap = document.getElementById('wrap');
+  if(!wrap) return;
+  var vw = window.innerWidth, vh = window.innerHeight;
+  var H = window._gameH || 880;
+  var scale = Math.min(vw / 560, vh / H);
+  wrap.style.width  = '560px';
+  wrap.style.height = H + 'px';
+  wrap.style.transform = 'scale(' + scale + ')';
+  wrap.style.transformOrigin = 'top center';
+  // Centre verticalement
+  var marginTop = Math.max(0, (vh - H * scale) / 2);
+  wrap.style.marginTop = marginTop + 'px';
+  // Centre horizontalement
+  var marginLeft = Math.max(0, (vw - 560 * scale) / 2);
+  wrap.style.marginLeft = marginLeft + 'px';
+  wrap.style.position = 'absolute';
+  wrap.style.top = '0';
+  wrap.style.left = '0';
 }
-window.addEventListener('resize',scaleGame);
-window.addEventListener('orientationchange',scaleGame);
+
+window.addEventListener('resize', scaleGame);
+window.addEventListener('orientationchange', scaleGame);
+document.addEventListener('DOMContentLoaded', scaleGame);
 scaleGame();
 </script>
 </body>
