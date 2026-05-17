@@ -228,3 +228,45 @@ const CREW = [
     col:'#4ade80', emoji:'🌿',
   },
 ];
+
+// ── MAPS EXCLUSIVES CAMPAGNE ───────────────────────────────────────
+const CAMPAIGN_MAPS = [
+  {
+    id:'veltara', name:'SYSTÈME VELTARA', tag:'Planète mourante',
+    sky:['#000208','#040a1f','#000208'],
+    starHues:['#ffffff','#cfe4ff','#ffe6c4'],
+    bgKind:'verge',
+    planets:[
+      {x:270,y:200,r:80,base:'#4a6080',hi:'#8ab0d0',sh:'#1a2838',ring:false,sp:.008,bands:true,bandCol:'rgba(100,140,180,.25)'},
+      {x:420,y:450,r:18,base:'#888070',hi:'#c8b8a0',sh:'#282018',ring:false,sp:.015,bands:false},
+      {x:100,y:600,r:12,base:'#606870',hi:'#a0a8b0',sh:'#202428',ring:false,sp:.022,bands:false},
+    ],
+    bholes:[],
+    nebulas:[{x:0,y:0,w:540,h:840,col1:'rgba(80,40,20,.08)',col2:'rgba(0,0,0,0)',blur:true}],
+  },
+  {
+    id:'border', name:'ZONE FRONTIÈRE', tag:'Espace profond',
+    sky:['#000208','#040a1f','#000208'],
+    starHues:['#ffffff','#cfe4ff','#ffe6c4'],
+    bgKind:'verge',
+    planets:[
+      {x:380,y:150,r:22,base:'#804820',hi:'#c08040',sh:'#402010',ring:false,sp:.02,bands:false},
+      {x:80,y:400,r:14,base:'#608060',hi:'#90b090',sh:'#203020',ring:false,sp:.028,bands:false},
+    ],
+    bholes:[{x:300,y:500,r:20,sp:.02}],
+    nebulas:[],
+  },
+  {
+    id:'dragor', name:'MINES DE DRAGOR', tag:'Ceinture astéroïdes',
+    sky:['#000208','#040a1f','#000208'],
+    starHues:['#ffffff','#cfe4ff','#ffe6c4'],
+    bgKind:'verge',
+    planets:[
+      {x:150,y:200,r:30,base:'#706860',hi:'#a09888',sh:'#302820',ring:false,sp:.015,bands:false},
+      {x:400,y:350,r:20,base:'#806050',hi:'#b09080',sh:'#402818',ring:false,sp:.02,bands:false},
+      {x:250,y:600,r:16,base:'#786858',hi:'#a89888',sh:'#382818',ring:false,sp:.025,bands:false},
+    ],
+    bholes:[],
+    nebulas:[{x:0,y:0,w:540,h:840,col1:'rgba(60,40,20,.1)',col2:'rgba(0,0,0,0)',blur:true}],
+  },
+];
