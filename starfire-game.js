@@ -1708,9 +1708,9 @@ function spawnEnemy(){
   const df=getDiff();
   const sm=df.spMult[currentWorld]??df.spMult[df.spMult.length-1];
   const hm=df.hpMult[currentWorld]??df.hpMult[df.hpMult.length-1];
-  if(t==='basic'){e.sp=1.0*sm;e.hp=Math.max(1,Math.round(1*hm));e.mhp=e.hp;e.sc=10;e.w=32;e.h=36;e.col='#f55';e.sr=185;e.st=Math.random()*100;}
+  if(t==='basic'){e.sp=1.0*sm;e.hp=Math.max(1,Math.round(1*hm));e.mhp=e.hp;e.sc=10;e.w=32;e.h=36;e.col='#f55';e.sr=300;e.st=Math.random()*150;}
   else if(t==='fast'){e.sp=1.8*sm;e.hp=1;e.mhp=1;e.sc=20;e.w=26;e.h=32;e.col='#fa0';e.sr=215;e.st=Math.random()*120;}
-  else if(t==='tank'){e.sp=0.55*sm;e.hp=Math.max(2,Math.round(3*hm));e.mhp=e.hp;e.sc=50;e.w=46;e.h=50;e.col='#b06ef0';e.sr=125;e.st=Math.random()*55;}
+  else if(t==='tank'){e.sp=0.55*sm;e.hp=Math.max(2,Math.round(3*hm));e.mhp=e.hp;e.sc=50;e.w=46;e.h=50;e.col='#b06ef0';e.sr=260;e.st=Math.random()*130;}
   else if(t==='hunter'){e.sp=1.3*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=35;e.w=28;e.h=34;e.col='#ff2288';e.sr=170;e.st=Math.random()*90;}
   else{e.sp=1.2*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=30;e.w=34;e.h=36;e.col='#0ff';e.sr=155;e.st=Math.random()*75;}
   enemies.push(e);
