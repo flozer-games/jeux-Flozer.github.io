@@ -411,10 +411,14 @@ async function saveScore(s,w,sh,mp,ps,wd){
 async function loadScores(diffName){
   if(sb){
     try{
-      let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
-      // Inclut les anciens scores sans difficulty (colonne null) + ceux du bon mode
-      if(diffName)q=q.or(`difficulty.eq.${diffName},difficulty.is.null`);
-      const{data,error}=await q;
+      const base=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
+      if(diffName){
+        // Tente filtre par difficulte + anciens scores sans difficulty
+        const{data:d,error:e}=await base.or(`difficulty.eq.${diffName},difficulty.is.null`);
+        if(!e&&d&&d.length>0)return d;
+      }
+      // Fallback : tous les scores (colonne difficulty absente ou 0 résultat)
+      const{data,error}=await base;
       if(!error&&data)return data;
     }catch(e){console.warn('Supabase select failed',e);}
   }
