@@ -944,11 +944,12 @@ function campaignMissionSuccess(){
   if(!campaignMission) return;
   const m = campaignMission;
   campaignMode = false;
-  GS = 'transition';
+  GS = 'victory';
   cancelAnimationFrame(RAF);
-  stopMusic();
+  snd.win&&snd.win();
   playTrack('victory');
   const progress = completeMission(m.id);
+  startMenuBg();
 
   OVel.style.display = 'flex';
   OVel.innerHTML = `
