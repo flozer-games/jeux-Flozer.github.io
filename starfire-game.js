@@ -840,6 +840,60 @@ function showCampaignDifficulty(){
 
 function selectCampaignDifficulty(diff){
   campaignDifficulty = diff;
+  showCampaignShipSelect();
+}
+
+function showCampaignShipSelect(){
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:480px;padding:20px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;overflow-y:auto;max-height:820px;">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:4px;">
+          CHOISIS TON VAISSEAU
+        </div>
+        <div style="font-size:14px;color:#ffffff55;margin-top:6px;">
+          ${campaignMission.title}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+        ${SHIPS.map(ship => `
+          <div onclick="selectCampaignShip('${ship.id}')"
+            style="background:rgba(25,0,35,.88);border:1px solid #550077;
+              border-radius:4px;padding:14px;cursor:pointer;
+              transition:all .15s;display:flex;align-items:center;gap:14px;"
+            onmouseover="this.style.borderColor='${ship.hue}';this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.borderColor='#550077';this.style.transform='translateY(0)'">
+            <div style="font-size:32px;">🚀</div>
+            <div style="flex:1;">
+              <div style="font-size:18px;color:${ship.hue};letter-spacing:3px;">
+                ${ship.name}
+              </div>
+              <div style="font-size:13px;color:#cc88ff;letter-spacing:1px;margin-top:2px;">
+                ${ship.class}
+              </div>
+              <div style="font-size:13px;color:#ffffff88;margin-top:4px;line-height:1.4;">
+                ${ship.desc}
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <button onclick="showCampaignDifficulty()" style="
+        width:100%;padding:12px;background:transparent;
+        color:#9944cc;border:1px solid #660088;border-radius:3px;
+        font-family:'VT323','Courier New',monospace;
+        font-size:16px;letter-spacing:2px;cursor:pointer;">
+        ← RETOUR DIFFICULTÉ
+      </button>
+    </div>`;
+}
+
+function selectCampaignShip(shipId){
+  chosenShip = SHIPS.find(s => s.id === shipId);
   startCampaignMission();
 }
 
