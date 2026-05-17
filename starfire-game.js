@@ -1671,28 +1671,28 @@ function bombAll(){
 // ── SYSTÈME DE DIFFICULTÉ ──────────────────────────────────────────
 const DIFF_SETTINGS={
   easy:{
-    hpMult:    [1.0, 1.0, 1.0, 1.0, 1.0],
+    hpMult:    [0.8, 0.8, 0.8, 0.8, 0.8],
     spMult:    [0.7, 0.7, 0.7, 0.7, 0.7],
     bulletSpd: [1.0, 1.0, 1.0, 1.0, 1.0],
     maxE:      [5,   5,   5,   5,   5  ],
-    spawnRate: [90,  90,  90,  90,  90 ],
+    spawnRate: [110, 110, 110, 110, 110],
     bossHp:    [60,  60,  60,  60,  60 ],
   },
   normal:{
-    hpMult:    [1.3, 1.3, 1.3, 1.3, 1.3],
+    hpMult:    [1.0, 1.0, 1.0, 1.0, 1.0],
     spMult:    [1.0, 1.0, 1.0, 1.0, 1.0],
-    bulletSpd: [1.8, 1.8, 1.8, 1.8, 1.8],
+    bulletSpd: [1.4, 1.4, 1.4, 1.4, 1.4],
     maxE:      [9,   9,   9,   9,   9  ],
-    spawnRate: [65,  65,  65,  65,  65 ],
-    bossHp:    [200, 200, 200, 200, 200],
+    spawnRate: [80,  80,  80,  80,  80 ],
+    bossHp:    [150, 150, 150, 150, 150],
   },
   hard:{
-    hpMult:    [1.5, 1.5, 1.5, 1.5, 1.5],
+    hpMult:    [1.2, 1.2, 1.2, 1.2, 1.2],
     spMult:    [1.3, 1.3, 1.3, 1.3, 1.3],
-    bulletSpd: [2.4, 2.4, 2.4, 2.4, 2.4],
+    bulletSpd: [1.8, 1.8, 1.8, 1.8, 1.8],
     maxE:      [12,  12,  12,  12,  12 ],
-    spawnRate: [52,  52,  52,  52,  52 ],
-    bossHp:    [350, 350, 350, 350, 350],
+    spawnRate: [65,  65,  65,  65,  65 ],
+    bossHp:    [200, 200, 200, 200, 200],
   },
 };
 function getDiff(){return DIFF_SETTINGS[difficulty]||DIFF_SETTINGS.normal;}
@@ -1710,7 +1710,7 @@ function spawnEnemy(){
   const sm=df.spMult[currentWorld]??df.spMult[df.spMult.length-1];
   const hm=df.hpMult[currentWorld]??df.hpMult[df.hpMult.length-1];
   if(t==='basic'){e.sp=1.0*sm;e.hp=Math.max(1,Math.round(1*hm));e.mhp=e.hp;e.sc=10;e.w=32;e.h=36;e.col='#f55';e.sr=300;e.st=Math.random()*150;}
-  else if(t==='fast'){e.sp=1.8*sm;e.hp=1;e.mhp=1;e.sc=20;e.w=26;e.h=32;e.col='#fa0';e.sr=215;e.st=Math.random()*120;}
+  else if(t==='fast'){const _fsp={easy:1.26,normal:1.5,hard:1.8}[difficulty]||1.5;e.sp=_fsp;e.hp=1;e.mhp=1;e.sc=20;e.w=26;e.h=32;e.col='#fa0';e.sr=215;e.st=Math.random()*120;}
   else if(t==='tank'){e.sp=0.55*sm;e.hp=Math.max(2,Math.round(3*hm));e.mhp=e.hp;e.sc=50;e.w=46;e.h=50;e.col='#b06ef0';e.sr=260;e.st=Math.random()*130;}
   else if(t==='hunter'){e.sp=1.3*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=35;e.w=28;e.h=34;e.col='#ff2288';e.sr=170;e.st=Math.random()*90;}
   else{e.sp=1.2*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=30;e.w=34;e.h=36;e.col='#0ff';e.sr=155;e.st=Math.random()*75;}
