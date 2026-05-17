@@ -538,15 +538,27 @@ async function showMenu(){
         </div>
       </div>
     </div>
-    <div style="width:100%;display:flex;justify-content:center;margin-top:${cpt?'8':'28'}px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
-        <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
-        <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
-        <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">+</button>
-      </div>
-    </div>
-    <div style="position:absolute;bottom:14px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>
+    ${cpt
+      /* compact : creator + volume sur la même ligne */
+      ? `<div style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 22px;margin-top:8px;">
+          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:5px;text-shadow:0 0 8px rgba(255,0,200,.5);">FloZeR</span></div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
+            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
+            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;">${Math.round(masterVolume*400)}%</span>
+            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+          </div>
+        </div>`
+      /* plein : volume centré + creator en absolute */
+      : `<div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
+            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
+            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
+            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">+</button>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:14px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>`}
     `;
   OVel.style.display='flex';
   document.getElementById('bs').onclick=()=>{snd.sel&&snd.sel();showShipPick();};
