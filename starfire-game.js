@@ -934,7 +934,10 @@ function checkCampaignObjective(){
   if(m.objectiveType === 'survive' && wave >= m.objectiveValue && !boss) success = true;
   if(m.objectiveType === 'boss'    && bDefeated) success = true;
 
-  if(success) campaignMissionSuccess();
+  if(success){
+    campaignMode = false; // stoppe la vérification immédiatement
+    campaignMissionSuccess();
+  }
 }
 
 function campaignMissionSuccess(){
