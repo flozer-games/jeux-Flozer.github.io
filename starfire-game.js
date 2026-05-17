@@ -1919,7 +1919,7 @@ function update(){
   if(player.weapon!=='default'&&player.wTimer>0){player.wTimer--;if(player.wTimer===0)player.weapon='default';}
   if(player.iframes>0)player.iframes--;
 
-  const spd=player.speed*sensitivity*(player.bonuses.speed>0?1.22:1);
+  const spd=player.speed*sensitivity+(player.bonuses.speed>0?1.5:0);
   if((keys['ArrowLeft']||keys['a']||keys['A']||keys['q']||keys['Q'])&&player.x-22>0)player.x-=spd;
   if((keys['ArrowRight']||keys['d']||keys['D'])&&player.x+22<W)player.x+=spd;
   // Mouvement vertical avec inertie marquée : haut = boost, bas = freinage
@@ -2406,12 +2406,36 @@ function draw(){
       ctx.fillText('PRÊT !',_bx+_bw+6,_by+8);
     }
   }
-  // ── HUD BAS : arme H-38 · bonus actif H-60 ───────────────────────
+  // ── HUD BAS : arme H-38 · bonus actifs H-72 ─────────────────────
   if(player.weapon!=='default'&&player.wTimer>0){
     const wp=WP[player.weapon],secs=Math.ceil(player.wTimer/60);
     ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(W/2-80,H-54,160,22);
     ctx.fillStyle=wp.col;ctx.font='bold 12px "Courier New"';ctx.textAlign='center';ctx.fillText(`${wp.icon} ${wp.name}  ${secs}s`,W/2,H-38);
     ctx.fillStyle='#111';ctx.fillRect(W/2-60,H-26,120,4);ctx.fillStyle=wp.col;ctx.fillRect(W/2-26,H-26,120*(player.wTimer/Math.max(300,player.wTimer)),4);
+  }
+  // ── BONUS ACTIFS avec timer ───────────────────────────────────────
+  {
+    const BINFO=[
+      {key:'rapid',icon:'⚡',col:'#fa0',max:240},
+      {key:'multi',icon:'✦',col:'#0ff',max:210},
+      {key:'shield',icon:'🛡',col:'#4f4',max:300},
+      {key:'speed',icon:'💨',col:'#f4f',max:180},
+    ].filter(b=>player.bonuses[b.key]>0);
+    if(BINFO.length>0){
+      const cW=58,cH=20,gap=6;
+      const totalW=BINFO.length*(cW+gap)-gap;
+      let cx=Math.round(W/2-totalW/2);
+      const cy=H-78;
+      BINFO.forEach(b=>{
+        const rem=player.bonuses[b.key],secs=Math.ceil(rem/60),ratio=rem/b.max;
+        ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(cx,cy,cW,cH);
+        ctx.font='bold 10px "Courier New"';ctx.fillStyle=b.col;ctx.textAlign='center';
+        ctx.fillText(b.icon+' '+secs+'s',cx+cW/2,cy+13);
+        ctx.fillStyle='#1a1a1a';ctx.fillRect(cx,cy+cH,cW,3);
+        ctx.fillStyle=b.col;ctx.fillRect(cx,cy+cH,Math.round(cW*ratio),3);
+        cx+=cW+gap;
+      });
+    }
   }
   if(isBW&&bDefeated&&!bSpawned&&!rouletteQueued&&wTimer>20&&wTimer<100){
     ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.2)*.5;ctx.fillStyle='#f44';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';ctx.fillText('⚠  BOSS IMMINENT  ⚠',W/2,H/2);ctx.restore();
