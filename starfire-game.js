@@ -561,7 +561,7 @@ async function showMenu(){
             🎮 MANETTE</button>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;">
-          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;text-align:center;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
+          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;text-align:center;margin-right:30px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
             ${gpIndex!==null?'● MANETTE CONNECTÉE':'○ AUCUNE MANETTE'}
           </div>
           <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330044,transparent);"></div>
