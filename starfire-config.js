@@ -426,3 +426,65 @@ const CAMPAIGN_MAPS = [
     nebulas:[{x:0,y:0,w:540,h:840,col1:'rgba(100,0,120,.15)',col2:'rgba(60,0,80,.08)',blur:true}],
   },
 ];
+
+// ── MISSIONS CAMPAGNE ──────────────────────────────────────────────
+const CAMPAIGN_MISSIONS = [
+  {
+    id:1, title:'DÉPART D\'URGENCE',
+    map:'veltara', difficulty:'easy',
+    objectiveType:'survive', objectiveValue:10,
+    objectiveLabel:'Survivre 10 vagues',
+    bossWave:10,
+    narrator:'nova',
+    briefing:{
+      location:'Système Veltara — Orbite basse',
+      crew:['zara','keel','nova'],
+      text:[
+        'NOVA : "Capitaine, les réserves d\'énergie de Veltara sont à 3.2%. Durée de vie estimée : 47 jours."',
+        'ZARA : "Compris. On décolle. Keel, le moteur tient ?"',
+        'KEEL : "Techniquement oui. J\'ai scotché quelques trucs mais ça devrait aller."',
+        'ZARA : "...On décolle quand même. Destination : l\'inconnu. Objectif : trouver le Zyonite."',
+        'À peine sortis de l\'atmosphère, les premiers éclaireurs Korrax apparaissent sur les radars.',
+      ],
+    },
+  },
+  {
+    id:2, title:'EMBUSCADE AUX PORTES',
+    map:'border', difficulty:'easy',
+    objectiveType:'score', objectiveValue:5000,
+    objectiveLabel:'Atteindre 5 000 points',
+    bossWave:null,
+    narrator:'rex',
+    briefing:{
+      location:'Zone Frontière — Secteur Delta-7',
+      crew:['zara','rex','nova'],
+      text:[
+        'REX : "Premier contact avec les Korrax. Mi-aliens, mi-robots, 100% antipathiques."',
+        'NOVA : "Leur technologie combine biologie organique et cybernétique. Fascinant."',
+        'ZARA : "Nova, c\'est pas le moment de faire de la science. Rex, à toi de jouer."',
+        'REX : "Avec plaisir, Capitaine !" *sourire inquiétant*',
+        'Les Korrax avaient prévu leur passage. Mauvais calcul : ils n\'avaient pas prévu Rex.',
+      ],
+    },
+  },
+  {
+    id:3, title:'LES MINES DE DRAGOR',
+    map:'dragor', difficulty:'easy',
+    objectiveType:'boss', objectiveValue:null,
+    objectiveLabel:'Détruire le Mineur Alpha',
+    bossWave:20,
+    narrator:'lyra',
+    briefing:{
+      location:'Ceinture astéroïdes Dragor',
+      crew:['zara','lyra','keel'],
+      text:[
+        'LYRA : "Capitaine ! Les scanners détectent des traces de Zyonite dans cette ceinture !"',
+        'ZARA : "Parfait. Problème ?"',
+        'LYRA : "Un vaisseau minier Korrax de classe Alpha occupe le secteur. Il fait 4 fois notre taille."',
+        'KEEL : "Génial. J\'adore les défis." *rajuste son scotch de réparation nerveusement*',
+        'ZARA : "On détruit leur mineur, on récupère les échantillons. Simple."',
+        'LYRA : "Rien n\'est jamais simple avec vous..."',
+      ],
+    },
+  },
+];
