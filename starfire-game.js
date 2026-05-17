@@ -491,15 +491,15 @@ async function showMenu(){
   const cpt=H<800; // mode compact quand hauteur limitée (desktop)
   OVel.innerHTML=`
     <div class="scan"></div>
-    <div class="menu-shell" style="gap:${cpt?'10':'16'}px;">
+    <div class="menu-shell ${cpt?'cpt':''}" style="gap:${cpt?'8':'16'}px;">
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
-      <div style="height:${cpt?'4':'18'}px;"></div>
+      <div style="height:${cpt?'2':'18'}px;"></div>
       <div style="position:relative;">
         <span class="menu-side l"></span><span class="menu-side r"></span>
-        <div class="title">STARFIRE</div>
+        <div class="title" ${cpt?'style="font-size:28px;letter-spacing:4px;"':''}>STARFIRE</div>
       </div>
-      <div style="height:${cpt?'10':'38'}px;"></div>
-      <div class="hero-ship">
+      <div style="height:${cpt?'6':'38'}px;"></div>
+      <div class="hero-ship" ${cpt?'style="width:90px;height:56px;margin:0;"':''}>
         <div class="hero-ring"></div><div class="hero-ring r2"></div>
         <div class="hero-orbit"><i></i></div><div class="hero-orbit b"><i></i></div>
         ${heroSvg}
@@ -2355,7 +2355,7 @@ function draw(){
       const alpha=Math.min(1,f.t/30);
       ctx.save();
       ctx.globalAlpha=alpha;
-      ctx.font='bold 18px "Courier New"';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.font='bold 13px "Courier New"';ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.shadowBlur=14;ctx.shadowColor=f.col;
       ctx.strokeStyle='#000';ctx.lineWidth=3;
       ctx.strokeText(f.txt||f.val,f.x,f.y);
@@ -2365,7 +2365,7 @@ function draw(){
       return;
     }
     ctx.save();ctx.globalAlpha=f.life;
-    const fs=f.outline?19:(f.big?19:14);
+    const fs=f.outline?13:(f.big?13:10);
     ctx.font=`bold ${fs}px "Courier New"`;ctx.textAlign='center';ctx.textBaseline='middle';
     if(f.big||f.outline){ctx.shadowBlur=16;ctx.shadowColor=f.col;}
     const txt=f.txt||(f.big?f.val:('+'+f.val));
@@ -2420,29 +2420,29 @@ function draw(){
   if(player.weapon!=='default'&&player.wTimer>0){
     const wp=WP[player.weapon],secs=Math.ceil(player.wTimer/60);
     ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(W/2-80,H-54,160,22);
-    ctx.fillStyle=wp.col;ctx.font='bold 17px "Courier New"';ctx.textAlign='center';ctx.fillText(`${wp.icon} ${wp.name}  ${secs}s`,W/2,H-38);
+    ctx.fillStyle=wp.col;ctx.font='bold 12px "Courier New"';ctx.textAlign='center';ctx.fillText(`${wp.icon} ${wp.name}  ${secs}s`,W/2,H-38);
     ctx.fillStyle='#111';ctx.fillRect(W/2-60,H-26,120,4);ctx.fillStyle=wp.col;ctx.fillRect(W/2-26,H-26,120*(player.wTimer/Math.max(300,player.wTimer)),4);
   }
   if(isBW&&bDefeated&&!bSpawned&&!rouletteQueued&&wTimer>20&&wTimer<100){
-    ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.2)*.5;ctx.fillStyle='#f44';ctx.font='bold 14px "Courier New"';ctx.textAlign='center';ctx.fillText('⚠  BOSS IMMINENT  ⚠',W/2,H/2);ctx.restore();
+    ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.2)*.5;ctx.fillStyle='#f44';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';ctx.fillText('⚠  BOSS IMMINENT  ⚠',W/2,H/2);ctx.restore();
   }
   if(!isBW&&!rouletteQueued){
     const wEnd=200+wave*32;
     if(wTimer>wEnd-50){
-      ctx.save();ctx.globalAlpha=.4+Math.sin(FN*.3)*.4;ctx.fillStyle='#7af';ctx.font='bold 13px "Courier New"';ctx.textAlign='center';
+      ctx.save();ctx.globalAlpha=.4+Math.sin(FN*.3)*.4;ctx.fillStyle='#7af';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';
       const _wlMsg=getWaveLimit();const msg=(_wlMsg!==Infinity&&wave>=_wlMsg)?(currentWorld<MAPS.length-1?`— SECTEUR ${currentWorld+2} EN APPROCHE —`:'— VICTOIRE IMMINENTE —'):`— VAGUE ${wave+1} EN APPROCHE —`;
       ctx.fillText(msg,W/2,H/2);ctx.restore();
     }
   }
   if(rouletteQueued&&rouletteDelay<60){
-    ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.3)*.5;ctx.fillStyle='#fa0';ctx.font='bold 14px "Courier New"';ctx.textAlign='center';ctx.fillText('🎰  NOUVELLE ARME !  🎰',W/2,H/2+30);ctx.restore();
+    ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.3)*.5;ctx.fillStyle='#fa0';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';ctx.fillText('🎰  NOUVELLE ARME !  🎰',W/2,H/2+30);ctx.restore();
   }
   // ── COMBO HUD ────────────────────────────────────────────────────
   if(combo>=2&&comboTimer>0){
     const ca=Math.min(1,comboTimer/50);
     ctx.save();ctx.globalAlpha=ca;ctx.textAlign='center';
-    ctx.font='bold 22px "Courier New"';
-    ctx.strokeStyle='#000';ctx.lineWidth=4;ctx.strokeText('COMBO ×'+combo,W/2,75);
+    ctx.font='bold 15px "Courier New"';
+    ctx.strokeStyle='#000';ctx.lineWidth=3;ctx.strokeText('COMBO ×'+combo,W/2,75);
     const comboCol=combo>=8?'#ff2bd6':combo>=5?'#ff6b00':'#FFD700';
     ctx.fillStyle=comboCol;ctx.fillText('COMBO ×'+combo,W/2,75);
     ctx.restore();
