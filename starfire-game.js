@@ -412,14 +412,15 @@ async function loadScores(diffName){
   if(sb){
     try{
       let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
-      if(diffName)q=q.eq('difficulty',diffName);
+      // Inclut les anciens scores sans difficulty (colonne null) + ceux du bon mode
+      if(diffName)q=q.or(`difficulty.eq.${diffName},difficulty.is.null`);
       const{data,error}=await q;
       if(!error&&data)return data;
     }catch(e){console.warn('Supabase select failed',e);}
   }
   try{const r=await Store.get('starfire:scores');if(r){
     let arr=JSON.parse(r.value);
-    if(diffName)arr=arr.filter(s=>s.difficulty===diffName);
+    if(diffName)arr=arr.filter(s=>!s.difficulty||s.difficulty===diffName);
     return arr.slice(0,15);
   }}catch(e){}
   return[];
