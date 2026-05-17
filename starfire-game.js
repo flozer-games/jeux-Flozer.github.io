@@ -766,6 +766,83 @@ function showMissionBriefing(idx){
     </div>`;
 }
 
+function showCampaignDifficulty(){
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:480px;padding:24px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;">
+
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:4px;">
+          ⚡ DIFFICULTÉ
+        </div>
+        <div style="font-size:14px;color:#ffffff55;margin-top:6px;letter-spacing:1px;">
+          ${campaignMission.title}
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+
+        <div onclick="selectCampaignDifficulty('easy')" style="
+          padding:18px;cursor:pointer;border-radius:4px;
+          background:linear-gradient(180deg,rgba(20,80,20,.9),rgba(10,40,10,.95));
+          border:2px solid #4ade80;transition:all .15s;"
+          onmouseover="this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:18px;color:#4ade80;letter-spacing:4px;">
+            ★ FACILE
+          </div>
+          <div style="font-size:14px;color:#86efac;margin-top:6px;letter-spacing:1px;">
+            Ennemis lents · Peu de tirs · Idéal pour découvrir
+          </div>
+        </div>
+
+        <div onclick="selectCampaignDifficulty('normal')" style="
+          padding:18px;cursor:pointer;border-radius:4px;
+          background:linear-gradient(180deg,rgba(30,50,100,.9),rgba(15,25,65,.95));
+          border:2px solid #60a5fa;transition:all .15s;"
+          onmouseover="this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:18px;color:#60a5fa;letter-spacing:4px;">
+            ★★ NORMAL
+          </div>
+          <div style="font-size:14px;color:#93c5fd;margin-top:6px;letter-spacing:1px;">
+            Équilibré · Progressif · L'expérience recommandée
+          </div>
+        </div>
+
+        <div onclick="selectCampaignDifficulty('hard')" style="
+          padding:18px;cursor:pointer;border-radius:4px;
+          background:linear-gradient(180deg,rgba(90,15,15,.9),rgba(50,5,5,.95));
+          border:2px solid #f87171;transition:all .15s;"
+          onmouseover="this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.transform='translateY(0)'">
+          <div style="font-size:18px;color:#f87171;letter-spacing:4px;">
+            ★★★ DIFFICILE
+          </div>
+          <div style="font-size:14px;color:#fca5a5;margin-top:6px;letter-spacing:1px;">
+            Ennemis rapides · Tirs denses · Pour les pilotes aguerris
+          </div>
+        </div>
+
+      </div>
+
+      <button onclick="showMissionBriefing(${campaignMission.id - 1})" style="
+        width:100%;padding:12px;background:transparent;
+        color:#9944cc;border:1px solid #660088;border-radius:3px;
+        font-family:'VT323','Courier New',monospace;
+        font-size:16px;letter-spacing:2px;cursor:pointer;">
+        ← RETOUR BRIEFING
+      </button>
+    </div>`;
+}
+
+function selectCampaignDifficulty(diff){
+  campaignDifficulty = diff;
+  startCampaignMission();
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
