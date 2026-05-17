@@ -1717,7 +1717,7 @@ const DIFF_SETTINGS={
     hpMult:    [1.0, 1.0, 1.0, 1.0, 1.0],
     spMult:    [1.0, 1.0, 1.0, 1.0, 1.0],
     bulletSpd: [1.4, 1.4, 1.4, 1.4, 1.4],
-    maxE:      [9,   9,   9,   9,   9  ],
+    maxE:      [8,   8,   8,   8,   8  ],
     spawnRate: [80,  80,  80,  80,  80 ],
     bossHp:    [150, 150, 150, 150, 150],
   },
@@ -1725,8 +1725,8 @@ const DIFF_SETTINGS={
     hpMult:    [1.2, 1.2, 1.2, 1.2, 1.2],
     spMult:    [1.3, 1.3, 1.3, 1.3, 1.3],
     bulletSpd: [1.8, 1.8, 1.8, 1.8, 1.8],
-    maxE:      [12,  12,  12,  12,  12 ],
-    spawnRate: [65,  65,  65,  65,  65 ],
+    maxE:      [10,  10,  10,  10,  10 ],
+    spawnRate: [71,  71,  71,  71,  71 ],
     bossHp:    [200, 200, 200, 200, 200],
   },
 };
@@ -2150,7 +2150,7 @@ function update(){
 
   wTimer++;
   if(isBW){if(bDefeated&&!bSpawned&&!rouletteQueued&&wTimer>100)spawnBoss();}
-  else{const wEnd=200+wave*32;if(!rouletteQueued&&wTimer>wEnd)advanceWave();}
+  else{const wEnd=600;if(!rouletteQueued&&wTimer>wEnd)advanceWave();}
 }
 
 // ── DRAW ───────────────────────────────────────────────────────────
@@ -2477,7 +2477,7 @@ function draw(){
     ctx.save();ctx.globalAlpha=.5+Math.sin(FN*.2)*.5;ctx.fillStyle='#f44';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';ctx.fillText('⚠  BOSS IMMINENT  ⚠',W/2,H/2);ctx.restore();
   }
   if(!isBW&&!rouletteQueued){
-    const wEnd=200+wave*32;
+    const wEnd=600;
     if(wTimer>wEnd-50){
       ctx.save();ctx.globalAlpha=.4+Math.sin(FN*.3)*.4;ctx.fillStyle='#7af';ctx.font='bold 10px "Courier New"';ctx.textAlign='center';
       const _wlMsg=getWaveLimit();const msg=(_wlMsg!==Infinity&&wave>=_wlMsg)?(currentWorld<MAPS.length-1?`— SECTEUR ${currentWorld+2} EN APPROCHE —`:'— VICTOIRE IMMINENTE —'):`— VAGUE ${wave+1} EN APPROCHE —`;
