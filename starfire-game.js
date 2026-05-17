@@ -2203,17 +2203,20 @@ function bossDefeatedFn(){
   advanceWave();
 }
 function advanceWave(){
-  wave++;wTimer=0;score+=wave*50;
-  if(wave>0&&wave%5===0&&wave%10!==0)spawnGridFormation();
-  checkCampaignObjective();
-  // Limite variable selon la map
-  const wLimit=getWaveLimit();
-  if(wLimit!==Infinity&&wave>wLimit){
-    // En mode campagne → laisser checkCampaignObjective gérer
-    if(campaignMode){checkCampaignObjective();return;}
-    // Mode normal → comportement habituel
-    if(currentWorld<MAPS.length-1){showWorldTransition();}
-    else{showVictory();}
+  wave++; wTimer=0; score+=wave*50;
+  if(wave>0 && wave%5===0 && wave%10!==0) spawnGridFormation();
+
+  // Vérification objectif campagne
+  if(campaignMode){
+    checkCampaignObjective();
+    return; // stoppe tout le reste — campagne gère sa propre fin
+  }
+
+  // Mode normal — vérification limite de vagues
+  const wLimit = getWaveLimit();
+  if(wLimit !== Infinity && wave > wLimit){
+    if(currentWorld < MAPS.length - 1){ showWorldTransition(); }
+    else { showVictory(); }
   }
 }
 
