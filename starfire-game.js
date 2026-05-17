@@ -520,9 +520,9 @@ async function showMenu(){
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
       <div style="position:relative;margin-top:6px;">
         <span class="menu-side l"></span><span class="menu-side r"></span>
-        <div class="title" style="font-size:36px;letter-spacing:5px;">STARFIRE</div>
+        <div class="title" style="font-size:44px;letter-spacing:6px;">STARFIRE</div>
       </div>
-      <div class="hero-ship" style="width:80px;height:52px;margin:0;">
+      <div class="hero-ship" style="width:110px;height:72px;margin:0;">
         <div class="hero-ring"></div><div class="hero-ring r2"></div>
         <div class="hero-orbit"><i></i></div><div class="hero-orbit b"><i></i></div>
         ${heroSvg}
@@ -530,8 +530,8 @@ async function showMenu(){
       <div class="brackets" style="font-size:11px;letter-spacing:3px;">TRANSMISSION REÇUE</div>
       <div class="btn-row" style="gap:6px;">
         <button class="sb" id="bs">⚡ COMMENCER</button>
-        <button onclick="showCampaign()" class="sb" style="background:linear-gradient(180deg,rgba(0,40,60,.9),rgba(0,15,30,.95));border-color:#00e5ff;color:#00e5ff;width:80%;box-shadow:0 0 12px rgba(0,200,255,.25) inset;">📖 CAMPAGNE</button>
-        <button class="sb alt" id="bmp" style="letter-spacing:3px;">⚔ MULTIJOUEUR</button>
+        <button onclick="showCampaign()" class="sb" style="background:linear-gradient(180deg,rgba(0,40,60,.9),rgba(0,15,30,.95));border-color:#00e5ff;color:#00e5ff;width:70%;padding:10px 28px;font-size:18px;box-shadow:0 0 12px rgba(0,200,255,.25) inset;">📖 CAMPAGNE</button>
+        <button class="sb alt" id="bmp" style="letter-spacing:3px;padding:10px 28px;font-size:16px;">⚔ MULTIJOUEUR</button>
         <div style="display:flex;gap:8px;">
           <button class="sb alt" id="bsc" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">⟡ Scores</button>
           <button class="sb alt" id="bcr" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">✦ Crédits</button>
