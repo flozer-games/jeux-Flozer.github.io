@@ -950,7 +950,8 @@ function campaignMissionSuccess(){
   cancelAnimationFrame(RAF);
   snd.win&&snd.win();
   playTrack('victory');
-  const progress = completeMission(m.id);
+  let progress = {unlockedMission: m.id+1, completedMissions:[]};
+  try { progress = completeMission(m.id); } catch(e){ console.warn('[CAMPAGNE] save error:', e); }
   startMenuBg();
 
   OVel.style.display = 'flex';

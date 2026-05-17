@@ -752,14 +752,16 @@ function saveCampaignProgress(progress){
   } catch(e) {}
 
   // Sauvegarde Supabase
-  if(typeof supabase !== 'undefined' && typeof supabase.from === 'function'){
-    supabase.from('campaign_progress').upsert({
-      player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
-      unlocked_mission: progress.unlockedMission,
-      completed_missions: progress.completedMissions,
-      updated_at: new Date().toISOString(),
-    }).then(()=>{}).catch(()=>{});
-  }
+  try {
+    if(typeof supabase !== 'undefined' && typeof supabase.from === 'function'){
+      supabase.from('campaign_progress').upsert({
+        player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
+        unlocked_mission: progress.unlockedMission,
+        completed_missions: progress.completedMissions,
+        updated_at: new Date().toISOString(),
+      }).then(()=>{}).catch(()=>{});
+    }
+  } catch(e) {}
 }
 
 function completeMission(missionId){
