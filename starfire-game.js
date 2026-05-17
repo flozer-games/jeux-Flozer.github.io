@@ -843,6 +843,34 @@ function selectCampaignDifficulty(diff){
   startCampaignMission();
 }
 
+function startCampaignMission(){
+  if(!campaignMission) return;
+
+  // Applique la map de la mission
+  const campMap = CAMPAIGN_MAPS.find(m => m.id === campaignMission.map);
+  if(campMap) chosenMap = campMap;
+
+  // Applique la difficulté choisie par le joueur
+  difficulty = campaignDifficulty;
+
+  // Configure les vagues selon l'objectif
+  if(campaignMission.objectiveType === 'survive'){
+    WORLD_WAVES[difficulty] = [
+      campaignMission.objectiveValue,
+      campaignMission.objectiveValue,
+      campaignMission.objectiveValue,
+      campaignMission.objectiveValue,
+      campaignMission.objectiveValue,
+    ];
+  } else {
+    WORLD_WAVES[difficulty] = [Infinity, Infinity, Infinity, Infinity, Infinity];
+  }
+
+  // Active le mode campagne et lance le jeu
+  campaignMode = true;
+  startGame();
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
