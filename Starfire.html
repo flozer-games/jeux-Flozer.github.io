@@ -168,12 +168,18 @@ window._gameH = 840;
 function scaleGame(){
   var wrap = document.getElementById('wrap');
   if(!wrap) return;
-  var vw = window.innerWidth, vh = window.innerHeight;
-  var scale = Math.min(vw / 540, vh / 840);
+  var vw = window.innerWidth;
+  var vh = window.innerHeight; // tient compte de la barre des tâches
+  var scaleX = vw / 540;
+  var scaleY = vh / 840;
+  var scale = Math.min(scaleX, scaleY) * 0.97; // marge de sécurité anti-débordement
+  var scaledW = 540 * scale;
+  var scaledH = 840 * scale;
   wrap.style.transform = 'scale(' + scale + ')';
   wrap.style.transformOrigin = '0 0';
-  wrap.style.left = Math.round((vw - 540 * scale) / 2) + 'px';
-  wrap.style.top  = Math.round((vh - 840 * scale) / 2) + 'px';
+  wrap.style.position = 'fixed';
+  wrap.style.left = Math.round((vw - scaledW) / 2) + 'px';
+  wrap.style.top  = Math.round((vh - scaledH) / 2) + 'px';
 }
 window.addEventListener('resize', scaleGame);
 window.addEventListener('orientationchange', scaleGame);
