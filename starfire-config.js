@@ -732,3 +732,44 @@ const CAMPAIGN_MISSIONS = [
     },
   },
 ];
+
+// ── SAUVEGARDE CAMPAGNE ────────────────────────────────────────────
+const CAMPAIGN_SAVE_KEY = 'sf_campaign_progress';
+
+function getCampaignProgress(){
+  try {
+    const raw = localStorage.getItem(CAMPAIGN_SAVE_KEY);
+    return raw ? JSON.parse(raw) : { unlockedMission:1, completedMissions:[] };
+  } catch(e) {
+    return { unlockedMission:1, completedMissions:[] };
+  }
+}
+
+function saveCampaignProgress(progress){
+  // Sauvegarde locale
+  try {
+    localStorage.setItem(CAMPAIGN_SAVE_KEY, JSON.stringify(progress));
+  } catch(e) {}
+
+  // Sauvegarde Supabase
+  if(typeof supabase !== 'undefined'){
+    supabase.from('campaign_progress').upsert({
+      player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
+      unlocked_mission: progress.unlockedMission,
+      completed_missions: progress.completedMissions,
+      updated_at: new Date().toISOString(),
+    }).then(()=>{}).catch(()=>{});
+  }
+}
+
+function completeMission(missionId){
+  const progress = getCampaignProgress();
+  if(!progress.completedMissions.includes(missionId)){
+    progress.completedMissions.push(missionId);
+  }
+  if(progress.unlockedMission <= missionId){
+    progress.unlockedMission = missionId + 1;
+  }
+  saveCampaignProgress(progress);
+  return progress;
+}
