@@ -538,27 +538,15 @@ async function showMenu(){
         </div>
       </div>
     </div>
-    ${cpt
-      /* compact : creator à gauche, volume à droite sur la même ligne */
-      ? `<div style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 22px;margin-top:8px;">
-          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:5px;text-shadow:0 0 8px rgba(255,0,200,.5);">FloZeR</span></div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
-            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
-            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;">${Math.round(masterVolume*400)}%</span>
-            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
-          </div>
-        </div>`
-      /* plein : volume centré + creator en absolute */
-      : `<div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
-            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
-            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
-            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">+</button>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:14px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>`}
+    <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;">
+      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);">CREATOR <b style="color:#4fc3f7;font-weight:normal;">FLOZER</b></div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 9px;font-family:'VT323','Courier New',monospace;font-size:16px;cursor:pointer;">−</button>
+        <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:14px;">🔊</span>
+        <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:14px;min-width:38px;text-align:center;">${Math.round(masterVolume*400)}%</span>
+        <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 9px;font-family:'VT323','Courier New',monospace;font-size:16px;cursor:pointer;">+</button>
+      </div>
+    </div>
     `;
   OVel.style.display='flex';
   document.getElementById('bs').onclick=()=>{snd.sel&&snd.sel();showShipPick();};
@@ -992,19 +980,21 @@ function showMapPick(){
   GS='menu';
   let selIdx=MAPS.findIndex(m=>m.id===chosenMap.id);if(selIdx<0)selIdx=0;
   const cards=MAPS.map((m,i)=>`
-    <div class="card${i===selIdx?' sel':''}" data-idx="${i}" style="padding:14px;">
+    <div class="card${i===selIdx?' sel':''}" data-idx="${i}" style="padding:14px;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;">
       <div class="thumb" style="height:86px;">${mapThumb(m)}</div>
       <div class="card-name" style="font-size:13px;margin-top:10px;">${m.name}</div>
       <div style="font-size:10px;color:#9ec3ff;letter-spacing:2px;text-transform:uppercase;margin-top:5px;">${m.tag}</div>
-      <div class="card-desc" style="font-size:10px;line-height:1.65;margin-top:8px;">${m.desc}</div>
+      <div class="card-desc" style="font-size:10px;line-height:1.5;margin-top:8px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;">${m.desc}</div>
     </div>`).join('');
   OVel.innerHTML=`
-    <div class="pick-title" style="margin-top:8px;">CAP SUR…</div>
-    <div class="pick-sub" style="margin-top:6px;margin-bottom:4px;">Étape 3 / 3</div>
-    <div class="grid g5" id="map-grid" style="width:580px;max-height:700px;overflow-y:auto;padding:4px;gap:16px;">${cards}</div>
+    <div style="width:100%;max-width:540px;box-sizing:border-box;padding:10px 8px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div class="pick-title">CAP SUR…</div>
+    <div class="pick-sub" style="margin-bottom:4px;">Étape 3 / 3</div>
+    <div class="grid g5" id="map-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;box-sizing:border-box;padding:0 8px;">${cards}</div>
     <div style="display:flex;gap:14px;margin-top:14px;">
       <button class="sb back" id="bbk" style="padding:12px 28px;">← VAISSEAU</button>
       <button class="sb" id="blz" style="padding:12px 36px;">⚡ LANCEMENT</button>
+    </div>
     </div>`;
   const grid=document.getElementById('map-grid');
   grid.querySelectorAll('.card').forEach(c=>{
