@@ -684,6 +684,87 @@ function showCampaign(){
     </div>`;
 }
 
+function showMissionBriefing(idx){
+  const m = CAMPAIGN_MISSIONS[idx];
+  if(!m) return;
+  campaignMission = m;
+
+  const crewMembers = m.briefing.crew
+    .map(id => CREW.find(c => c.id === id))
+    .filter(Boolean);
+
+  const objIcons = { survive:'🛡', boss:'💥', score:'⭐' };
+
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:560px;padding:20px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;overflow-y:auto;max-height:820px;">
+
+      <div style="background:rgba(0,0,0,.6);border:1px solid #cc00ff;
+        border-radius:4px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;color:#cc00ff;letter-spacing:2px;">
+          📍 ${m.briefing.location}
+        </div>
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:3px;margin-top:6px;
+          text-shadow:0 0 10px rgba(255,200,80,.7);">
+          MISSION ${m.id < 10 ? '0'+m.id : m.id} — ${m.title}
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,.5);border:1px solid #333;
+        border-radius:4px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:12px;color:#ffffff55;letter-spacing:2px;margin-bottom:8px;">
+          ÉQUIPAGE PRÉSENT
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${crewMembers.map(c => `
+            <div style="border:1px solid ${c.col}44;border-radius:3px;
+              padding:5px 10px;font-size:14px;color:${c.col};">
+              ${c.emoji} ${c.name.split(' ').pop()}
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,.5);border:1px solid #333;
+        border-radius:4px;padding:14px;margin-bottom:12px;line-height:2;">
+        ${m.briefing.text.map(line => `
+          <div style="font-size:15px;color:#e0e0ff;margin-bottom:4px;">
+            ${line}
+          </div>`).join('')}
+      </div>
+
+      <div style="background:rgba(255,200,0,.08);border:1px solid #ffd87a44;
+        border-radius:4px;padding:12px;margin-bottom:14px;">
+        <div style="font-size:12px;color:#ffffff55;letter-spacing:2px;">
+          OBJECTIF
+        </div>
+        <div style="font-size:19px;color:#ffd87a;margin-top:4px;letter-spacing:2px;">
+          ${objIcons[m.objectiveType]} ${m.objectiveLabel}
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button onclick="showCampaign()" style="
+          flex:1;padding:12px;background:transparent;
+          color:#9944cc;border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          ← MISSIONS
+        </button>
+        <button onclick="showCampaignDifficulty()" style="
+          flex:2;padding:12px;
+          background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
+          color:#ffd87a;border:2px solid #ff00cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:18px;letter-spacing:3px;cursor:pointer;
+          box-shadow:0 0 16px rgba(255,0,200,.25);">
+          ⚡ CHOISIR DIFFICULTÉ
+        </button>
+      </div>
+    </div>`;
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
