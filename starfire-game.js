@@ -496,7 +496,8 @@ async function showMenu(){
     } else if(el)el.innerHTML=`<small style="opacity:.5;">&nbsp;</small>`;
     const elL=document.getElementById('local-score-peek');
     if(elL&&local){
-      elL.innerHTML=`<b>◈ ${local.pseudo||'MOI'} — ${Number(local.score).toLocaleString()}</b>`;
+      const mapL=local.map?`<span style="color:#c97a20;font-size:11px;letter-spacing:1px;"> · ${local.map}</span>`:'';
+      elL.innerHTML=`<b style="color:#ff9a2e;">◈ ${local.pseudo||'MOI'} — ${Number(local.score).toLocaleString()}</b>${mapL}`;
     } else if(elL)elL.innerHTML=`<small style="opacity:.5;">Pas encore de score</small>`;
   }).catch(()=>{});
   // hero ship svg (selected)
@@ -542,7 +543,7 @@ async function showMenu(){
         <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;">— Meilleur Score Mondial —</small>
         <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;">${loadingPlaceholder}</span>
         <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;margin-top:3px;">— Mon Meilleur Score —</small>
-        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;color:#7dffb8;">${loadingPlaceholder}</span>
+        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;color:#ff9a2e;">${loadingPlaceholder}</span>
       </div>
       <div style="margin-top:${cpt?'6':'18'}px;display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
@@ -557,16 +558,18 @@ async function showMenu(){
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
           ${gpIndex!==null?'● MANETTE CONNECTÉE':'○ AUCUNE MANETTE'}
         </div>
-        <div style="display:flex;align-items:center;gap:12px;margin-top:4px;">
-          <span style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:3px;color:#9944cc;">SENSIBILITÉ</span>
-          <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
-          <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:56px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
-          <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:2px;">
+          <span style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Sensibilité</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
+            <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:62px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
+            <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+          </div>
         </div>
       </div>
     </div>
     <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;">
-      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);">CREATOR <b style="color:#4fc3f7;font-weight:normal;">FLOZER</b></div>
+      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);">CREATORS <b style="color:#cc66ff;font-weight:normal;text-shadow:0 0 6px #aa44dd;">FLOZER</b> <span style="color:rgba(255,255,255,.2);">&</span> <b style="color:#aa44cc;font-weight:normal;text-shadow:0 0 6px #882299;">CLAUDE</b></div>
       <div style="display:flex;align-items:center;gap:6px;">
         <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 9px;font-family:'VT323','Courier New',monospace;font-size:16px;cursor:pointer;">−</button>
         <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:14px;">🔊</span>
