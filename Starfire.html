@@ -11,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;background:#000;}
 body{font-family:'VT323','Courier New',monospace;}
-#wrap{position:fixed;width:560px;height:1200px;overflow:hidden !important;isolation:isolate;clip-path:inset(0);transform-origin:0 0;}
+#wrap{position:fixed;width:560px;height:880px;overflow:hidden !important;isolation:isolate;clip-path:inset(0);transform-origin:0 0;}
 canvas{display:block;}
 
 /* ── MENU CHROME — NEON ARCADE ───────────────────────────────────── */
@@ -60,7 +60,7 @@ canvas{display:block;}
 
 /* Scan line : magenta */
 .scan{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,0,200,.8),transparent);animation:scan 5s linear infinite;pointer-events:none;}
-@keyframes scan{0%{transform:translateY(-2px);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(1200px);opacity:0;}}
+@keyframes scan{0%{transform:translateY(-2px);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(2000px);opacity:0;}}
 
 .btn-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:4px;}
 
@@ -137,8 +137,8 @@ canvas{display:block;}
 </head>
 <body>
 <div id="wrap">
-  <canvas id="c" width="560" height="1200"></canvas>
-  <canvas id="cm" width="560" height="1200"></canvas>
+  <canvas id="c" width="560" height="880"></canvas>
+  <canvas id="cm" width="560" height="880"></canvas>
   <div id="bbar"><span id="bname">⚠ BOSS</span><div id="bbo"><div id="bbi"></div></div></div>
   <div id="blog"></div>
   <div id="ov"></div>
@@ -152,38 +152,42 @@ canvas{display:block;}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+<!-- ── SCALING ─────────────────────────────────────────────────────────
+     ÉTAPE 1 : Calculer H et redimensionner les canvas AVANT game.js.
+     - Téléphone portrait (vw < vh * 0.467) → H=1200 pour remplir l'écran
+     - Desktop / paysage → H adapté à la fenêtre, max 880
+     game.js lit window._gameH à son démarrage (const H=window._gameH||880)
+───────────────────────────────────────────────────────────────────── -->
 <script>
 (function(){
   var vw=window.innerWidth, vh=window.innerHeight;
-  // Téléphone portrait : H=1200 (remplit l'écran, contraint par la largeur)
-  // Desktop / paysage  : H s'adapte à la hauteur réelle de la fenêtre (max 880)
-  //   → scale ≈ 1 quelle que soit la résolution, le jeu remplit la hauteur disponible
-  var isPhone=(vw*1200<=vh*560);
-  var H=isPhone?1200:Math.max(600,Math.min(880,Math.floor(vh*0.97)));
-  ['c','cm'].forEach(function(id){var el=document.getElementById(id);if(el)el.height=H;});
-  var wr=document.getElementById('wrap');if(wr)wr.style.height=H+'px';
+  var H=(vw*1200<=vh*560)?1200:Math.max(600,Math.min(880,Math.floor(vh*0.97)));
+  document.getElementById('c').height=H;
+  document.getElementById('cm').height=H;
+  document.getElementById('wrap').style.height=H+'px';
   window._gameH=H;
 })();
 </script>
+
 <script src="starfire-config.js"></script>
 <script src="starfire-game.js"></script>
+
+<!-- ── SCALING ─────────────────────────────────────────────────────────
+     ÉTAPE 2 : Mettre à l'échelle le wrap APRÈS game.js.
+     transform-origin:0 0 → left/top centrent exactement le jeu.
+     scaleGame() est aussi appelée au resize.
+───────────────────────────────────────────────────────────────────── -->
 <script>
 function scaleGame(){
   var wrap=document.getElementById('wrap');
   if(!wrap)return;
-  var vw=window.innerWidth,vh=window.innerHeight;
+  var vw=window.innerWidth, vh=window.innerHeight;
   var H=window._gameH||880;
-  var scale=Math.min(vw/560,vh/H);
-  // transform-origin 0 0 : formule de centrage exacte
-  var x=Math.round((vw-560*scale)/2);
-  var y=Math.round((vh-H*scale)/2);
-  wrap.style.transformOrigin='0 0';
+  var scale=Math.min(vw/560, vh/H);
   wrap.style.transform='scale('+scale+')';
-  wrap.style.position='fixed';
-  wrap.style.left=x+'px';
-  wrap.style.top=y+'px';
-  wrap.style.marginTop='';
-  wrap.style.marginLeft='';
+  wrap.style.left=Math.round((vw-560*scale)/2)+'px';
+  wrap.style.top=Math.round((vh-H*scale)/2)+'px';
 }
 window.addEventListener('resize',scaleGame);
 window.addEventListener('orientationchange',scaleGame);
