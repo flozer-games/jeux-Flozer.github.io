@@ -536,18 +536,12 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">✦ Crédits</button>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;margin-top:4px;">
-        <div style="display:flex;align-items:center;gap:14px;width:100%;justify-content:center;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
-            <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
-            <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
-          </div>
-          <div style="width:1px;height:30px;background:linear-gradient(180deg,transparent,#330055,transparent);"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
-            <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
-            <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
-          </div>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;margin-top:4px;">
+        <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
+        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
+        <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:2px 0;"></div>
+        <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
+        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
       </div>
       <div style="margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:5px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
