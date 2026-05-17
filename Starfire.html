@@ -164,7 +164,7 @@ canvas{display:block;}
   var vw=window.innerWidth, vh=window.innerHeight;
   // H=1200 sur téléphone portrait, H adaptatif (max 740) sur desktop
   // H=740 sur desktop → scale≈1.28 sur 1920×945 → jeu ~715px (même largeur qu'avant W=560)
-  var H=(vw*1200<=vh*560)?1200:Math.max(560,Math.min(740,Math.floor(vh*0.97)));
+  var H=(vw*1200<=vh*560)?1200:Math.max(560,Math.min(720,Math.floor(vh*0.97)));
   document.getElementById('c').height=H;
   document.getElementById('cm').height=H;
   document.getElementById('wrap').style.height=H+'px';

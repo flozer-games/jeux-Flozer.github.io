@@ -6,7 +6,7 @@ const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
 // H calculé par l'HTML avant le chargement du moteur (voir _gameH dans Starfire.html)
 // isMobile = pointeur principal imprecis (doigt) → active le joystick virtuel
 const isMobile=window.matchMedia('(pointer:coarse)').matches;
-const W=560,H=window._gameH||740;
+const W=560,H=window._gameH||720;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpRT=false,gpStart=false;
 let inputMode='keyboard'; // 'keyboard' | 'gamepad'
@@ -488,16 +488,17 @@ async function showMenu(){
     <ellipse cx="0" cy="-10" rx="4" ry="8" fill="${p.cockHi}"/>
     <rect x="-1" y="-4" width="2" height="14" fill="${p.accent}"/>
   </svg>`;
+  const cpt=H<800; // mode compact quand hauteur limitée (desktop)
   OVel.innerHTML=`
     <div class="scan"></div>
-    <div class="menu-shell">
+    <div class="menu-shell" style="gap:${cpt?'10':'16'}px;">
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
-      <div style="height:18px;"></div>
+      <div style="height:${cpt?'4':'18'}px;"></div>
       <div style="position:relative;">
         <span class="menu-side l"></span><span class="menu-side r"></span>
         <div class="title">STARFIRE</div>
       </div>
-      <div style="height:38px;"></div>
+      <div style="height:${cpt?'10':'38'}px;"></div>
       <div class="hero-ship">
         <div class="hero-ring"></div><div class="hero-ring r2"></div>
         <div class="hero-orbit"><i></i></div><div class="hero-orbit b"><i></i></div>
@@ -512,11 +513,11 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:14px;letter-spacing:4px;padding:11px 28px;">✦ Crédits</button>
         </div>
       </div>
-      <div class="peek" style="margin-top:22px;">
+      <div class="peek" style="margin-top:${cpt?'6':'22'}px;">
         <small style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:5px;color:#5b8acc;text-transform:uppercase;">— Meilleur Score —</small>
         <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:16px;letter-spacing:3px;color:#ffd87a;">${topRow}</span>
       </div>
-      <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <div style="margin-top:${cpt?'4':'14'}px;display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
         <div style="display:flex;gap:10px;">
           <button id="btn-mode-kb" onclick="setInputMode('keyboard')" style="font-family:'VT323','Courier New',monospace;font-size:17px;letter-spacing:3px;padding:8px 20px;border-radius:3px;cursor:pointer;transition:all .15s;
@@ -537,7 +538,7 @@ async function showMenu(){
         </div>
       </div>
     </div>
-    <div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
+    <div style="width:100%;display:flex;justify-content:center;margin-top:${cpt?'8':'28'}px;">
       <div style="display:flex;align-items:center;gap:10px;">
         <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
         <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
