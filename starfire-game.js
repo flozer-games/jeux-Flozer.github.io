@@ -536,14 +536,14 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">✦ Crédits</button>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;margin-top:4px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;margin-top:6px;">
         <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
-        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
-        <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:2px 0;"></div>
+        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
+        <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:3px 0;"></div>
         <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
-        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
+        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
       </div>
-      <div style="margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:5px;">
+      <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:5px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
         <div style="display:flex;gap:8px;">
           <button id="btn-mode-kb" onclick="setInputMode('keyboard')" style="font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:2px;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all .15s;
