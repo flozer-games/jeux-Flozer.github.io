@@ -579,7 +579,8 @@ function showCredits(){
     <div style="font-size:12px;color:#9ec3ff;text-align:center;line-height:1.9;letter-spacing:1px;max-width:340px;">
       Conception de STARFIRE<br>
       <span style="color:#ffd87a;letter-spacing:3px;">VOUS</span><br>
-      <span style="color:#ffd87a;letter-spacing:3px;">et Claude</span><br><br>
+      <span style="color:#ffd87a;letter-spacing:3px;">et Claude</span>
+      <span style="font-size:0.75em;color:#ffffff66;letter-spacing:1px;">(AI, Code &amp; Design)</span><br><br>
       Engin & rendu spatial<br>
       <span style="color:#ffd87a;letter-spacing:3px;">CANEVAS HTML</span><br><br>
       Bande-son procédurale<br>
