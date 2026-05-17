@@ -530,6 +530,7 @@ async function showMenu(){
       <div class="brackets" style="font-size:11px;letter-spacing:3px;">TRANSMISSION REÇUE</div>
       <div class="btn-row" style="gap:6px;">
         <button class="sb" id="bs">⚡ COMMENCER</button>
+        <button onclick="showCampaign()" class="sb" style="background:linear-gradient(180deg,rgba(0,40,60,.9),rgba(0,15,30,.95));border-color:#00e5ff;color:#00e5ff;width:80%;box-shadow:0 0 12px rgba(0,200,255,.25) inset;">📖 CAMPAGNE</button>
         <button class="sb alt" id="bmp" style="letter-spacing:3px;">⚔ MULTIJOUEUR</button>
         <div style="display:flex;gap:8px;">
           <button class="sb alt" id="bsc" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">⟡ Scores</button>
