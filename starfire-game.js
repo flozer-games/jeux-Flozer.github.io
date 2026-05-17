@@ -1013,6 +1013,70 @@ function campaignMissionSuccess(){
     </div>`;
 }
 
+function campaignGameOver(){
+  if(!campaignMission) return;
+  const m = campaignMission;
+  campaignMode = false;
+  stopMusic();
+  playGameOverCrash();
+
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="text-align:center;font-family:'VT323','Courier New',monospace;
+      color:#fff;padding:30px;width:100%;max-width:480px;box-sizing:border-box;">
+
+      <div style="font-size:32px;color:#ff2bd6;letter-spacing:4px;margin-bottom:10px;
+        text-shadow:0 0 20px rgba(255,43,214,.9);animation:goBlink 0.6s infinite alternate;">
+        ❌ MISSION ÉCHOUÉE
+      </div>
+
+      <div style="font-size:18px;color:#ff8888;letter-spacing:2px;margin-bottom:20px;">
+        ${m.title}
+      </div>
+
+      <div style="font-size:14px;color:#ffffff55;margin-bottom:6px;">SCORE</div>
+      <div style="font-size:36px;color:#ffd87a;margin-bottom:8px;">
+        ${score.toLocaleString()}
+      </div>
+
+      <div style="font-size:14px;color:#ffffff44;margin-bottom:24px;letter-spacing:1px;">
+        Objectif : ${m.objectiveLabel}
+      </div>
+
+      <div style="background:rgba(0,0,0,.4);border:1px solid #ffffff22;
+        border-radius:4px;padding:12px;margin-bottom:24px;
+        font-size:14px;color:#cc88ff;letter-spacing:1px;line-height:1.8;">
+        ${m.briefing.text[Math.floor(Math.random() * m.briefing.text.length)]}
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="showMissionBriefing(${m.id - 1})" style="
+          padding:12px 20px;
+          background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
+          color:#ffd87a;border:2px solid #ff00cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;
+          box-shadow:0 0 16px rgba(255,0,200,.25);">
+          🔄 RÉESSAYER
+        </button>
+        <button onclick="showCampaign()" style="
+          padding:12px 20px;background:transparent;color:#00e5ff;
+          border:1px solid #0099cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          📋 MISSIONS
+        </button>
+        <button onclick="showMenu()" style="
+          padding:12px 20px;background:transparent;color:#9944cc;
+          border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          🏠 MENU
+        </button>
+      </div>
+    </div>`;
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
@@ -2967,6 +3031,7 @@ function abandonGame(){
 }
 
 async function endGame(){
+  if(campaignMode){campaignMode=false;campaignGameOver();return;}
   GS='dead';cancelAnimationFrame(RAF);stopMusic();playGameOverCrash();snd.over();
   destroyJoystick();
   if(mpMode)mpSendGameOver();
