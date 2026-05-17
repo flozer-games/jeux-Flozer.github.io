@@ -539,11 +539,16 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:14px;letter-spacing:4px;padding:11px 28px;">✦ Crédits</button>
         </div>
       </div>
-      <div class="peek" style="margin-top:${cpt?'4':'12'}px;gap:2px;">
-        <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;">— Meilleur Score Mondial —</small>
-        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;">${loadingPlaceholder}</span>
-        <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;margin-top:3px;">— Mon Meilleur Score —</small>
-        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;color:#ff9a2e;">${loadingPlaceholder}</span>
+      <div class="peek" style="margin-top:${cpt?'4':'12'}px;gap:0;width:100%;max-width:420px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:6px 0 5px;">
+          <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
+          <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
+        </div>
+        <div style="width:80%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:0 auto;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:5px 0 4px;">
+          <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
+          <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
+        </div>
       </div>
       <div style="margin-top:${cpt?'6':'18'}px;display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
@@ -569,7 +574,7 @@ async function showMenu(){
       </div>
     </div>
     <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;">
-      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);">CREATORS <b style="color:#cc66ff;font-weight:normal;text-shadow:0 0 6px #aa44dd;">FLOZER</b> <span style="color:rgba(255,255,255,.2);">&</span> <b style="color:#aa44cc;font-weight:normal;text-shadow:0 0 6px #882299;">CLAUDE</b></div>
+      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);"><span style="color:#ff8800;font-weight:bold;">CREATORS</span> <b style="color:#cc66ff;font-weight:normal;text-shadow:0 0 6px #aa44dd;">FLOZER</b> <span style="color:#ff8800;font-weight:bold;">&</span> <b style="color:#aa44cc;font-weight:normal;text-shadow:0 0 6px #882299;">CLAUDE</b></div>
       <div style="display:flex;align-items:center;gap:6px;">
         <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 9px;font-family:'VT323','Courier New',monospace;font-size:16px;cursor:pointer;">−</button>
         <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:14px;">🔊</span>
