@@ -408,6 +408,16 @@ async function saveScore(s,w,sh,mp,ps,wd){
     if(!lb||s>lb.score)await Store.set('starfire:localbest',JSON.stringify({score:s,wave:w,map:mp,pseudo:(ps||'ANONYME').toUpperCase().slice(0,10)}));
   }catch(e){}
 }
+async function loadAllScores(){
+  if(sb){
+    try{
+      const{data,error}=await sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
+      if(!error&&data)return data;
+    }catch(e){console.warn('Supabase loadAll failed',e);}
+  }
+  try{const r=await Store.get('starfire:scores');if(r)return JSON.parse(r.value).slice(0,15);}catch(e){}
+  return[];
+}
 async function loadScores(diffName){
   if(sb){
     try{
@@ -767,6 +777,7 @@ async function showScores(diffIdx){
     {key:'easy',   label:'FACILE',    stars:'★',   col:'#4ade80'},
     {key:'normal', label:'NORMAL',    stars:'★★',  col:'#60a5fa'},
     {key:'hard',   label:'DIFFICILE', stars:'★★★', col:'#f87171'},
+    {key:null,     label:'ANCIENS',   stars:'📜',  col:'#e2a84b'},
   ];
   const cur=DIFFS[diffIdx];
 
@@ -774,8 +785,8 @@ async function showScores(diffIdx){
     const tabs=DIFFS.map((d,i)=>{
       const active=i===diffIdx;
       return `<button onclick="showScores(${i})" style="
-        font-family:'VT323','Courier New',monospace;font-size:15px;letter-spacing:2px;
-        padding:7px 18px;border-radius:3px 3px 0 0;cursor:pointer;white-space:nowrap;
+        font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:1px;
+        padding:7px 14px;border-radius:3px 3px 0 0;cursor:pointer;white-space:nowrap;
         border:1px solid ${active?d.col:'#440055'};border-bottom:${active?'1px solid #0a001a':'1px solid #440055'};
         background:${active?'rgba(40,0,55,.95)':'rgba(15,0,22,.7)'};
         color:${active?d.col:'#9944cc'};
@@ -789,7 +800,7 @@ async function showScores(diffIdx){
       <div style="font-family:'VT323',monospace;font-size:13px;letter-spacing:3px;color:${sb?'#00e5ff':'#9944cc'};margin-bottom:10px;">
         ${sb?'🌐 TOP 15 MONDIAL':'💾 SCORES LOCAUX'}
       </div>
-      <div style="display:flex;gap:4px;justify-content:center;width:520px;padding-bottom:0;border-bottom:1px solid #440055;margin-bottom:0;">
+      <div style="display:flex;gap:3px;justify-content:center;width:520px;padding-bottom:0;border-bottom:1px solid #440055;margin-bottom:0;">
         ${tabs}
       </div>
       <div style="width:520px;background:rgba(8,0,18,.92);border:1px solid #440055;border-top:none;border-radius:0 0 4px 4px;min-height:280px;display:flex;flex-direction:column;">
@@ -802,14 +813,15 @@ async function showScores(diffIdx){
   OVel.style.display='flex';
   document.getElementById('bbk').onclick=()=>showMenu();
 
-  const sc=await loadScores(cur.key);
+  // Onglet ANCIENS : tous les scores sans filtre de difficulte
+  const sc=cur.key===null ? await loadAllScores() : await loadScores(cur.key);
   const medal=['🥇','🥈','🥉'];
 
   // Raccourcit le nom de map pour gagner de la place
   const shortMap=m=>(m||'').replace('SYSTEME SOLAIRE','SOLAIRE').replace('ARALIS DUNES','ARALIS').replace('KRYNOS FROSTBELT','KRYNOS').replace('PYRON CRADLE','PYRON').replace('NYXAR VEIL','NYXAR');
 
   const rows=sc.length===0
-    ?`<tr><td colspan="6" style="color:#444;padding:28px;text-align:center;letter-spacing:2px;font-size:12px;font-family:'Courier New',monospace;">— Aucune entrée en ${cur.label} —</td></tr>`
+    ?`<tr><td colspan="6" style="color:#444;padding:28px;text-align:center;letter-spacing:2px;font-size:12px;font-family:'Courier New',monospace;">— Aucune entrée ${cur.key===null?'disponible':('en '+cur.label)} —</td></tr>`
     :sc.map((s,i)=>{
       const rank=medal[i]||`<span style="color:#9944cc;">${String(i+1).padStart(2,'0')}</span>`;
       const bg=i===0?'rgba(255,200,50,.06)':i===1?'rgba(180,180,180,.04)':i===2?'rgba(180,100,30,.05)':'';
