@@ -721,7 +721,7 @@ function showMissionBriefing(idx){
           ${crewMembers.map(c => `
             <div style="border:1px solid ${c.col}44;border-radius:3px;
               padding:5px 10px;font-size:14px;color:${c.col};">
-              ${c.emoji} ${c.name.split(' ').pop()}
+              ${c.emoji} ${c.name.split(' ').filter(w=>!['Capitaine','Dr.'].includes(w))[0]}
             </div>`).join('')}
         </div>
       </div>
@@ -730,7 +730,8 @@ function showMissionBriefing(idx){
         border-radius:4px;padding:14px;margin-bottom:12px;line-height:2;">
         ${m.briefing.text.map(line => `
           <div style="font-size:15px;color:#e0e0ff;margin-bottom:4px;">
-            ${line}
+            ${line.replace(/^([A-ZÀÉÈÊËÎÏÔÙÛÜ\-]+(?:\s[A-ZÀÉÈÊËÎÏÔÙÛÜ\-]+)?) :/,
+              '<span style="color:#ff8c00;font-weight:bold;text-shadow:0 0 8px rgba(255,140,0,.7);">$1</span> :')}
           </div>`).join('')}
       </div>
 
