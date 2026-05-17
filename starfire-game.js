@@ -538,11 +538,11 @@ async function showMenu(){
         </div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;margin:10px 0;">
-        <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
-        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
+        <small style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
+        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ffd87a;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
         <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:3px 0;"></div>
-        <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
-        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
+        <small style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
+        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:1px;color:#ff9a2e;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
       </div>
       <div style="margin:10px 0;display:flex;flex-direction:column;align-items:center;gap:5px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
