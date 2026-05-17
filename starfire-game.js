@@ -925,6 +925,88 @@ function startCampaignMission(){
   startGame();
 }
 
+function checkCampaignObjective(){
+  if(!campaignMode || !campaignMission || GS !== 'playing') return;
+  const m = campaignMission;
+  let success = false;
+
+  if(m.objectiveType === 'score'   && score >= m.objectiveValue) success = true;
+  if(m.objectiveType === 'survive' && wave >= m.objectiveValue && !boss) success = true;
+  if(m.objectiveType === 'boss'    && bDefeated) success = true;
+
+  if(success) campaignMissionSuccess();
+}
+
+function campaignMissionSuccess(){
+  if(!campaignMission) return;
+  const m = campaignMission;
+  campaignMode = false;
+  GS = 'transition';
+  cancelAnimationFrame(RAF);
+  stopMusic();
+  playTrack('victory');
+  const progress = completeMission(m.id);
+
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="text-align:center;font-family:'VT323','Courier New',monospace;
+      color:#fff;padding:30px;width:100%;max-width:480px;box-sizing:border-box;">
+
+      <div style="font-size:32px;color:#ffd87a;letter-spacing:4px;margin-bottom:10px;
+        text-shadow:0 0 20px rgba(255,200,80,.9);">
+        ✅ MISSION ACCOMPLIE
+      </div>
+
+      <div style="font-size:18px;color:#22c55e;letter-spacing:2px;margin-bottom:20px;">
+        ${m.title}
+      </div>
+
+      <div style="font-size:14px;color:#ffffff55;margin-bottom:6px;">
+        SCORE FINAL
+      </div>
+      <div style="font-size:40px;color:#ffd87a;margin-bottom:20px;">
+        ${score.toLocaleString()}
+      </div>
+
+      ${m.id < 15 ? `
+        <div style="font-size:15px;color:#00e5ff;letter-spacing:2px;margin-bottom:24px;">
+          ⚡ MISSION ${m.id + 1} DÉBLOQUÉE !
+        </div>` : `
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:3px;margin-bottom:24px;
+          text-shadow:0 0 12px rgba(255,200,80,.8);">
+          🏆 CAMPAGNE TERMINÉE !<br>
+          <span style="font-size:15px;color:#22c55e;">Veltara est sauvée !</span>
+        </div>`}
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="showMissionBriefing(${m.id - 1})" style="
+          padding:12px 20px;background:transparent;color:#9944cc;
+          border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          🔄 REJOUER
+        </button>
+        ${m.id < 15 ? `
+        <button onclick="showMissionBriefing(${m.id})" style="
+          padding:12px 20px;
+          background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
+          color:#ffd87a;border:2px solid #ff00cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;
+          box-shadow:0 0 16px rgba(255,0,200,.25);">
+          ⚡ MISSION SUIVANTE
+        </button>` : ''}
+        <button onclick="showCampaign()" style="
+          padding:12px 20px;background:transparent;color:#00e5ff;
+          border:1px solid #0099cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          📋 MISSIONS
+        </button>
+      </div>
+    </div>`;
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
@@ -1863,6 +1945,7 @@ function killScore(x,y,sc,col){
   score+=total;
   fSc(x,y,total,col);
   if(combo>=2)floats.push({x,y:y-24,val:'×'+combo,col:'#ffd87a',life:.9,vy:-2.2,big:true});
+  checkCampaignObjective();
 }
 function spawnBonus(x,y,fc){
   // Taux fixe : 22% par ennemi tué, identique toutes difficultés et toutes maps
@@ -2112,11 +2195,13 @@ function bossDefeatedFn(){
   if(player){player.bonuses.shield=180;logB('shield');}
   // Reprend la musique de la map 2s après la mort du boss (laisse la fanfare snd.win() finir)
   setTimeout(()=>playTrack('map'+currentWorld), 2000);
+  checkCampaignObjective();
   advanceWave();
 }
 function advanceWave(){
   wave++;wTimer=0;score+=wave*50;
   if(wave>0&&wave%5===0&&wave%10!==0)spawnGridFormation();
+  checkCampaignObjective();
   // Limite variable selon la map
   const wLimit=getWaveLimit();
   if(wLimit!==Infinity&&wave>wLimit){
