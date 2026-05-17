@@ -6,7 +6,7 @@ const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
 // H calculé par l'HTML avant le chargement du moteur (voir _gameH dans Starfire.html)
 // isMobile = pointeur principal imprecis (doigt) → active le joystick virtuel
 const isMobile=window.matchMedia('(pointer:coarse)').matches;
-const W=560,H=window._gameH||720;
+const W=540,H=840;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpRT=false,gpStart=false;
 let inputMode='keyboard'; // 'keyboard' | 'gamepad'
