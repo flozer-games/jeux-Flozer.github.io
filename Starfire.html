@@ -152,15 +152,30 @@ canvas{display:block;}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script>
+(function(){
+  // On choisit H=1200 uniquement si l'écran est assez haut pour que le jeu
+  // reste contraint par la largeur (= téléphone portrait).
+  // Formule : vw/560 <= vh/1200  <=>  vw*1200 <= vh*560
+  // Desktop 1920×1080 : 1920*1200=2304000 > 1080*560=604800 → H=880 ✓
+  // Phone   390×844  :  390*1200=468000  ≤  844*560=472640  → H=1200 ✓
+  var vw=window.innerWidth, vh=window.innerHeight;
+  var H=(vw*1200<=vh*560)?1200:880;
+  ['c','cm'].forEach(function(id){var el=document.getElementById(id);if(el)el.height=H;});
+  var wr=document.getElementById('wrap');if(wr)wr.style.height=H+'px';
+  window._gameH=H;
+})();
+</script>
 <script src="starfire-config.js"></script>
 <script src="starfire-game.js"></script>
 <script>
 function scaleGame(){
   const wrap=document.getElementById('wrap');
   const vw=window.innerWidth, vh=window.innerHeight;
-  const scale=Math.min(vw/560, vh/1200);
+  const H=window._gameH||1200;
+  const scale=Math.min(vw/560, vh/H);
   const x=Math.round((vw-560*scale)/2);
-  const y=Math.round((vh-1200*scale)/2);
+  const y=Math.round((vh-H*scale)/2);
   wrap.style.transform=`scale(${scale})`;
   wrap.style.left=x+'px';
   wrap.style.top=y+'px';

@@ -3,9 +3,10 @@
 // ═══════════════════════════════════════════════════════════════════
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
-const W=560,H=1200;
-// ── MOBILE ────────────────────────────────────────────────────────
-const isMobile='ontouchstart' in window||navigator.maxTouchPoints>0;
+// H calculé par l'HTML avant le chargement du moteur (voir _gameH dans Starfire.html)
+// isMobile = pointeur principal imprecis (doigt) → active le joystick virtuel
+const isMobile=window.matchMedia('(pointer:coarse)').matches;
+const W=560,H=window._gameH||880;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpRT=false,gpStart=false;
 let inputMode='keyboard'; // 'keyboard' | 'gamepad'
