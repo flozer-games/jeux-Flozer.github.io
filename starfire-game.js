@@ -2206,6 +2206,7 @@ function advanceWave(){
   wave++;wTimer=0;score+=wave*50;
   if(wave>0&&wave%5===0&&wave%10!==0)spawnGridFormation();
   checkCampaignObjective();
+  if(campaignMode) return; // succès campagne déjà géré, on ne touche pas aux transitions
   // Limite variable selon la map
   const wLimit=getWaveLimit();
   if(wLimit!==Infinity&&wave>wLimit){
