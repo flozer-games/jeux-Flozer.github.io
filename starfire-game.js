@@ -536,29 +536,15 @@ async function showMenu(){
           <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:56px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
           <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
         </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+          <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
+          <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
+          <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
+          <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+        </div>
       </div>
     </div>
-    ${cpt
-      /* compact : creator + volume sur la même ligne */
-      ? `<div style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 22px;margin-top:8px;">
-          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:5px;text-shadow:0 0 8px rgba(255,0,200,.5);">FloZeR</span></div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
-            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
-            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;">${Math.round(masterVolume*400)}%</span>
-            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
-          </div>
-        </div>`
-      /* plein : volume centré + creator en absolute */
-      : `<div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
-            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
-            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
-            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">+</button>
-          </div>
-        </div>
-        <div style="position:absolute;bottom:14px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>`}
+    <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>
     `;
   OVel.style.display='flex';
   document.getElementById('bs').onclick=()=>{snd.sel&&snd.sel();showShipPick();};
@@ -1952,14 +1938,22 @@ function update(){
   if(gpIndex!==null){
     const gp=navigator.getGamepads()[gpIndex];
     if(gp){
-      // Stick gauche → mouvement
-      const ax=gp.axes[0]??0, ay=gp.axes[1]??0;
       const dead=0.15;
-      if(Math.abs(ax)>dead){player.x=Math.max(22,Math.min(W-22,player.x+ax*spd*1.4));}
-      if(Math.abs(ay)>dead){player.y=Math.max(60,Math.min(H-32,player.y+ay*spd*1.4));player.vy=0;}
-      // RT (axe 5) ou bouton 7 → tir manuel (stocké dans gpRT, lu dans la logique de tir)
-      gpRT=((gp.axes[5]??-1)>0.1)||!!(gp.buttons[7]?.pressed);
-      // Bouton START (9) → pause (edge detection : une seule bascule par appui physique)
+      // Stick gauche (axes 0/1) ou stick droit (axes 2/3) → mouvement
+      const ax0=gp.axes[0]??0, ay0=gp.axes[1]??0;
+      const ax2=gp.axes[2]??0, ay2=gp.axes[3]??0;
+      const ax=Math.abs(ax0)>dead?ax0:(Math.abs(ax2)>dead?ax2:0);
+      const ay=Math.abs(ay0)>dead?ay0:(Math.abs(ay2)>dead?ay2:0);
+      // D-pad (boutons 12-15) en complément des sticks
+      const dpL=!!(gp.buttons[14]?.pressed), dpR=!!(gp.buttons[15]?.pressed);
+      const dpU=!!(gp.buttons[12]?.pressed), dpD=!!(gp.buttons[13]?.pressed);
+      const mx=ax!==0?ax:(dpL?-1:dpR?1:0);
+      const my=ay!==0?ay:(dpU?-1:dpD?1:0);
+      if(mx!==0)player.x=Math.max(22,Math.min(W-22,player.x+mx*spd*1.4));
+      if(my!==0){player.y=Math.max(60,Math.min(H-32,player.y+my*spd*1.4));player.vy=0;}
+      // RT (axe 5 ou bouton 7) → tir ; bouton A (0) = tir aussi
+      gpRT=((gp.axes[5]??-1)>0.1)||!!(gp.buttons[7]?.pressed)||!!(gp.buttons[0]?.pressed);
+      // Bouton START (9) → pause
       const startNow=!!(gp.buttons[9]?.pressed);
       if(startNow&&!gpStart){if(GS==='playing'||GS==='pause')togglePause();}
       gpStart=startNow;
@@ -1973,7 +1967,9 @@ function update(){
   const frMap={default:player.bonuses.rapid>0?Math.max(6,baseFr-10):baseFr,missile:30,minigun:3,laser:9999};
   const fr=frMap[player.weapon]||baseFr;
   if(fTimer<fr)fTimer++;
-  if(fTimer>=fr){
+  // gpRT (RT ou bouton A manette) force le tir dès que le timer est à moitié chargé
+  const rtBoost=gpRT&&fTimer>=Math.ceil(fr/2);
+  if(fTimer>=fr||rtBoost){
     if(player.weapon==='default')fireDefault();
     else if(player.weapon==='missile')fireMissile();
     else if(player.weapon==='minigun')fireMinigun();
