@@ -621,6 +621,69 @@ function showCredits(){
   document.getElementById('bbk').onclick=()=>showMenu();
 }
 
+// ── MODE CAMPAGNE ─────────────────────────────────────────────────
+let campaignMode = false;
+let campaignMission = null;
+let campaignDifficulty = 'normal';
+
+function showCampaign(){
+  const progress = getCampaignProgress();
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:560px;padding:16px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;overflow-y:auto;max-height:820px;">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:24px;color:#ffd87a;letter-spacing:4px;
+          text-shadow:0 0 12px rgba(255,200,80,.8);">
+          📖 MODE CAMPAGNE
+        </div>
+        <div style="font-size:15px;color:#00e5ff;letter-spacing:3px;margin-top:6px;">
+          LA QUÊTE DU ZYONITE
+        </div>
+        <div style="font-size:13px;color:#ffffff55;margin-top:6px;">
+          ${progress.completedMissions.length} / 15 missions complétées
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+        ${CAMPAIGN_MISSIONS.map(m => {
+          const unlocked  = m.id <= progress.unlockedMission;
+          const completed = progress.completedMissions.includes(m.id);
+          const isCurrent = m.id === progress.unlockedMission;
+          const borderCol = completed ? '#22c55e' : isCurrent ? '#ffd87a' : '#444';
+          const bgCol     = completed ? 'rgba(20,60,20,.8)' : isCurrent ? 'rgba(50,30,0,.8)' : 'rgba(10,10,10,.8)';
+          const icon      = completed ? '✅' : isCurrent ? '⚡' : unlocked ? '🔓' : '🔒';
+          return `
+          <div onclick="${unlocked ? `showMissionBriefing(${m.id - 1})` : ''}"
+            style="background:${bgCol};border:1px solid ${borderCol};
+              border-radius:4px;padding:10px 8px;text-align:center;
+              cursor:${unlocked ? 'pointer' : 'default'};
+              opacity:${unlocked ? 1 : 0.4};transition:all .15s;"
+            onmouseover="if(${unlocked})this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size:11px;color:${borderCol};letter-spacing:1px;">
+              ${icon} M${m.id < 10 ? '0' + m.id : m.id}
+            </div>
+            <div style="font-size:12px;color:${unlocked ? '#fff' : '#666'};
+              margin-top:4px;line-height:1.3;letter-spacing:0.5px;">
+              ${m.title}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <button onclick="showMenu()" style="
+        width:100%;padding:12px;background:transparent;
+        color:#9944cc;border:1px solid #660088;border-radius:3px;
+        font-family:'VT323','Courier New',monospace;
+        font-size:17px;letter-spacing:3px;cursor:pointer;">
+        ← RETOUR MENU
+      </button>
+    </div>`;
+}
+
 // ── MULTIPLAYER FUNCTIONS ──────────────────────────────────────────
 function initMultiplayer(onId,peerId){
   if(mpPeer){try{mpPeer.destroy();}catch(e){}}
