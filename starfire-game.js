@@ -927,7 +927,6 @@ function startCampaignMission(){
 }
 
 function checkCampaignObjective(){
-  console.log('[CAMPAGNE] check — GS:', GS, '| campaignMode:', campaignMode);
   if(!campaignMode || !campaignMission || GS !== 'playing') return;
   const m = campaignMission;
   let success = false;
@@ -943,7 +942,6 @@ function checkCampaignObjective(){
 }
 
 function campaignMissionSuccess(){
-  console.log('[CAMPAGNE] campaignMissionSuccess appelé — GS:', GS, '| campaignMode:', campaignMode);
   if(!campaignMission) return;
   const m = campaignMission;
   campaignMode = false;
