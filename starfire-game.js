@@ -1812,7 +1812,7 @@ function dmgPlayer(){
   if(player.iframes>0)return false;
   if(player.bonuses.shield>0){player.bonuses.shield=0;expl(player.x,player.y,'#4f4',14);return false;}
   lives--;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
-  if(lives<=0){endGame();return true;}
+  if(lives<=0){if(campaignMode)campaignMode=false;endGame();return true;}
   player.iframes=120;return false;
 }
 
@@ -2206,10 +2206,12 @@ function advanceWave(){
   wave++;wTimer=0;score+=wave*50;
   if(wave>0&&wave%5===0&&wave%10!==0)spawnGridFormation();
   checkCampaignObjective();
-  if(campaignMode) return; // succès campagne déjà géré, on ne touche pas aux transitions
   // Limite variable selon la map
   const wLimit=getWaveLimit();
   if(wLimit!==Infinity&&wave>wLimit){
+    // En mode campagne → laisser checkCampaignObjective gérer
+    if(campaignMode){checkCampaignObjective();return;}
+    // Mode normal → comportement habituel
     if(currentWorld<MAPS.length-1){showWorldTransition();}
     else{showVictory();}
   }
