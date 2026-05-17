@@ -514,62 +514,61 @@ async function showMenu(){
     <ellipse cx="0" cy="-10" rx="4" ry="8" fill="${p.cockHi}"/>
     <rect x="-1" y="-4" width="2" height="14" fill="${p.accent}"/>
   </svg>`;
-  const cpt=H<800; // mode compact quand hauteur limitée (desktop)
   OVel.innerHTML=`
     <div class="scan"></div>
-    <div class="menu-shell ${cpt?'cpt':''}" style="gap:${cpt?'8':'16'}px;">
+    <div class="menu-shell cpt" style="gap:6px;padding-bottom:40px;">
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
-      <div style="height:${cpt?'2':'18'}px;"></div>
-      <div style="position:relative;">
+      <div style="position:relative;margin-top:6px;">
         <span class="menu-side l"></span><span class="menu-side r"></span>
-        <div class="title" ${cpt?'style="font-size:28px;letter-spacing:4px;"':''}>STARFIRE</div>
+        <div class="title" style="font-size:30px;letter-spacing:5px;">STARFIRE</div>
       </div>
-      <div style="height:${cpt?'6':'38'}px;"></div>
-      <div class="hero-ship" ${cpt?'style="width:90px;height:56px;margin:0;"':''}>
+      <div class="hero-ship" style="width:80px;height:52px;margin:0;">
         <div class="hero-ring"></div><div class="hero-ring r2"></div>
         <div class="hero-orbit"><i></i></div><div class="hero-orbit b"><i></i></div>
         ${heroSvg}
       </div>
-      <div class="brackets">TRANSMISSION REÇUE</div>
-      <div class="btn-row">
+      <div class="brackets" style="font-size:11px;letter-spacing:3px;">TRANSMISSION REÇUE</div>
+      <div class="btn-row" style="gap:6px;">
         <button class="sb" id="bs">⚡ COMMENCER</button>
         <button class="sb alt" id="bmp" style="letter-spacing:3px;">⚔ MULTIJOUEUR</button>
-        <div style="display:flex;gap:10px;">
-          <button class="sb alt" id="bsc" style="font-size:14px;letter-spacing:4px;padding:11px 28px;">⟡ Scores</button>
-          <button class="sb alt" id="bcr" style="font-size:14px;letter-spacing:4px;padding:11px 28px;">✦ Crédits</button>
+        <div style="display:flex;gap:8px;">
+          <button class="sb alt" id="bsc" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">⟡ Scores</button>
+          <button class="sb alt" id="bcr" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">✦ Crédits</button>
         </div>
       </div>
-      <div class="peek" style="margin-top:${cpt?'4':'12'}px;gap:0;width:100%;max-width:420px;">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:6px 0 5px;">
-          <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
-          <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
-        </div>
-        <div style="width:80%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:0 auto;"></div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:5px 0 4px;">
-          <small style="font-family:'Courier New',monospace;font-size:9px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
-          <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:15px;letter-spacing:2px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:14px;width:100%;justify-content:center;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
+            <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;">${loadingPlaceholder}</span>
+          </div>
+          <div style="width:1px;height:30px;background:linear-gradient(180deg,transparent,#330055,transparent);"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+            <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
+            <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;">${loadingPlaceholder}</span>
+          </div>
         </div>
       </div>
-      <div style="margin-top:${cpt?'6':'18'}px;display:flex;flex-direction:column;align-items:center;gap:8px;">
-        <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
-        <div style="display:flex;gap:10px;">
-          <button id="btn-mode-kb" onclick="setInputMode('keyboard')" style="font-family:'VT323','Courier New',monospace;font-size:17px;letter-spacing:3px;padding:8px 20px;border-radius:3px;cursor:pointer;transition:all .15s;
+      <div style="margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:5px;">
+        <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
+        <div style="display:flex;gap:8px;">
+          <button id="btn-mode-kb" onclick="setInputMode('keyboard')" style="font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:2px;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all .15s;
             ${inputMode==='keyboard'?'background:linear-gradient(180deg,rgba(0,80,60,.9),rgba(0,30,20,.95));color:#00ff88;border:2px solid #00ff88;box-shadow:0 0 14px rgba(0,255,136,.35);':'background:rgba(0,0,0,.5);color:#9944cc;border:2px solid #330044;'}">
             ⌨ CLAVIER</button>
-          <button id="btn-mode-gp" onclick="setInputMode('gamepad')" style="font-family:'VT323','Courier New',monospace;font-size:17px;letter-spacing:3px;padding:8px 20px;border-radius:3px;cursor:pointer;transition:all .15s;
+          <button id="btn-mode-gp" onclick="setInputMode('gamepad')" style="font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:2px;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all .15s;
             ${inputMode==='gamepad'?'background:linear-gradient(180deg,rgba(0,80,60,.9),rgba(0,30,20,.95));color:#00ff88;border:2px solid #00ff88;box-shadow:0 0 14px rgba(0,255,136,.35);':'background:rgba(0,0,0,.5);color:#9944cc;border:2px solid #330044;'}">
             🎮 MANETTE</button>
         </div>
-        <div style="display:inline-flex;flex-direction:column;align-items:flex-start;gap:6px;">
-          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
-            ${gpIndex!==null?'● MANETTE CONNECTÉE':'○ AUCUNE MANETTE'}
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:2px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
+            ${gpIndex!==null?'● CONNECTÉE':'○ AUCUNE MANETTE'}
           </div>
-          <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,#330044,transparent);"></div>
-          <span style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Sensibilité</span>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
-            <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:62px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
-            <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+          <div style="width:1px;height:20px;background:#330044;"></div>
+          <div style="display:flex;align-items:center;gap:7px;">
+            <span style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:#660088;text-transform:uppercase;">Sensibilité</span>
+            <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:1px 10px;font-family:'VT323','Courier New',monospace;font-size:17px;cursor:pointer;">−</button>
+            <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:15px;min-width:52px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
+            <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:1px 10px;font-family:'VT323','Courier New',monospace;font-size:17px;cursor:pointer;">+</button>
           </div>
         </div>
       </div>
