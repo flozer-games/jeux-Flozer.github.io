@@ -409,32 +409,28 @@ async function saveScore(s,w,sh,mp,ps,wd){
   }catch(e){}
 }
 async function loadAllScores(){
+  // Onglet ANCIENS : uniquement les scores où difficulty IS NULL
   if(sb){
     try{
-      const{data,error}=await sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
+      const{data,error}=await sb.from('scores').select('*').is('difficulty',null).order('score',{ascending:false}).limit(15);
       if(!error&&data)return data;
     }catch(e){console.warn('Supabase loadAll failed',e);}
   }
-  try{const r=await Store.get('starfire:scores');if(r)return JSON.parse(r.value).slice(0,15);}catch(e){}
+  try{const r=await Store.get('starfire:scores');if(r)return JSON.parse(r.value).filter(s=>!s.difficulty).slice(0,15);}catch(e){}
   return[];
 }
 async function loadScores(diffName){
   if(sb){
     try{
-      const base=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
-      if(diffName){
-        // Tente filtre par difficulte + anciens scores sans difficulty
-        const{data:d,error:e}=await base.or(`difficulty.eq.${diffName},difficulty.is.null`);
-        if(!e&&d&&d.length>0)return d;
-      }
-      // Fallback : tous les scores (colonne difficulty absente ou 0 résultat)
-      const{data,error}=await base;
+      let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
+      if(diffName)q=q.eq('difficulty',diffName);
+      const{data,error}=await q;
       if(!error&&data)return data;
     }catch(e){console.warn('Supabase select failed',e);}
   }
   try{const r=await Store.get('starfire:scores');if(r){
     let arr=JSON.parse(r.value);
-    if(diffName)arr=arr.filter(s=>!s.difficulty||s.difficulty===diffName);
+    if(diffName)arr=arr.filter(s=>s.difficulty===diffName);
     return arr.slice(0,15);
   }}catch(e){}
   return[];
