@@ -560,13 +560,13 @@ async function showMenu(){
             ${inputMode==='gamepad'?'background:linear-gradient(180deg,rgba(0,80,60,.9),rgba(0,30,20,.95));color:#00ff88;border:2px solid #00ff88;box-shadow:0 0 14px rgba(0,255,136,.35);':'background:rgba(0,0,0,.5);color:#9944cc;border:2px solid #330044;'}">
             🎮 MANETTE</button>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;">
-          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;text-align:center;margin-right:30px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
+        <div style="display:inline-flex;flex-direction:column;align-items:flex-start;gap:6px;">
+          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:2px;${gpIndex!==null?'color:#7dff9e;text-shadow:0 0 8px #7dff9e;':'color:#550077;'}">
             ${gpIndex!==null?'● MANETTE CONNECTÉE':'○ AUCUNE MANETTE'}
           </div>
-          <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330044,transparent);"></div>
-          <span style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#660088;text-transform:uppercase;text-align:center;">Sensibilité</span>
-          <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+          <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,#330044,transparent);"></div>
+          <span style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Sensibilité</span>
+          <div style="display:flex;align-items:center;gap:10px;">
             <button onclick="adjustSensitivity(-0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
             <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:62px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
             <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 13px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
