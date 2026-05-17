@@ -536,15 +536,29 @@ async function showMenu(){
           <span class="sens-display" style="color:#ff00cc;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:56px;text-align:center;text-shadow:0 0 8px rgba(255,0,200,.5);">🎯 ${Math.round(sensitivity*100)}%</span>
           <button onclick="adjustSensitivity(0.25)" style="background:rgba(30,0,40,.9);color:#ff00cc;border:1px solid #660088;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-          <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
-          <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
-          <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
-          <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 11px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
-        </div>
       </div>
     </div>
-    <div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>
+    ${cpt
+      /* compact : creator à gauche, volume à droite sur la même ligne */
+      ? `<div style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 22px;margin-top:8px;">
+          <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:5px;text-shadow:0 0 8px rgba(255,0,200,.5);">FloZeR</span></div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">−</button>
+            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;">🔊</span>
+            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;">${Math.round(masterVolume*400)}%</span>
+            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;">+</button>
+          </div>
+        </div>`
+      /* plein : volume centré + creator en absolute */
+      : `<div style="width:100%;display:flex;justify-content:center;margin-top:28px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">−</button>
+            <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:1px;">🔊</span>
+            <span id="volDisplayMenu" style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:16px;min-width:44px;text-align:center;text-shadow:0 0 8px rgba(0,200,255,.5);">${Math.round(masterVolume*400)}%</span>
+            <button onclick="adjustVolume(0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:3px 12px;font-family:'VT323','Courier New',monospace;font-size:18px;cursor:pointer;box-shadow:0 0 8px rgba(0,180,255,.2);">+</button>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:14px;font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:5px;color:#660088;text-transform:uppercase;">Creator <span style="color:#ff00cc;letter-spacing:6px;text-shadow:0 0 10px rgba(255,0,200,.6);">FloZeR</span></div>`}
     `;
   OVel.style.display='flex';
   document.getElementById('bs').onclick=()=>{snd.sel&&snd.sel();showShipPick();};
@@ -1967,9 +1981,7 @@ function update(){
   const frMap={default:player.bonuses.rapid>0?Math.max(6,baseFr-10):baseFr,missile:30,minigun:3,laser:9999};
   const fr=frMap[player.weapon]||baseFr;
   if(fTimer<fr)fTimer++;
-  // gpRT (RT ou bouton A manette) force le tir dès que le timer est à moitié chargé
-  const rtBoost=gpRT&&fTimer>=Math.ceil(fr/2);
-  if(fTimer>=fr||rtBoost){
+  if(fTimer>=fr){
     if(player.weapon==='default')fireDefault();
     else if(player.weapon==='missile')fireMissile();
     else if(player.weapon==='minigun')fireMinigun();
@@ -2637,7 +2649,7 @@ window.addEventListener('gamepadconnected',e=>{
   // gamepadconnected est un vrai geste utilisateur → on peut init l'audio ici
   if(!AC){initAC();if(GS==='menu')playTrack('menu');}
   else if(AC.state==='suspended'){AC.resume();}
-  if(GS==='menu')showMenu();
+  if(GS==='menu'){showMenu();startGpNav();} // startGpNav explicite car OVel.style peut déjà être 'flex' (observer ne re-fire pas)
 });
 window.addEventListener('gamepaddisconnected',e=>{
   if(e.gamepad.index===gpIndex){gpIndex=null;gpRT=false;gpStart=false;}
@@ -2645,25 +2657,22 @@ window.addEventListener('gamepaddisconnected',e=>{
 });
 
 // ── NAVIGATION MANETTE DANS LES MENUS ────────────────────────────
-{
-  let _gpFocus=0,_gpMenuKey='';
-  let _gpNavUp=false,_gpNavDown=false,_gpNavA=false,_gpNavStart=false;
-  let _gpNavInt=null;
-  function startGpNav(){
-    if(_gpNavInt)return; // déjà actif
-    _gpNavInt=setInterval(()=>{
+let _gpFocus=0,_gpMenuKey='';
+let _gpNavUp=false,_gpNavDown=false,_gpNavA=false,_gpNavStart=false;
+let _gpNavInt=null;
+function startGpNav(){
+  if(_gpNavInt)return; // déjà actif
+  _gpNavInt=setInterval(()=>{
     if(gpIndex===null||OVel.style.display==='none')return;
     const gp=navigator.getGamepads()[gpIndex];
     if(!gp)return;
-    // ── Init audio sur premier appui manette (filet de sécurité) ──
+    // Init audio sur premier appui manette
     if((!AC||AC.state==='suspended')&&gp.buttons.some(b=>b.pressed)){
       if(!AC)initAC();
       if(AC)AC.resume().then(()=>{if(GS==='menu'&&!musicOn)playTrack('menu');}).catch(()=>{});
     }
-    // ── Items navigables : sans filtre de visibilité (évite les faux négatifs overflow:auto) ──
     const items=[...OVel.querySelectorAll('button,.card,.diff-card,[onclick]')];
     if(!items.length)return;
-    // Reset du focus quand le menu change (clé = id ou texte du premier item)
     const menuKey=(items[0].id||items[0].textContent||'').slice(0,20);
     if(menuKey!==_gpMenuKey){_gpFocus=0;_gpMenuKey=menuKey;}
     _gpFocus=Math.min(_gpFocus,items.length-1);
@@ -2677,23 +2686,20 @@ window.addEventListener('gamepaddisconnected',e=>{
       if(i===_gpFocus){el.style.outline='3px solid #ffd87a';el.style.boxShadow='0 0 22px rgba(255,216,122,.85),0 0 44px rgba(255,216,122,.4)';}
       else{el.style.outline='';el.style.boxShadow='';}
     });
-    // Bouton A → valide l'élément focalisé
     if(a&&!_gpNavA){if(AC&&AC.state==='suspended')AC.resume();items[_gpFocus]?.click();}
-    // Bouton Start → raccourci vers l'action principale de l'écran (avancer sans naviguer)
     if(startBtn&&!_gpNavStart){
       const nxt=document.getElementById('bnx')||document.getElementById('blz')||document.getElementById('bs');
       if(nxt){if(AC&&AC.state==='suspended')AC.resume();nxt.click();}
     }
     _gpNavUp=up;_gpNavDown=down;_gpNavA=a;_gpNavStart=startBtn;
-    },130);
-  }
-  function stopGpNav(){if(_gpNavInt){clearInterval(_gpNavInt);_gpNavInt=null;}}
-  // Démarre la nav manette uniquement quand le menu est visible
-  const _gpObs=new MutationObserver(()=>{
-    if(OVel.style.display!=='none')startGpNav();else stopGpNav();
-  });
-  _gpObs.observe(OVel,{attributes:true,attributeFilter:['style']});
+  },130);
 }
+function stopGpNav(){if(_gpNavInt){clearInterval(_gpNavInt);_gpNavInt=null;}}
+// Démarre quand le menu devient visible
+const _gpObs=new MutationObserver(()=>{
+  if(OVel.style.display!=='none')startGpNav();else stopGpNav();
+});
+_gpObs.observe(OVel,{attributes:true,attributeFilter:['style']});
 document.addEventListener('keydown',e=>{
   keys[e.key]=true;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','z','Z','q','Q'].includes(e.key))e.preventDefault();
