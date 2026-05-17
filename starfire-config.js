@@ -751,17 +751,20 @@ function saveCampaignProgress(progress){
     localStorage.setItem(CAMPAIGN_SAVE_KEY, JSON.stringify(progress));
   } catch(e) {}
 
-  // Sauvegarde Supabase
+  // Sauvegarde Supabase — vérifie que le client est bien initialisé
   try {
-    if(typeof supabase !== 'undefined' && typeof supabase.from === 'function'){
-      supabase.from('campaign_progress').upsert({
+    const sb = window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
+    if(sb && typeof sb.from === 'function'){
+      sb.from('campaign_progress').upsert({
         player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
         unlocked_mission: progress.unlockedMission,
         completed_missions: progress.completedMissions,
         updated_at: new Date().toISOString(),
       }).then(()=>{}).catch(()=>{});
     }
-  } catch(e) {}
+  } catch(e) {
+    console.warn('Supabase campagne non disponible:', e);
+  }
 }
 
 function completeMission(missionId){
