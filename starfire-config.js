@@ -194,3 +194,37 @@ const QUOTES = [
   {t:"Les héros ne brillent pas plus que les étoiles. Ils brillent plus longtemps.", a:"Sentence des Forges de Pyron"},
   {t:"Voler n'est pas fuir. C'est défier la gravité de tous les doutes.", a:"Préceptes de l'Académie Stellaire"},
 ];
+
+// ── ÉQUIPAGE DU STARHUNTER ─────────────────────────────────────────
+const CREW = [
+  {
+    id:'zara', name:'Capitaine ZARA VOSS', role:'Commandante',
+    desc:'Pilote hors pair, sarcasme inclus. Dirige l\'équipage à la force du caractère — et du café.',
+    col:'#44d8ff', emoji:'👩‍🚀',
+  },
+  {
+    id:'keel', name:'KEEL', role:'Ingénieur en chef',
+    desc:'Répare tout avec du scotch et de l\'optimisme douteux.',
+    col:'#ff9800', emoji:'🔧',
+  },
+  {
+    id:'lyra', name:'Dr. LYRA SOL', role:'Scientifique',
+    desc:'Génie absolu, désastre social.',
+    col:'#9d4dff', emoji:'🔬',
+  },
+  {
+    id:'rex', name:'REX MAKO', role:'Spécialiste combat',
+    desc:'Convaincu que tout problème se résout avec suffisamment de firepower.',
+    col:'#ef4444', emoji:'💥',
+  },
+  {
+    id:'nova', name:'NOVA', role:'IA de navigation',
+    desc:'Intelligence artificielle avec une tendance à l\'existentialisme.',
+    col:'#22d3ee', emoji:'🤖',
+  },
+  {
+    id:'tika', name:'TIKA', role:'Médecin de bord',
+    desc:'Optimiste chronique. Seul membre de l\'équipe à toujours sourire.',
+    col:'#4ade80', emoji:'🌿',
+  },
+];
