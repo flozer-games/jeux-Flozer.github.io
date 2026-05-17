@@ -752,7 +752,7 @@ function saveCampaignProgress(progress){
   } catch(e) {}
 
   // Sauvegarde Supabase
-  if(typeof supabase !== 'undefined'){
+  if(typeof supabase !== 'undefined' && typeof supabase.from === 'function'){
     supabase.from('campaign_progress').upsert({
       player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
       unlocked_mission: progress.unlockedMission,
