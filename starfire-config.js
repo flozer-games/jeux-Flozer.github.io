@@ -180,7 +180,7 @@ const BD = [
 
 // ── WAVE LIMITS PER WORLD ─────────────────────────────────────────
 const WORLD_WAVES = {
-  easy:   [50, 50, 50, 50, 50],
+  easy:   [Infinity, Infinity, Infinity, Infinity, Infinity],
   normal: [Infinity, Infinity, Infinity, Infinity, Infinity],
   hard:   [Infinity, Infinity, Infinity, Infinity, Infinity],
 };
