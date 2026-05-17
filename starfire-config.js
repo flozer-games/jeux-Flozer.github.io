@@ -753,7 +753,7 @@ function saveCampaignProgress(progress){
 
   // Sauvegarde Supabase — vérifie que le client est bien initialisé
   try {
-    const sb = window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
+    const sb = window._sbClient || null;
     if(sb && typeof sb.from === 'function'){
       sb.from('campaign_progress').upsert({
         player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',

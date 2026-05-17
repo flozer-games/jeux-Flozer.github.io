@@ -391,6 +391,7 @@ function logB(t){const b=BD.find(x=>x.type===t),d=document.createElement('div');
 // ── SUPABASE CLIENT ────────────────────────────────────────────────
 const sbReady=typeof SUPABASE_URL==='string'&&SUPABASE_URL.startsWith('https://');
 const sb=sbReady&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+window._sbClient=sb;
 
 // ── HIGH SCORES ────────────────────────────────────────────────────
 async function saveScore(s,w,sh,mp,ps,wd){
