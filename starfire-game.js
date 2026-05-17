@@ -394,28 +394,34 @@ const sb=sbReady&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPA
 
 // ── HIGH SCORES ────────────────────────────────────────────────────
 async function saveScore(s,w,sh,mp,ps,wd){
-  const entry={pseudo:(ps||'ANONYME').toUpperCase().slice(0,10),score:s,wave:w,ship:sh,map:mp,world:wd||1,date:new Date().toLocaleDateString('fr-FR')};
+  const entry={pseudo:(ps||'ANONYME').toUpperCase().slice(0,10),score:s,wave:w,ship:sh,map:mp,world:wd||1,difficulty,date:new Date().toLocaleDateString('fr-FR')};
   if(sb){
     try{await sb.from('scores').insert(entry);}catch(e){console.warn('Supabase insert failed',e);}
   } else {
-    // fallback local
     try{let arr=[];try{const r=await Store.get('starfire:scores');if(r)arr=JSON.parse(r.value);}catch(e){}
     arr.push(entry);arr.sort((a,b)=>b.score-a.score);
-    await Store.set('starfire:scores',JSON.stringify(arr.slice(0,10)));}catch(e){}
+    await Store.set('starfire:scores',JSON.stringify(arr.slice(0,50)));}catch(e){}
   }
+  // Meilleur score local (toujours, indépendamment de Supabase)
+  try{
+    let lb=null;try{const r=await Store.get('starfire:localbest');if(r)lb=JSON.parse(r.value);}catch(e){}
+    if(!lb||s>lb.score)await Store.set('starfire:localbest',JSON.stringify({score:s,wave:w,map:mp,pseudo:(ps||'ANONYME').toUpperCase().slice(0,10)}));
+  }catch(e){}
 }
-async function loadScores(mapName){
+async function loadScores(diffName){
   if(sb){
     try{
-      let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(10);
-      if(mapName)q=q.eq('map',mapName);
+      let q=sb.from('scores').select('*').order('score',{ascending:false}).limit(15);
+      if(diffName)q=q.eq('difficulty',diffName);
       const{data,error}=await q;
       if(!error&&data)return data;
     }catch(e){console.warn('Supabase select failed',e);}
   }
-  // fallback local
-  try{const r=await Store.get('starfire:scores');if(r){let arr=JSON.parse(r.value);if(mapName)arr=arr.filter(s=>s.map===mapName);return arr.slice(0,10);}
-  }catch(e){}
+  try{const r=await Store.get('starfire:scores');if(r){
+    let arr=JSON.parse(r.value);
+    if(diffName)arr=arr.filter(s=>s.difficulty===diffName);
+    return arr.slice(0,15);
+  }}catch(e){}
   return[];
 }
 async function loadTopScore(){
@@ -425,6 +431,10 @@ async function loadTopScore(){
   }
   try{const r=await Store.get('starfire:scores');if(r){const arr=JSON.parse(r.value);if(arr&&arr[0])return arr[0];}
   }catch(e){}
+  return null;
+}
+async function loadLocalBest(){
+  try{const r=await Store.get('starfire:localbest');if(r)return JSON.parse(r.value);}catch(e){}
   return null;
 }
 
@@ -465,14 +475,18 @@ async function showMenu(){
   const pb=document.getElementById('pbtn');if(pb)pb.style.display='none';
   curQuote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
   // top score : placeholder immédiat, chargé en arrière-plan
-  const topRow=`<small style="opacity:.4;font-size:11px;letter-spacing:3px;">— chargement —</small>`;
-  // charge le vrai top score en arrière-plan sans bloquer le rendu
-  loadTopScore().then(top=>{
+  const loadingPlaceholder=`<small style="opacity:.4;font-size:11px;letter-spacing:3px;">— chargement —</small>`;
+  // charge le vrai top score + meilleur local en arrière-plan sans bloquer le rendu
+  Promise.all([loadTopScore(), loadLocalBest()]).then(([top, local])=>{
     const el=document.getElementById('top-score-peek');
     if(el&&top){
-      const mapLabel=top.map?`<span style="color:#9944cc;font-size:13px;letter-spacing:2px;"> · ${top.map}</span>`:'';
+      const mapLabel=top.map?`<span style="color:#9944cc;font-size:11px;letter-spacing:2px;"> · ${top.map}</span>`:'';
       el.innerHTML=`<b>★ ${top.pseudo||'PILOTE'} — ${Number(top.score).toLocaleString()}</b>${mapLabel}`;
     } else if(el)el.innerHTML=`<small style="opacity:.5;">&nbsp;</small>`;
+    const elL=document.getElementById('local-score-peek');
+    if(elL&&local){
+      elL.innerHTML=`<b>◈ ${local.pseudo||'MOI'} — ${Number(local.score).toLocaleString()}</b>`;
+    } else if(elL)elL.innerHTML=`<small style="opacity:.5;">Pas encore de score</small>`;
   }).catch(()=>{});
   // hero ship svg (selected)
   const sh=chosenShip,p=sh.palette;
@@ -513,9 +527,11 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:14px;letter-spacing:4px;padding:11px 28px;">✦ Crédits</button>
         </div>
       </div>
-      <div class="peek" style="margin-top:${cpt?'6':'22'}px;">
-        <small style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:5px;color:#5b8acc;text-transform:uppercase;">— Meilleur Score —</small>
-        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:16px;letter-spacing:3px;color:#ffd87a;">${topRow}</span>
+      <div class="peek" style="margin-top:${cpt?'6':'22'}px;gap:3px;">
+        <small style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:4px;color:#4a70aa;text-transform:uppercase;">— Meilleur Score Mondial —</small>
+        <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px;color:#ffd87a;">${loadingPlaceholder}</span>
+        <small style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:4px;color:#4a70aa;text-transform:uppercase;margin-top:4px;">— Mon Meilleur Score —</small>
+        <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:16px;letter-spacing:3px;color:#7dffb8;">${loadingPlaceholder}</span>
       </div>
       <div style="margin-top:${cpt?'4':'14'}px;display:flex;flex-direction:column;align-items:center;gap:8px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:13px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
@@ -740,39 +756,39 @@ function showMPVictory(){
   document.getElementById('bmpMn').onclick=()=>{mpMode=false;if(mpPeer)try{mpPeer.destroy();}catch(e){}mpPeer=null;mpConn=null;showMenu();};
 }
 
-async function showScores(mapIdx){
-  if(mapIdx===undefined)mapIdx=0;
-  const curMap=MAPS[mapIdx];
+async function showScores(diffIdx){
+  if(diffIdx===undefined)diffIdx=0;
+  const DIFFS=[
+    {key:'easy',   label:'FACILE',    stars:'★',   col:'#4ade80'},
+    {key:'normal', label:'NORMAL',    stars:'★★',  col:'#60a5fa'},
+    {key:'hard',   label:'DIFFICILE', stars:'★★★', col:'#f87171'},
+  ];
+  const cur=DIFFS[diffIdx];
 
-  // Affiche skeleton + onglets immédiatement
-  const renderShell=(loadingMsg)=>{
-    const tabs=MAPS.map((m,i)=>{
-      const active=i===mapIdx;
+  const renderShell=(bodyHtml)=>{
+    const tabs=DIFFS.map((d,i)=>{
+      const active=i===diffIdx;
       return `<button onclick="showScores(${i})" style="
-        font-family:'VT323','Courier New',monospace;font-size:14px;letter-spacing:2px;
-        padding:7px 14px;border-radius:3px 3px 0 0;cursor:pointer;white-space:nowrap;
-        border:1px solid ${active?'#ff00cc':'#440055'};border-bottom:${active?'1px solid #0a001a':'1px solid #440055'};
+        font-family:'VT323','Courier New',monospace;font-size:15px;letter-spacing:2px;
+        padding:7px 18px;border-radius:3px 3px 0 0;cursor:pointer;white-space:nowrap;
+        border:1px solid ${active?d.col:'#440055'};border-bottom:${active?'1px solid #0a001a':'1px solid #440055'};
         background:${active?'rgba(40,0,55,.95)':'rgba(15,0,22,.7)'};
-        color:${active?'#ffd87a':'#9944cc'};
-        ${active?'text-shadow:0 0 8px rgba(255,216,122,.5);margin-bottom:-1px;position:relative;z-index:2;':''}
+        color:${active?d.col:'#9944cc'};
+        ${active?`text-shadow:0 0 8px ${d.col}66;margin-bottom:-1px;position:relative;z-index:2;`:''}
         transition:all .12s;">
-        ${m.name}
+        ${d.stars} ${d.label}
       </button>`;
     }).join('');
     return `
       <div class="pick-title" style="font-size:15px;margin-bottom:6px;">⟡ MEILLEURS SCORES ⟡</div>
       <div style="font-family:'VT323',monospace;font-size:13px;letter-spacing:3px;color:${sb?'#00e5ff':'#9944cc'};margin-bottom:10px;">
-        ${sb?'🌐 TOP 10 MONDIAL':'💾 SCORES LOCAUX'}
+        ${sb?'🌐 TOP 15 MONDIAL':'💾 SCORES LOCAUX'}
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;width:520px;padding-bottom:0;border-bottom:1px solid #440055;margin-bottom:0;">
+      <div style="display:flex;gap:4px;justify-content:center;width:520px;padding-bottom:0;border-bottom:1px solid #440055;margin-bottom:0;">
         ${tabs}
       </div>
       <div style="width:520px;background:rgba(8,0,18,.92);border:1px solid #440055;border-top:none;border-radius:0 0 4px 4px;min-height:280px;display:flex;flex-direction:column;">
-        <div style="padding:6px 10px;background:rgba(30,0,45,.7);border-bottom:1px solid #330044;display:flex;align-items:center;gap:8px;">
-          <span style="font-family:'VT323',monospace;font-size:16px;color:#ffd87a;letter-spacing:3px;">${curMap.name}</span>
-          <span style="font-family:'VT323',monospace;font-size:13px;color:#660088;letter-spacing:2px;">— ${curMap.tag}</span>
-        </div>
-        <div id="sc-body" style="padding:8px;flex:1;">${loadingMsg}</div>
+        <div id="sc-body" style="padding:8px;flex:1;">${bodyHtml}</div>
       </div>
       <button class="sb back" id="bbk" style="margin-top:12px;">← RETOUR</button>`;
   };
@@ -781,35 +797,40 @@ async function showScores(mapIdx){
   OVel.style.display='flex';
   document.getElementById('bbk').onclick=()=>showMenu();
 
-  const sc=await loadScores(curMap.name);
+  const sc=await loadScores(cur.key);
   const medal=['🥇','🥈','🥉'];
+
+  // Raccourcit le nom de map pour gagner de la place
+  const shortMap=m=>(m||'').replace('SYSTEME SOLAIRE','SOLAIRE').replace('ARALIS DUNES','ARALIS').replace('KRYNOS FROSTBELT','KRYNOS').replace('PYRON CRADLE','PYRON').replace('NYXAR VEIL','NYXAR');
+
   const rows=sc.length===0
-    ?`<tr><td colspan="5" style="color:#444;padding:28px;text-align:center;letter-spacing:2px;font-size:12px;font-family:'Courier New',monospace;">— Aucune entrée sur cette map —</td></tr>`
+    ?`<tr><td colspan="6" style="color:#444;padding:28px;text-align:center;letter-spacing:2px;font-size:12px;font-family:'Courier New',monospace;">— Aucune entrée en ${cur.label} —</td></tr>`
     :sc.map((s,i)=>{
       const rank=medal[i]||`<span style="color:#9944cc;">${String(i+1).padStart(2,'0')}</span>`;
       const bg=i===0?'rgba(255,200,50,.06)':i===1?'rgba(180,180,180,.04)':i===2?'rgba(180,100,30,.05)':'';
       return `<tr style="border-bottom:1px solid rgba(80,0,120,.25);background:${bg};">
-        <td style="text-align:center;padding:6px 4px;font-size:14px;width:36px;">${rank}</td>
-        <td style="color:#ffe8a0;padding:6px 8px;font-family:'VT323',monospace;font-size:18px;letter-spacing:2px;">${(s.pseudo||'—').toUpperCase().slice(0,10)}</td>
-        <td style="color:#00e5ff;text-align:right;padding:6px 8px;font-family:'Courier New',monospace;font-size:12px;font-weight:bold;">${Number(s.score).toLocaleString()}</td>
-        <td style="color:#cc88ff;text-align:center;padding:6px 4px;font-size:11px;white-space:nowrap;">V${s.wave}</td>
-        <td style="color:#445566;text-align:center;font-size:10px;padding:6px 4px;white-space:nowrap;">${s.date||''}</td>
+        <td style="text-align:center;padding:5px 3px;font-size:13px;width:30px;">${rank}</td>
+        <td style="color:#ffe8a0;padding:5px 5px;font-family:'VT323',monospace;font-size:17px;letter-spacing:2px;">${(s.pseudo||'—').toUpperCase().slice(0,10)}</td>
+        <td style="color:#00e5ff;text-align:right;padding:5px 5px;font-family:'Courier New',monospace;font-size:11px;font-weight:bold;">${Number(s.score).toLocaleString()}</td>
+        <td style="color:#cc88ff;text-align:center;padding:5px 3px;font-size:11px;white-space:nowrap;">V${s.wave}</td>
+        <td style="color:#9944cc;text-align:center;padding:5px 3px;font-size:10px;white-space:nowrap;letter-spacing:1px;">${shortMap(s.map)||'—'}</td>
+        <td style="color:#445566;text-align:center;font-size:10px;padding:5px 3px;white-space:nowrap;">${s.date||''}</td>
       </tr>`;
     }).join('');
 
   const table=`
-    <table style="border-collapse:collapse;width:100%;font-family:'Courier New',monospace;font-size:12px;">
+    <table style="border-collapse:collapse;width:100%;font-family:'Courier New',monospace;font-size:11px;">
       <thead><tr style="border-bottom:1px solid #330044;">
-        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;width:36px;">#</th>
-        <th style="color:#550077;text-align:left;padding:5px 8px;font-size:9px;letter-spacing:2px;">PILOTE</th>
-        <th style="color:#550077;text-align:right;padding:5px 8px;font-size:9px;letter-spacing:2px;">SCORE</th>
-        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;">VAGUE</th>
-        <th style="color:#550077;padding:5px 4px;font-size:9px;letter-spacing:2px;">DATE</th>
+        <th style="color:#550077;padding:4px 3px;font-size:9px;letter-spacing:2px;width:30px;">#</th>
+        <th style="color:#550077;text-align:left;padding:4px 5px;font-size:9px;letter-spacing:2px;">PILOTE</th>
+        <th style="color:#550077;text-align:right;padding:4px 5px;font-size:9px;letter-spacing:2px;">SCORE</th>
+        <th style="color:#550077;padding:4px 3px;font-size:9px;letter-spacing:2px;">VAGUE</th>
+        <th style="color:#550077;padding:4px 3px;font-size:9px;letter-spacing:2px;">MAP</th>
+        <th style="color:#550077;padding:4px 3px;font-size:9px;letter-spacing:2px;">DATE</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
 
-  // Injecte seulement le corps du tableau (les onglets sont déjà là)
   OVel.innerHTML=renderShell(table);
   document.getElementById('bbk').onclick=()=>showMenu();
 }
