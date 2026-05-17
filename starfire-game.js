@@ -1878,7 +1878,7 @@ function dmgPlayer(){
   if(player.iframes>0)return false;
   if(player.bonuses.shield>0){player.bonuses.shield=0;expl(player.x,player.y,'#4f4',14);return false;}
   lives--;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
-  if(lives<=0){if(campaignMode)campaignMode=false;endGame();return true;}
+  if(lives<=0){endGame();return true;}
   player.iframes=120;return false;
 }
 
