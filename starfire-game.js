@@ -1524,12 +1524,11 @@ function killScore(x,y,sc,col){
   if(combo>=2)floats.push({x,y:y-24,val:'×'+combo,col:'#ffd87a',life:.9,vy:-2.2,big:true});
 }
 function spawnBonus(x,y,fc){
-  const baseChance=Math.min(.48,.14+wave*.028);
-  const chance=fc!==undefined?fc:(currentWorld===0?baseChance*0.85:baseChance);
+  // Taux fixe : 22% par ennemi tué, identique toutes difficultés et toutes maps
+  const chance=fc!==undefined?fc:0.22;
   if(Math.random()>chance)return;
-  // Pyramide : map 1=7%, map 2≈10%, map 3≈16%, map 4≈23%, map 5=32%
-  const weaponChance=currentWorld===0?0.12:0.12+Math.pow(currentWorld/4,1.5)*0.25;
-  const isWeapon=Math.random()<weaponChance;
+  // 15% des drops sont des armes — identique toutes maps
+  const isWeapon=Math.random()<0.15;
   let bt;
   if(isWeapon){const wpool=BD.filter(b=>b.weapon);bt=wpool[Math.floor(Math.random()*wpool.length)];}
   // supernova exclus du pool normal — tombe uniquement après un boss

@@ -167,14 +167,14 @@ const WPOOL = ['missile','missile','missile','missile','minigun','minigun','mini
 
 // ── BONUSES ────────────────────────────────────────────────────────
 const BD = [
-  {type:'rapid',color:'#fa0',label:'⚡ TIR RAPIDE',dur:390},
-  {type:'multi',color:'#0ff',label:'✦ TRIPLE TIR',dur:345},
-  {type:'shield',color:'#4f4',label:'🛡 BOUCLIER',dur:487},
-  {type:'speed',color:'#f4f',label:'💨 VITESSE',dur:292},
+  {type:'rapid',color:'#fa0',label:'⚡ TIR RAPIDE',dur:240},
+  {type:'multi',color:'#0ff',label:'✦ TRIPLE TIR',dur:210},
+  {type:'shield',color:'#4f4',label:'🛡 BOUCLIER',dur:300},
+  {type:'speed',color:'#f4f',label:'💨 VITESSE',dur:180},
   {type:'bomb',color:'#f80',label:'💥 BOMBE !',dur:0},
-  {type:'wMissile',color:'#88ff44',label:'🚀 MISSILES',dur:300,weapon:'missile'},
-  {type:'wMinigun',color:'#ff8800',label:'🔫 MINIGUN',dur:300,weapon:'minigun'},
-  {type:'wLaser',color:'#ff44ff',label:'🔮 LASER',dur:300,weapon:'laser'},
+  {type:'wMissile',color:'#88ff44',label:'🚀 MISSILES',dur:180,weapon:'missile'},
+  {type:'wMinigun',color:'#ff8800',label:'🔫 MINIGUN',dur:180,weapon:'minigun'},
+  {type:'wLaser',color:'#ff44ff',label:'🔮 LASER',dur:180,weapon:'laser'},
   {type:'supernova',color:'#ffe040',label:'❤ VIE BONUS !',dur:0,super:true},
 ];
 
