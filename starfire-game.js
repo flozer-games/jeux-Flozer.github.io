@@ -516,11 +516,11 @@ async function showMenu(){
   </svg>`;
   OVel.innerHTML=`
     <div class="scan"></div>
-    <div class="menu-shell cpt" style="gap:6px;padding-bottom:40px;">
+    <div class="menu-shell cpt" style="gap:20px;padding-bottom:40px;">
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
       <div style="position:relative;margin-top:6px;">
         <span class="menu-side l"></span><span class="menu-side r"></span>
-        <div class="title" style="font-size:30px;letter-spacing:5px;">STARFIRE</div>
+        <div class="title" style="font-size:36px;letter-spacing:5px;">STARFIRE</div>
       </div>
       <div class="hero-ship" style="width:80px;height:52px;margin:0;">
         <div class="hero-ring"></div><div class="hero-ring r2"></div>
@@ -537,14 +537,14 @@ async function showMenu(){
           <button class="sb alt" id="bcr" style="font-size:13px;letter-spacing:3px;padding:9px 22px;">✦ Crédits</button>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;margin-top:6px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;margin:10px 0;">
         <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Meilleur Score Mondial —</small>
         <span id="top-score-peek" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#ffd87a;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
         <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#330055,transparent);margin:3px 0;"></div>
         <small style="font-family:'Courier New',monospace;font-size:8px;letter-spacing:3px;color:#4a70aa;text-transform:uppercase;font-weight:bold;">— Mon Meilleur Score —</small>
         <span id="local-score-peek" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:1px;color:#ff9a2e;text-align:center;display:block;width:100%;">${loadingPlaceholder}</span>
       </div>
-      <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:5px;">
+      <div style="margin:10px 0;display:flex;flex-direction:column;align-items:center;gap:5px;">
         <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:4px;color:#9944cc;text-transform:uppercase;">— Contrôles —</div>
         <div style="display:flex;gap:8px;">
           <button id="btn-mode-kb" onclick="setInputMode('keyboard')" style="font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:2px;padding:7px 18px;border-radius:3px;cursor:pointer;transition:all .15s;
@@ -569,7 +569,7 @@ async function showMenu(){
       </div>
     </div>
     <div style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:0 14px;">
-      <div style="font-family:'VT323','Courier New',monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.2);"><span style="color:#ff8800;font-weight:bold;">CREATORS</span> <b style="color:#cc66ff;font-weight:normal;text-shadow:0 0 6px #aa44dd;">FLOZER</b> <span style="color:#ff8800;font-weight:bold;">&</span> <b style="color:#aa44cc;font-weight:normal;text-shadow:0 0 6px #882299;">CLAUDE</b></div>
+      <div style="font-family:'VT323','Courier New',monospace;font-size:12px;letter-spacing:3px;color:rgba(255,255,255,.2);"><span style="color:#ff8800;font-weight:bold;">CREATORS</span> <b style="color:#cc66ff;font-weight:normal;text-shadow:0 0 6px #aa44dd;">FLOZER</b> <span style="color:#ff8800;font-weight:bold;">&</span> <b style="color:#aa44cc;font-weight:normal;text-shadow:0 0 6px #882299;">CLAUDE</b></div>
       <div style="display:flex;align-items:center;gap:6px;">
         <button onclick="adjustVolume(-0.0125,'volDisplayMenu')" style="background:rgba(30,0,40,.9);color:#00e5ff;border:1px solid #0099cc;border-radius:4px;padding:2px 9px;font-family:'VT323','Courier New',monospace;font-size:16px;cursor:pointer;">−</button>
         <span style="color:#00e5ff;font-family:'VT323','Courier New',monospace;font-size:14px;">🔊</span>
