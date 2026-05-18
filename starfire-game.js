@@ -969,17 +969,21 @@ function showCampaignMissions(diff){
 
       <div style="display:flex;gap:8px;">
         <button onclick="showCampaign()" style="
-          flex:1;padding:12px;background:transparent;
-          color:#9944cc;border:1px solid #660088;border-radius:3px;
+          flex:1;padding:14px;
+          background:linear-gradient(180deg,rgba(60,0,80,.9),rgba(20,0,40,.95));
+          color:#ff00cc;border:2px solid #ff00cc;border-radius:3px;
           font-family:'VT323','Courier New',monospace;
-          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          font-size:17px;letter-spacing:3px;cursor:pointer;
+          box-shadow:0 0 14px rgba(255,0,200,.3),0 0 14px rgba(255,0,200,.15) inset;">
           ← SLOTS
         </button>
         <button onclick="showMenu()" style="
-          flex:1;padding:12px;background:transparent;
-          color:#ffffff55;border:1px solid #444;border-radius:3px;
+          flex:1;padding:14px;
+          background:linear-gradient(180deg,rgba(0,40,60,.9),rgba(0,15,30,.95));
+          color:#00e5ff;border:2px solid #00e5ff;border-radius:3px;
           font-family:'VT323','Courier New',monospace;
-          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          font-size:17px;letter-spacing:3px;cursor:pointer;
+          box-shadow:0 0 14px rgba(0,200,255,.3),0 0 12px rgba(0,200,255,.15) inset;">
           🏠 MENU
         </button>
       </div>
