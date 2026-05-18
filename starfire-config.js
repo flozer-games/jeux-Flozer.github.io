@@ -733,48 +733,47 @@ const CAMPAIGN_MISSIONS = [
   },
 ];
 
-// ── SAUVEGARDE CAMPAGNE ────────────────────────────────────────────
-const CAMPAIGN_SAVE_KEY = 'sf_campaign_progress';
+// ── SAUVEGARDE CAMPAGNE — 3 SLOTS ─────────────────────────────────
+const CAMPAIGN_SLOTS = ['easy', 'normal', 'hard'];
 
-function getCampaignProgress(){
+function getCampaignSlot(diff){
   try {
-    const raw = localStorage.getItem(CAMPAIGN_SAVE_KEY);
-    return raw ? JSON.parse(raw) : { unlockedMission:1, completedMissions:[] };
-  } catch(e) {
-    return { unlockedMission:1, completedMissions:[] };
-  }
+    const raw = localStorage.getItem('sf_campaign_' + diff);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
 }
 
-function saveCampaignProgress(progress){
-  // Sauvegarde locale
+function saveCampaignSlot(diff, progress){
   try {
-    localStorage.setItem(CAMPAIGN_SAVE_KEY, JSON.stringify(progress));
+    localStorage.setItem('sf_campaign_' + diff, JSON.stringify(progress));
   } catch(e) {}
-
-  // Sauvegarde Supabase — vérifie que le client est bien initialisé
   try {
     const sb = window._sbClient || null;
     if(sb && typeof sb.from === 'function'){
       sb.from('campaign_progress').upsert({
         player_name: typeof playerName !== 'undefined' ? playerName : 'PILOTE',
+        difficulty: diff,
         unlocked_mission: progress.unlockedMission,
         completed_missions: progress.completedMissions,
         updated_at: new Date().toISOString(),
       }).then(()=>{}).catch(()=>{});
     }
-  } catch(e) {
-    console.warn('Supabase campagne non disponible:', e);
-  }
+  } catch(e) {}
+}
+
+function resetCampaignSlot(diff){
+  try { localStorage.removeItem('sf_campaign_' + diff); } catch(e) {}
 }
 
 function completeMission(missionId){
-  const progress = getCampaignProgress();
-  if(!progress.completedMissions.includes(missionId)){
-    progress.completedMissions.push(missionId);
+  const diff = typeof campaignDifficulty !== 'undefined' ? campaignDifficulty : 'normal';
+  const slot = getCampaignSlot(diff) || { unlockedMission:1, completedMissions:[] };
+  if(!slot.completedMissions.includes(missionId)){
+    slot.completedMissions.push(missionId);
   }
-  if(progress.unlockedMission <= missionId){
-    progress.unlockedMission = missionId + 1;
+  if(slot.unlockedMission <= missionId){
+    slot.unlockedMission = missionId + 1;
   }
-  saveCampaignProgress(progress);
-  return progress;
+  saveCampaignSlot(diff, slot);
+  return slot;
 }

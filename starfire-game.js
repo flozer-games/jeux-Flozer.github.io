@@ -628,53 +628,69 @@ let campaignMission = null;
 let campaignDifficulty = null;
 
 function showCampaign(){
-  if(!campaignDifficulty){
-    showCampaignFirstDifficulty();
-    return;
-  }
-  const progress = getCampaignProgress();
+  const diffLabels = {
+    easy:   { label:'★ FACILE',      col:'#4ade80', bg:'rgba(20,80,20,.9)'  },
+    normal: { label:'★★ NORMAL',     col:'#60a5fa', bg:'rgba(30,50,100,.9)' },
+    hard:   { label:'★★★ DIFFICILE', col:'#f87171', bg:'rgba(90,15,15,.9)'  },
+  };
+
   OVel.style.display = 'flex';
   OVel.innerHTML = `
-    <div style="width:100%;max-width:560px;padding:16px;
-      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
-      color:#fff;overflow-y:auto;max-height:820px;">
+    <div style="width:100%;max-width:480px;padding:20px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;color:#fff;">
 
       <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:24px;color:#ffd87a;letter-spacing:4px;
-          text-shadow:0 0 12px rgba(255,200,80,.8);">
+        <div style="font-size:22px;color:#ffd87a;letter-spacing:4px;">
           📖 MODE CAMPAGNE
         </div>
-        <div style="font-size:15px;color:#00e5ff;letter-spacing:3px;margin-top:6px;">
+        <div style="font-size:14px;color:#00e5ff;margin-top:6px;letter-spacing:2px;">
           LA QUÊTE DU ZYONITE
-        </div>
-        <div style="font-size:13px;color:#ffffff55;margin-top:6px;">
-          ${progress.completedMissions.length} / 15 missions complétées
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
-        ${CAMPAIGN_MISSIONS.map(m => {
-          const unlocked  = m.id <= progress.unlockedMission;
-          const completed = progress.completedMissions.includes(m.id);
-          const isCurrent = m.id === progress.unlockedMission;
-          const borderCol = completed ? '#22c55e' : isCurrent ? '#ffd87a' : '#444';
-          const bgCol     = completed ? 'rgba(20,60,20,.8)' : isCurrent ? 'rgba(50,30,0,.8)' : 'rgba(10,10,10,.8)';
-          const icon      = completed ? '✅' : isCurrent ? '⚡' : unlocked ? '🔓' : '🔒';
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+        ${['easy','normal','hard'].map(diff => {
+          const slot = getCampaignSlot(diff);
+          const cfg  = diffLabels[diff];
+          const hasProgress = slot && slot.completedMissions.length > 0;
           return `
-          <div onclick="${unlocked ? `showMissionBriefing(${m.id - 1})` : ''}"
-            style="background:${bgCol};border:1px solid ${borderCol};
-              border-radius:4px;padding:10px 8px;text-align:center;
-              cursor:${unlocked ? 'pointer' : 'default'};
-              opacity:${unlocked ? 1 : 0.4};transition:all .15s;"
-            onmouseover="if(${unlocked})this.style.transform='translateY(-2px)'"
-            onmouseout="this.style.transform='translateY(0)'">
-            <div style="font-size:11px;color:${borderCol};letter-spacing:1px;">
-              ${icon} M${m.id < 10 ? '0' + m.id : m.id}
+          <div style="background:${cfg.bg};border:2px solid ${cfg.col};
+            border-radius:4px;padding:16px;">
+            <div style="font-size:18px;color:${cfg.col};letter-spacing:3px;margin-bottom:8px;">
+              ${cfg.label}
             </div>
-            <div style="font-size:12px;color:${unlocked ? '#fff' : '#666'};
-              margin-top:4px;line-height:1.3;letter-spacing:0.5px;">
-              ${m.title}
-            </div>
+            ${hasProgress ? `
+              <div style="font-size:13px;color:#ffffff88;margin-bottom:10px;">
+                Mission ${slot.completedMissions.length}/15 complétée${slot.completedMissions.length > 1 ? 's' : ''}
+                · Débloquée jusqu'à M${slot.unlockedMission > 15 ? 15 : slot.unlockedMission}
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button onclick="startCampaignSlot('${diff}')" style="
+                  flex:2;padding:10px;
+                  background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
+                  color:#ffd87a;border:2px solid #ff00cc;border-radius:3px;
+                  font-family:'VT323','Courier New',monospace;
+                  font-size:16px;letter-spacing:2px;cursor:pointer;">
+                  ⚡ CONTINUER
+                </button>
+                <button onclick="confirmResetSlot('${diff}')" style="
+                  flex:1;padding:10px;background:transparent;
+                  color:#f87171;border:1px solid #f87171;border-radius:3px;
+                  font-family:'VT323','Courier New',monospace;
+                  font-size:14px;letter-spacing:1px;cursor:pointer;">
+                  🔄 RESET
+                </button>
+              </div>` : `
+              <div style="font-size:13px;color:#ffffff44;margin-bottom:10px;">
+                Pas encore commencé
+              </div>
+              <button onclick="startCampaignSlot('${diff}')" style="
+                width:100%;padding:10px;background:transparent;
+                color:${cfg.col};border:2px solid ${cfg.col};border-radius:3px;
+                font-family:'VT323','Courier New',monospace;
+                font-size:16px;letter-spacing:2px;cursor:pointer;">
+                + NOUVELLE CAMPAGNE
+              </button>`}
           </div>`;
         }).join('')}
       </div>
@@ -683,7 +699,7 @@ function showCampaign(){
         width:100%;padding:12px;background:transparent;
         color:#9944cc;border:1px solid #660088;border-radius:3px;
         font-family:'VT323','Courier New',monospace;
-        font-size:17px;letter-spacing:3px;cursor:pointer;">
+        font-size:16px;letter-spacing:2px;cursor:pointer;">
         ← RETOUR MENU
       </button>
     </div>`;
@@ -771,70 +787,95 @@ function showMissionBriefing(idx){
     </div>`;
 }
 
-function showCampaignFirstDifficulty(){
+function startCampaignSlot(diff){
+  campaignDifficulty = diff;
+  showCampaignMissions(diff);
+}
+
+function confirmResetSlot(diff){
+  const diffLabels = {easy:'FACILE', normal:'NORMAL', hard:'DIFFICILE'};
   OVel.style.display = 'flex';
   OVel.innerHTML = `
-    <div style="width:100%;max-width:480px;padding:24px;
-      box-sizing:border-box;font-family:'VT323','Courier New',monospace;color:#fff;">
-      <div style="text-align:center;margin-bottom:24px;">
-        <div style="font-size:22px;color:#ffd87a;letter-spacing:4px;">
-          📖 MODE CAMPAGNE
+    <div style="text-align:center;font-family:'VT323','Courier New',monospace;
+      color:#fff;padding:30px;max-width:400px;width:90%;">
+      <div style="font-size:20px;color:#f87171;letter-spacing:3px;margin-bottom:16px;">
+        ⚠️ RECOMMENCER ?
+      </div>
+      <div style="font-size:15px;color:#ffffff88;margin-bottom:24px;line-height:1.8;">
+        Ta progression en mode ${diffLabels[diff]} sera effacée.<br>
+        Cette action est irréversible.
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button onclick="showCampaign()" style="
+          padding:12px 20px;background:transparent;color:#9944cc;
+          border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          ← ANNULER
+        </button>
+        <button onclick="resetCampaignSlot('${diff}');startCampaignSlot('${diff}')" style="
+          padding:12px 20px;background:rgba(90,15,15,.9);
+          color:#f87171;border:2px solid #f87171;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          🔄 RECOMMENCER
+        </button>
+      </div>
+    </div>`;
+}
+
+function showCampaignMissions(diff){
+  const slot = getCampaignSlot(diff) || { unlockedMission:1, completedMissions:[] };
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:560px;padding:16px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;overflow-y:auto;max-height:820px;">
+
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:4px;">
+          📖 MISSIONS
         </div>
-        <div style="font-size:14px;color:#00e5ff;margin-top:6px;letter-spacing:2px;">
-          LA QUÊTE DU ZYONITE
-        </div>
-        <div style="font-size:13px;color:#ffffff55;margin-top:8px;">
-          Choisis ta difficulté pour toute la campagne
+        <div style="font-size:13px;color:#ffffff55;margin-top:4px;">
+          ${slot.completedMissions.length} / 15 complétées
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
-        <div onclick="setCampaignDifficulty('easy')" style="
-          padding:18px;cursor:pointer;border-radius:4px;
-          background:linear-gradient(180deg,rgba(20,80,20,.9),rgba(10,40,10,.95));
-          border:2px solid #4ade80;transition:all .15s;"
-          onmouseover="this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.transform='translateY(0)'">
-          <div style="font-size:18px;color:#4ade80;letter-spacing:4px;">★ FACILE</div>
-          <div style="font-size:13px;color:#86efac;margin-top:6px;">
-            Ennemis lents · Idéal pour découvrir l'histoire
-          </div>
-        </div>
-        <div onclick="setCampaignDifficulty('normal')" style="
-          padding:18px;cursor:pointer;border-radius:4px;
-          background:linear-gradient(180deg,rgba(30,50,100,.9),rgba(15,25,65,.95));
-          border:2px solid #60a5fa;transition:all .15s;"
-          onmouseover="this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.transform='translateY(0)'">
-          <div style="font-size:18px;color:#60a5fa;letter-spacing:4px;">★★ NORMAL</div>
-          <div style="font-size:13px;color:#93c5fd;margin-top:6px;">
-            Équilibré · L'expérience recommandée
-          </div>
-        </div>
-        <div onclick="setCampaignDifficulty('hard')" style="
-          padding:18px;cursor:pointer;border-radius:4px;
-          background:linear-gradient(180deg,rgba(90,15,15,.9),rgba(50,5,5,.95));
-          border:2px solid #f87171;transition:all .15s;"
-          onmouseover="this.style.transform='translateY(-2px)'"
-          onmouseout="this.style.transform='translateY(0)'">
-          <div style="font-size:18px;color:#f87171;letter-spacing:4px;">★★★ DIFFICILE</div>
-          <div style="font-size:13px;color:#fca5a5;margin-top:6px;">
-            Ennemis rapides · Pour les pilotes aguerris
-          </div>
-        </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+        ${CAMPAIGN_MISSIONS.map(m => {
+          const unlocked  = m.id <= slot.unlockedMission;
+          const completed = slot.completedMissions.includes(m.id);
+          const isCurrent = m.id === slot.unlockedMission;
+          const borderCol = completed ? '#22c55e' : isCurrent ? '#ffd87a' : '#444';
+          const bgCol     = completed ? 'rgba(20,60,20,.8)' : isCurrent ? 'rgba(50,30,0,.8)' : 'rgba(10,10,10,.8)';
+          const icon      = completed ? '✅' : isCurrent ? '⚡' : unlocked ? '🔓' : '🔒';
+          return `
+          <div onclick="${unlocked ? `showMissionBriefing(${m.id - 1})` : ''}"
+            style="background:${bgCol};border:1px solid ${borderCol};
+              border-radius:4px;padding:10px 8px;text-align:center;
+              cursor:${unlocked ? 'pointer' : 'default'};
+              opacity:${unlocked ? 1 : 0.4};transition:all .15s;"
+            onmouseover="if(${unlocked})this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.transform='translateY(0)'">
+            <div style="font-size:11px;color:${borderCol};">
+              ${icon} M${m.id < 10 ? '0'+m.id : m.id}
+            </div>
+            <div style="font-size:11px;color:${unlocked ? '#fff' : '#666'};
+              margin-top:4px;line-height:1.3;">
+              ${m.title}
+            </div>
+          </div>`;
+        }).join('')}
       </div>
-      <button onclick="showMenu()" style="
+
+      <button onclick="showCampaign()" style="
         width:100%;padding:12px;background:transparent;
         color:#9944cc;border:1px solid #660088;border-radius:3px;
         font-family:'VT323','Courier New',monospace;
         font-size:16px;letter-spacing:2px;cursor:pointer;">
-        ← RETOUR MENU
+        ← SLOTS
       </button>
     </div>`;
-}
-
-function setCampaignDifficulty(diff){
-  campaignDifficulty = diff;
-  showCampaign();
 }
 
 function showCampaignDifficulty(){
