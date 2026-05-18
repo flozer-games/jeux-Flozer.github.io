@@ -3031,6 +3031,7 @@ function abandonGame(){
 }
 
 async function endGame(){
+  console.log('[DEBUG] endGame appelé — campaignMode:', campaignMode, '| GS:', GS);
   if(campaignMode){campaignMode=false;campaignGameOver();return;}
   GS='dead';cancelAnimationFrame(RAF);stopMusic();playGameOverCrash();snd.over();
   destroyJoystick();
