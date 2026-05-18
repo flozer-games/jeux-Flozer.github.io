@@ -395,6 +395,7 @@ window._sbClient=sb;
 
 // ── HIGH SCORES ────────────────────────────────────────────────────
 async function saveScore(s,w,sh,mp,ps,wd){
+  if(campaignMode) return;
   const entry={pseudo:(ps||'ANONYME').toUpperCase().slice(0,10),score:s,wave:w,ship:sh,map:mp,world:wd||1,difficulty,date:new Date().toLocaleDateString('fr-FR')};
   if(sb){
     try{await sb.from('scores').insert(entry);}catch(e){console.warn('Supabase insert failed',e);}
