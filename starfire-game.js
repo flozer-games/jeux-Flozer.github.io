@@ -2222,13 +2222,30 @@ function powerSentinel(){
   },interval*(1000/60));
 }
 function powerTitan(){
-  const interval=8;let elapsed=0;const duration=6*60;
-  const fire=setInterval(()=>{
-    if(!powerActive||GS!=='playing'){clearInterval(fire);powerActive=false;return;}
-    [-16,16].forEach(ox=>{bullets.push({x:player.x+ox,y:player.y-10,vx:ox*0.1,vy:-7,col:'#ff6b00',f:1,type:'bounce',bounceCount:0,maxBounce:3});});
-    elapsed+=interval;
-    if(elapsed>=duration){clearInterval(fire);powerActive=false;applyPostPowerShield();}
-  },interval*(1000/60));
+  let elapsed = 0;
+  const duration = 6 * 60;
+  const interval = 5;
+  const fire = setInterval(()=>{
+    if(!powerActive){ clearInterval(fire); return; }
+    for(let i = 0; i < 2; i++){
+      const angle = Math.random() * Math.PI * 2;
+      bullets.push({
+        x: player.x + (Math.random()-0.5)*20,
+        y: player.y + (Math.random()-0.5)*20,
+        type: 'bounce',
+        vx: Math.cos(angle) * 7,
+        vy: Math.sin(angle) * 7,
+        dmg: 1,
+        col: '#ff6b00',
+        bounceCount: 0,
+        maxBounce: 8,
+        f: 1,
+        power: true,
+      });
+    }
+    elapsed += interval;
+    if(elapsed >= duration){ clearInterval(fire); powerActive = false; applyPostPowerShield(); }
+  }, interval * (1000/60));
 }
 function applyPostPowerShield(){
   player.bonuses.shield=600; // ~10s de bouclier post-pouvoir
@@ -2644,6 +2661,13 @@ function update(){
       const dx=b.target.x-b.x,dy=b.target.y-b.y,dist=Math.hypot(dx,dy)||1;
       b.vx+=(dx/dist)*0.8;b.vy+=(dy/dist)*0.8;
       const spd=Math.hypot(b.vx,b.vy);if(spd>8){b.vx=b.vx/spd*8;b.vy=b.vy/spd*8;}
+    }
+    if(b.type==='bounce'){
+      if(b.x<=10)      { b.vx= Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.x>=W-10)    { b.vx=-Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.y<=10)      { b.vy= Math.abs(b.vy); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.y>=H-10)    { b.vy=-Math.abs(b.vy); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.bounceCount>=b.maxBounce) b.dead=true;
     }
   });
   bullets=bullets.filter(b=>!b.dead&&b.y>-42&&b.y<H+42&&b.x>-42&&b.x<W+42);
