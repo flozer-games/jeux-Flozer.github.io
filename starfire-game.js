@@ -932,13 +932,7 @@ function checkCampaignObjective(){
   let success = false;
 
   if(m.objectiveType === 'score'   && score >= m.objectiveValue) success = true;
-  if(m.objectiveType === 'survive'){
-    if(wave === m.objectiveValue && !boss && !bDefeated){
-      isBW = true; // force la boss wave
-      spawnBoss();
-    }
-    if(wave >= m.objectiveValue && bDefeated) success = true;
-  }
+  if(m.objectiveType === 'survive' && wave >= m.objectiveValue) success = true;
   if(m.objectiveType === 'boss'    && bDefeated) success = true;
 
   if(success){
