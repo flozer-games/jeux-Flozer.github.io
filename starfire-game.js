@@ -208,6 +208,77 @@ const TRACKS={
       const mel=[null,null,null,null,null,null,220,null,null,null,261.63,null,null,null,246.94,null];
       if(mel[s]) n(mel[s],t,sd*1.5,0.02,'sine');
     }},
+  // Campagne — Système Solaire : épique, majestueux
+  camp0:{stepDur:60/90/4, steps:32,
+    tick(s,t){const sd=this.stepDur;
+      if([0,8,16,24].includes(s)) kk(t);
+      if([4,12,20,28].includes(s)) sn(t);
+      if(s%2===0) hh(t,0.12,0.025);
+      const bass=[55,null,null,null,55,null,null,null,49,null,null,null,49,null,null,null,
+                  52,null,null,null,52,null,null,null,55,null,null,null,55,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*3,0.10,'sawtooth');
+      const mel=[null,null,220,null,null,null,261.63,null,null,null,329.63,null,261.63,null,246.94,null,
+                 null,null,220,null,null,null,196,null,null,null,220,null,null,null,246.94,null];
+      if(mel[s]) n(mel[s],t,sd*1.5,0.06,'sawtooth');
+      if(s===0)[110,138.59,164.81].forEach(f=>n(f,t,sd*4,0.03,'sine'));
+      if(s===16)[98,123.47,146.83].forEach(f=>n(f,t,sd*4,0.03,'sine'));
+    }},
+  // Campagne — Aralis Dunes : tendu, exotique
+  camp1:{stepDur:60/100/4, steps:32,
+    tick(s,t){const sd=this.stepDur;
+      if([0,6,16,22].includes(s)) kk(t);
+      if([4,12,20,28].includes(s)) sn(t);
+      if(s%4===0) hh(t,0.15,0.03);
+      const bass=[98,null,null,null,98,null,87.31,null,98,null,null,null,87.31,null,null,null,
+                  73.42,null,null,null,73.42,null,87.31,null,98,null,null,null,98,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*2.5,0.11,'sawtooth');
+      const mel=[196,null,233.08,null,261.63,null,246.94,null,233.08,null,220,null,196,null,174.61,null,
+                 196,null,220,null,246.94,null,261.63,null,293.66,null,261.63,null,246.94,null,233.08,null];
+      if(mel[s]) n(mel[s],t,sd*1.2,0.05,'square');
+    }},
+  // Campagne — Krynos Frostbelt : cristallin, urgent
+  camp2:{stepDur:60/120/4, steps:32,
+    tick(s,t){const sd=this.stepDur;
+      if([0,8,16,24].includes(s)) kk(t);
+      if(s%2===0) hh(t,0.18,0.02);
+      const bass=[82.41,null,null,null,null,null,null,null,123.47,null,null,null,null,null,null,null,
+                  82.41,null,null,null,null,null,null,null,110,null,null,null,null,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*6,0.08,'triangle');
+      const mel=[659.26,null,587.33,null,523.25,null,587.33,null,659.26,null,698.46,null,783.99,null,698.46,null,
+                 659.26,null,587.33,null,523.25,null,493.88,null,523.25,null,587.33,null,659.26,null,783.99,null];
+      if(mel[s]) n(mel[s],t,sd*1.0,0.05,'sine');
+      if(s%8===0)[164.81,207.65,246.94].forEach(f=>n(f,t,sd*2,0.025,'sine'));
+    }},
+  // Campagne — Pyron Cradle : sombre, intense, industriel
+  camp3:{stepDur:60/110/4, steps:32,
+    tick(s,t){const sd=this.stepDur;
+      if(s%4===0) kk(t);
+      if([4,12,20,28].includes(s)) sn(t);
+      if(s%4===2) sn(t);
+      hh(t,0.20,0.018);
+      const bass=[65.41,null,null,65.41,null,null,65.41,null,49,null,null,null,null,null,null,null,
+                  58.27,null,null,58.27,null,null,58.27,null,65.41,null,null,null,65.41,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*2,0.14,'sawtooth',15);
+      const mel=[null,null,207.65,null,null,null,196,null,null,null,174.61,null,null,null,155.56,null,
+                 null,null,146.83,null,null,null,130.81,null,null,null,138.59,null,null,null,155.56,null];
+      if(mel[s]) n(mel[s],t,sd*1.5,0.07,'sawtooth');
+      if([0,16].includes(s))[65.41,82.41,98].forEach(f=>n(f,t,sd*2,0.04,'sawtooth'));
+    }},
+  // Campagne — Nyxar Veil : chaos épique, final
+  camp4:{stepDur:60/140/4, steps:32,
+    tick(s,t){const sd=this.stepDur;
+      if([0,3,8,11,16,19,24,27].includes(s)) kk(t);
+      if([4,12,20,28].includes(s)) sn(t);
+      if([2,6,10,14,18,22,26,30].includes(s)) sn(t);
+      hh(t,0.22,0.016);
+      const bass=[92.50,null,null,null,69.30,null,null,null,82.41,null,null,null,77.78,null,null,null,
+                  92.50,null,null,null,69.30,null,null,null,73.42,null,null,null,69.30,null,null,null];
+      if(bass[s]) n(bass[s],t,sd*2,0.12,'sawtooth',20);
+      const mel=[185,null,174.61,null,164.81,null,174.61,null,185,null,207.65,null,220,null,207.65,null,
+                 185,null,174.61,null,155.56,null,164.81,null,185,null,196,null,207.65,null,220,null];
+      if(mel[s]) n(mel[s],t,sd*0.8,0.06,'sawtooth');
+      if([0,16].includes(s))[92.50,116.54,138.59].forEach(f=>n(f,t,sd,0.05,'sawtooth'));
+    }},
 };
 // ---- MOTEUR DE LECTURE ----
 function musicTick(){
