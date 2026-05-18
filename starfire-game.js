@@ -2139,25 +2139,30 @@ function spawnBonus(x,y,fc){
   bonuses.push({x,y,type:bt.type,color:bt.color,sp:1.3,r:17,pulse:0,weapon:bt.weapon});
 }
 
-function trySpawnPowerFrag(x,y){
-  if(!chosenShip)return;
-  const shipKey=chosenShip.id.toLowerCase();
-  const cfg=getPwCfg(shipKey);
+function trySpawnPowerFrag(x, y){
+  if(!chosenShip) return;
+  const shipKey = chosenShip.id.toLowerCase();
+  const cfg = getPwCfg(shipKey);
+
   if(mpMode){
-    // MP : fragments illimités, probabilité progressive sur 50 vagues
-    const prob=0.06+(wave/50)*0.08;
-    if(Math.random()<prob){
+    const prob = 0.06 + (wave/50) * 0.08;
+    if(Math.random() < prob){
       bonuses.push({x,y,type:'powerfrag',shipKey,sp:1.8,pulse:0,r:13,color:cfg.col});
     }
     return;
   }
-  const maxUses=POWER_MAX_USES[currentWorld];
-  const maxFrags=maxUses*FRAGS_NEEDED;
-  if(powerBar>=1 && powerUsedCount>=maxUses)return;
-  const _wlFrag=getWaveLimit();const waveRatio=(_wlFrag===Infinity)?Math.min(wave/50,1):wave/_wlFrag;
-  if(waveRatio<0.15)return;
-  if(Math.random()<0.18){
-    powerFragsSpawned++;
+
+  if(campaignMode){
+    if(powerUsedCount >= 1 && powerBar === 0) return;
+    if(powerBar >= 1) return;
+    if(Math.random() < 0.15){
+      bonuses.push({x,y,type:'powerfrag',shipKey,sp:1.8,pulse:0,r:13,color:cfg.col});
+    }
+    return;
+  }
+
+  if(powerBar >= 1) return;
+  if(Math.random() < 0.12){
     bonuses.push({x,y,type:'powerfrag',shipKey,sp:1.8,pulse:0,r:13,color:cfg.col});
   }
 }
