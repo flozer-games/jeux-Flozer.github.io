@@ -932,7 +932,14 @@ function checkCampaignObjective(){
   let success = false;
 
   if(m.objectiveType === 'score'   && score >= m.objectiveValue) success = true;
-  if(m.objectiveType === 'survive' && wave >= m.objectiveValue && !boss) success = true;
+  if(m.objectiveType === 'survive'){
+    // Spawn le boss à la dernière vague
+    if(wave === m.objectiveValue && !boss && !bDefeated){
+      spawnBoss();
+    }
+    // Succès quand le boss est vaincu
+    if(wave >= m.objectiveValue && bDefeated) success = true;
+  }
   if(m.objectiveType === 'boss'    && bDefeated) success = true;
 
   if(success){
