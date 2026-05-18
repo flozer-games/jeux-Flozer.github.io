@@ -2504,7 +2504,7 @@ function bossDefeatedFn(){
   // Bouclier de 3 secondes offert automatiquement après la mort du boss
   if(player){player.bonuses.shield=180;logB('shield');}
   // Reprend la musique de la map 2s après la mort du boss (laisse la fanfare snd.win() finir)
-  setTimeout(()=>playTrack('map'+currentWorld), 2000);
+  setTimeout(()=>playTrack(['camp0','camp1','camp2','camp3','camp4'][currentWorld]||'camp0'), 2000);
   checkCampaignObjective();
   advanceWave();
 }
@@ -2569,7 +2569,7 @@ function showWorldTransition(){
   document.getElementById('btnW').onclick=()=>{
     OVel.style.display='none';
     const pb2=document.getElementById('pbtn');if(pb2)pb2.style.display='block';
-    playTrack('map'+currentWorld);
+    playTrack(['camp0','camp1','camp2','camp3','camp4'][currentWorld]||'camp0');
     GS='playing';RAF=requestAnimationFrame(loop);
   };
 }
@@ -3398,7 +3398,7 @@ function createJoystick(){
 function startGame(){
   currentWorld=MAPS.findIndex(m=>m.id===chosenMap.id);
   if(currentWorld<0)currentWorld=0;
-  initAC(); playTrack('map'+currentWorld);
+  initAC(); playTrack(['camp0','camp1','camp2','camp3','camp4'][currentWorld]||'camp0');
   stopMenuBg();OVel.style.display='none';ROVel.style.display='none';
   // Crée le bouton pause si absent, injecte le style une seule fois
   if(!document.getElementById('pbtn-style')){
