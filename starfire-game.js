@@ -2258,6 +2258,22 @@ function powerTitan(){
     if(elapsed >= duration){ clearInterval(fire); powerActive = false; applyPostPowerShield(); }
   }, interval * (1000/60));
 }
+
+function spawnBounceEffect(x, y){
+  for(let i = 0; i < 5; i++){
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1.5 + Math.random() * 2;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 14 + Math.random() * 8,
+      dc: 1,
+      col: Math.random() > 0.5 ? '#ff6b00' : '#ffd87a',
+      r: 1.5 + Math.random() * 2,
+    });
+  }
+}
 function applyPostPowerShield(){
   player.bonuses.shield=600; // ~10s de bouclier post-pouvoir
   floats.push({x:W/2,y:130,txt:'🛡 BOUCLIER POST-POUVOIR',col:'#4f4',life:1.8,vy:-0.3,big:true,outline:true});
@@ -2674,10 +2690,10 @@ function update(){
       const spd=Math.hypot(b.vx,b.vy);if(spd>8){b.vx=b.vx/spd*8;b.vy=b.vy/spd*8;}
     }
     if(b.type==='bounce'){
-      if(b.x<=10)      { b.vx= Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
-      if(b.x>=W-10)    { b.vx=-Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
-      if(b.y<=10)      { b.dead=true; } // pas de rebond sur le bord haut → balle détruite
-      if(b.y>=H-10)    { b.vy=-Math.abs(b.vy); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.x<=10)      { b.vx= Math.abs(b.vx); b.bounceCount++; spawnBounceEffect(b.x,b.y); }
+      if(b.x>=W-10)    { b.vx=-Math.abs(b.vx); b.bounceCount++; spawnBounceEffect(b.x,b.y); }
+      if(b.y<=10)      { b.dead=true; }
+      if(b.y>=H-10)    { b.vy=-Math.abs(b.vy); b.bounceCount++; spawnBounceEffect(b.x,b.y); }
       if(b.bounceCount>=b.maxBounce) b.dead=true;
     }
   });
