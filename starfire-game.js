@@ -901,8 +901,8 @@ function selectCampaignShip(shipId){
 function startCampaignMission(){
   if(!campaignMission) return;
 
-  const campMap = CAMPAIGN_MAPS.find(m => m.id === campaignMission.map);
-  if(campMap) chosenMap = campMap;
+  const campMap = MAPS.find(m => m.id === campaignMission.map);
+  if(campMap){ chosenMap = campMap; }
 
   difficulty = campaignDifficulty;
 
@@ -921,7 +921,6 @@ function startCampaignMission(){
   wave = 0;
   campaignMode = true;
   startGame();
-  initBg(); // après startGame() pour écraser le fond initialisé par startGame
 }
 
 function checkCampaignObjective(){

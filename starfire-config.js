@@ -431,7 +431,7 @@ const CAMPAIGN_MAPS = [
 const CAMPAIGN_MISSIONS = [
   {
     id:1, title:'DÉPART D\'URGENCE',
-    map:'veltara',
+    map:'verge',
     objectiveType:'survive', objectiveValue:10,
     objectiveLabel:'Survivre 10 vagues',
     bossWave:10,
@@ -450,7 +450,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:2, title:'EMBUSCADE AUX PORTES',
-    map:'border',
+    map:'verge',
     objectiveType:'score', objectiveValue:5000,
     objectiveLabel:'Atteindre 5 000 points',
     bossWave:null,
@@ -469,7 +469,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:3, title:'LES MINES DE DRAGOR',
-    map:'dragor',
+    map:'verge',
     objectiveType:'boss', objectiveValue:null,
     objectiveLabel:'Détruire le Mineur Alpha',
     bossWave:20,
@@ -489,7 +489,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:4, title:'TEMPÊTE BINAIRE',
-    map:'binary',
+    map:'aralis',
     objectiveType:'survive', objectiveValue:15,
     objectiveLabel:'Survivre 15 vagues',
     bossWave:15,
@@ -509,7 +509,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:5, title:'LE MARCHÉ SPATIAL',
-    map:'station',
+    map:'aralis',
     objectiveType:'score', objectiveValue:8000,
     objectiveLabel:'Atteindre 8 000 points',
     bossWave:null,
@@ -529,7 +529,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:6, title:'NÉBULEUSE TOXIQUE',
-    map:'nebula',
+    map:'aralis',
     objectiveType:'survive', objectiveValue:20,
     objectiveLabel:'Survivre 20 vagues',
     bossWave:20,
@@ -549,7 +549,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:7, title:'LE TRAQUEUR',
-    map:'deepspace',
+    map:'krynos',
     objectiveType:'boss', objectiveValue:null,
     objectiveLabel:'Détruire le Chasseur Korrax',
     bossWave:18,
@@ -570,7 +570,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:8, title:'CEINTURE DE GIVRE',
-    map:'frost',
+    map:'krynos',
     objectiveType:'score', objectiveValue:12000,
     objectiveLabel:'Atteindre 12 000 points',
     bossWave:null,
@@ -591,7 +591,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:9, title:'LA FORGE INFERNALE',
-    map:'forge',
+    map:'krynos',
     objectiveType:'boss', objectiveValue:null,
     objectiveLabel:'Détruire le Contremaître Korrax',
     bossWave:22,
@@ -611,7 +611,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:10, title:'LE SIGNAL MYSTÉRIEUX',
-    map:'signal',
+    map:'pyron',
     objectiveType:'score', objectiveValue:15000,
     objectiveLabel:'Atteindre 15 000 points',
     bossWave:null,
@@ -631,7 +631,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:11, title:'FLOTTE D\'INVASION',
-    map:'fleet',
+    map:'pyron',
     objectiveType:'survive', objectiveValue:30,
     objectiveLabel:'Survivre 30 vagues',
     bossWave:30,
@@ -652,7 +652,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:12, title:'LE GARDIEN DES PORTES',
-    map:'gate',
+    map:'pyron',
     objectiveType:'boss', objectiveValue:null,
     objectiveLabel:'Détruire le Gardien Suprême',
     bossWave:25,
@@ -672,7 +672,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:13, title:'CŒUR DE L\'EMPIRE',
-    map:'korraxis',
+    map:'nyxar',
     objectiveType:'score', objectiveValue:20000,
     objectiveLabel:'Atteindre 20 000 points',
     bossWave:null,
@@ -692,7 +692,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:14, title:'LA SOURCE',
-    map:'nexus',
+    map:'nyxar',
     objectiveType:'survive', objectiveValue:40,
     objectiveLabel:'Survivre 40 vagues',
     bossWave:40,
@@ -712,7 +712,7 @@ const CAMPAIGN_MISSIONS = [
   },
   {
     id:15, title:'CONFRONTATION FINALE',
-    map:'throne',
+    map:'nyxar',
     objectiveType:'boss', objectiveValue:null,
     objectiveLabel:'Vaincre KORRAX-PRIME',
     bossWave:1, isFinalBoss:true,
