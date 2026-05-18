@@ -967,13 +967,22 @@ function showCampaignMissions(diff){
         }).join('')}
       </div>
 
-      <button onclick="showCampaign()" style="
-        width:100%;padding:12px;background:transparent;
-        color:#9944cc;border:1px solid #660088;border-radius:3px;
-        font-family:'VT323','Courier New',monospace;
-        font-size:16px;letter-spacing:2px;cursor:pointer;">
-        ← SLOTS
-      </button>
+      <div style="display:flex;gap:8px;">
+        <button onclick="showCampaign()" style="
+          flex:1;padding:12px;background:transparent;
+          color:#9944cc;border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          ← SLOTS
+        </button>
+        <button onclick="showMenu()" style="
+          flex:1;padding:12px;background:transparent;
+          color:#ffffff55;border:1px solid #444;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:16px;letter-spacing:2px;cursor:pointer;">
+          🏠 MENU
+        </button>
+      </div>
     </div>`;
 }
 
@@ -1221,7 +1230,7 @@ function campaignMissionSuccess(){
           box-shadow:0 0 16px rgba(255,0,200,.25);">
           ⚡ MISSION SUIVANTE
         </button>` : ''}
-        <button onclick="showCampaign()" style="
+        <button onclick="showCampaignMissions(campaignDifficulty)" style="
           padding:12px 20px;background:transparent;color:#00e5ff;
           border:1px solid #0099cc;border-radius:3px;
           font-family:'VT323','Courier New',monospace;
