@@ -1060,6 +1060,8 @@ function campaignMissionSuccess(){
   playTrack('victory');
   let progress = {unlockedMission: m.id+1, completedMissions:[]};
   try { progress = completeMission(m.id); } catch(e){ console.warn('[CAMPAGNE] save error:', e); }
+  const halfHeartBonus = progress.completedMissions.length % 3 === 0;
+  if(halfHeartBonus) lives = Math.min(lives + 0.5, 9);
   startMenuBg();
 
   OVel.style.display = 'flex';
@@ -1084,14 +1086,19 @@ function campaignMissionSuccess(){
       </div>
 
       ${m.id < 15 ? `
-        <div style="font-size:15px;color:#00e5ff;letter-spacing:2px;margin-bottom:24px;">
+        <div style="font-size:15px;color:#00e5ff;letter-spacing:2px;margin-bottom:${halfHeartBonus?'8px':'24px'};">
           ⚡ MISSION ${m.id + 1} DÉBLOQUÉE !
         </div>` : `
-        <div style="font-size:20px;color:#ffd87a;letter-spacing:3px;margin-bottom:24px;
+        <div style="font-size:20px;color:#ffd87a;letter-spacing:3px;margin-bottom:${halfHeartBonus?'8px':'24px'};
           text-shadow:0 0 12px rgba(255,200,80,.8);">
           🏆 CAMPAGNE TERMINÉE !<br>
           <span style="font-size:15px;color:#22c55e;">Veltara est sauvée !</span>
         </div>`}
+      ${halfHeartBonus ? `
+        <div style="font-size:16px;color:#ff6868;letter-spacing:2px;margin-bottom:24px;
+          text-shadow:0 0 10px rgba(255,80,80,.7);">
+          ❤️ +½ CŒUR BONUS (3 missions accomplies)
+        </div>` : ''}
 
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <button onclick="showMissionBriefing(${m.id - 1})" style="
@@ -2669,7 +2676,7 @@ function update(){
     if(b.type==='bounce'){
       if(b.x<=10)      { b.vx= Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
       if(b.x>=W-10)    { b.vx=-Math.abs(b.vx); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
-      if(b.y<=10)      { b.vy= Math.abs(b.vy); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
+      if(b.y<=10)      { b.dead=true; } // pas de rebond sur le bord haut → balle détruite
       if(b.y>=H-10)    { b.vy=-Math.abs(b.vy); b.bounceCount++; spark(b.x,b.y,'#ff6b00'); }
       if(b.bounceCount>=b.maxBounce) b.dead=true;
     }
@@ -3026,7 +3033,9 @@ function draw(){
     ctx.font='bold 8px "Courier New"';ctx.fillStyle='#ff8c00';ctx.textAlign='right';ctx.fillText(_mLabel,W-8,31);
   }
   // RIGHT: hearts
-  ctx.font='bold 18px "Courier New"';ctx.fillStyle='#ff4444';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;ctx.textAlign='right';ctx.fillText('♥'.repeat(Math.max(0,lives)),W-8,18);ctx.shadowBlur=0;
+  ctx.font='bold 18px "Courier New"';ctx.fillStyle='#ff4444';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;ctx.textAlign='right';
+const _fullH=Math.max(0,Math.floor(lives)),_halfH=lives%1>=0.5?'♡':'';
+ctx.fillText('♥'.repeat(_fullH)+_halfH,W-8,18);ctx.shadowBlur=0;
   // ── MP OPPONENT HUD ────────────────────────────────────────────────
   if(mpMode){
     ctx.fillStyle='rgba(255,100,100,.18)';ctx.fillRect(0,42,W,18);
