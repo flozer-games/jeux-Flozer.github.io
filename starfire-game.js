@@ -2317,6 +2317,7 @@ function spawnEnemy(){
   else if(t==='hunter'){e.sp=1.3*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=35;e.w=28;e.h=34;e.col='#ff2288';e.sr=170;e.st=Math.random()*90;}
   else{e.sp=1.2*sm;e.hp=Math.max(1,Math.round(2*hm));e.mhp=e.hp;e.sc=30;e.w=34;e.h=36;e.col='#0ff';e.sr=155;e.st=Math.random()*75;}
   enemies.push(e);
+  if(difficulty === 'hard') e.sr = Math.floor(e.sr * 0.9);
 }
 function eShoot(e){
   const _d=getDiff();const spd=_d.bulletSpd[currentWorld]??_d.bulletSpd[_d.bulletSpd.length-1];
