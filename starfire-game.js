@@ -793,6 +793,9 @@ function showMissionBriefing(idx){
   if(!m) return;
   playTrack('briefing');
   campaignMission = m;
+  const _slot = getCampaignSlot(campaignDifficulty) || {};
+  const _shipChosen = !!_slot.shipId;
+  if(_shipChosen) chosenShip = SHIPS.find(s => s.id === _slot.shipId) || chosenShip;
 
   const crewMembers = m.briefing.crew
     .map(id => CREW.find(c => c.id === id))
@@ -858,6 +861,7 @@ function showMissionBriefing(idx){
           font-size:16px;letter-spacing:2px;cursor:pointer;">
           ← MISSIONS
         </button>
+        ${!_shipChosen ? `
         <button onclick="showCampaignShipSelect()" style="
           flex:2;padding:12px;
           background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
@@ -866,7 +870,16 @@ function showMissionBriefing(idx){
           font-size:18px;letter-spacing:3px;cursor:pointer;
           box-shadow:0 0 16px rgba(255,0,200,.25);">
           ⚡ CHOISIR MON VAISSEAU
-        </button>
+        </button>` : `
+        <button onclick="startCampaignMission()" style="
+          flex:2;padding:12px;
+          background:linear-gradient(180deg,rgba(50,0,60,.9),rgba(15,0,25,.95));
+          color:#ffd87a;border:2px solid #ff00cc;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;
+          font-size:18px;letter-spacing:3px;cursor:pointer;
+          box-shadow:0 0 16px rgba(255,0,200,.25);">
+          ⚡ LANCER LA MISSION
+        </button>`}
       </div>
     </div>`;
 }
@@ -1092,6 +1105,9 @@ function showCampaignShipSelect(){
 
 function selectCampaignShip(shipId){
   chosenShip = SHIPS.find(s => s.id === shipId);
+  const slot = getCampaignSlot(campaignDifficulty) || {unlockedMission:1, completedMissions:[]};
+  slot.shipId = shipId;
+  saveCampaignSlot(campaignDifficulty, slot);
   startCampaignMission();
 }
 
