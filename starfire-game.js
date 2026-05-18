@@ -2235,7 +2235,7 @@ function powerSentinel(){
 function powerTitan(){
   let elapsed = 0;
   const duration = 6 * 60;
-  const interval = 5;
+  const interval = 8;
   const fire = setInterval(()=>{
     if(!powerActive){ clearInterval(fire); return; }
     for(let i = 0; i < 2; i++){
