@@ -903,7 +903,7 @@ function startCampaignMission(){
 
   // Applique la map de la mission
   const campMap = CAMPAIGN_MAPS.find(m => m.id === campaignMission.map);
-  if(campMap) chosenMap = campMap;
+  if(campMap){ chosenMap = campMap; initBg(); }
 
   // Applique la difficulté choisie par le joueur
   difficulty = campaignDifficulty;
