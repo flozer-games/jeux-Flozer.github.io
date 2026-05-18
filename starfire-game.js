@@ -3218,6 +3218,12 @@ document.addEventListener('keydown',e=>{
   keys[e.key]=true;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','z','Z','q','Q'].includes(e.key))e.preventDefault();
   if(e.key==='Escape'&&(GS==='playing'||GS==='pause'))togglePause();
+  if(e.key==='n'||e.key==='N'){
+    if(GS==='playing'&&campaignMode&&campaignMission){
+      campaignMode=false;
+      campaignMissionSuccess();
+    }
+  }
 });
 document.addEventListener('keyup',e=>keys[e.key]=false);
 let tx=null,ty=null;
