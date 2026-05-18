@@ -910,6 +910,7 @@ function confirmResetSlot(diff){
 
 function showCampaignMissions(diff){
   stopMusic();
+  chosenShip = null;
   const slot = getCampaignSlot(diff) || { unlockedMission:1, completedMissions:[] };
   OVel.style.display = 'flex';
   OVel.innerHTML = `
