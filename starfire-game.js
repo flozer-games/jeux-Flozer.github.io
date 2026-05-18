@@ -198,6 +198,16 @@ const TRACKS={
       if(s%8===0&&s<24) kk(t);
       if(s===28) kk(t);
     }},
+  // Musique briefing campagne — douce et mystérieuse
+  briefing:{stepDur:60/55/4, steps:16,
+    tick(s,t){const sd=this.stepDur;
+      if(s===0){ n(110,t,sd*16,0.04,'sine'); n(138.59,t,sd*16,0.03,'sine'); }
+      if(s===4){ n(164.81,t,sd*4,0.03,'sine'); }
+      if(s===8){ n(130.81,t,sd*4,0.025,'sine'); }
+      if(s===12){ n(146.83,t,sd*4,0.03,'sine'); }
+      const mel=[null,null,null,null,null,null,220,null,null,null,261.63,null,null,null,246.94,null];
+      if(mel[s]) n(mel[s],t,sd*1.5,0.02,'sine');
+    }},
 };
 // ---- MOTEUR DE LECTURE ----
 function musicTick(){
