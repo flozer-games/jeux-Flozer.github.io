@@ -2153,8 +2153,7 @@ function trySpawnPowerFrag(x,y){
   }
   const maxUses=POWER_MAX_USES[currentWorld];
   const maxFrags=maxUses*FRAGS_NEEDED;
-  if(powerFragsSpawned>=maxFrags)return;
-  if(powerUsedCount>=maxUses&&powerBar===0)return;
+  if(powerBar>=1 && powerUsedCount>=maxUses)return;
   const _wlFrag=getWaveLimit();const waveRatio=(_wlFrag===Infinity)?Math.min(wave/50,1):wave/_wlFrag;
   if(waveRatio<0.15)return;
   if(Math.random()<0.18){
