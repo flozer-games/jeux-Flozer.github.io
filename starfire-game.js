@@ -2949,6 +2949,11 @@ function draw(){
   ctx.fillStyle='#ffffff';ctx.fillText(_vStr,_cx+_mW,18);
   // CENTER ROW 2: difficulty
   ctx.font='bold 8px "Courier New"';ctx.fillStyle=_dCol[difficulty]||'#fff';ctx.textAlign='center';ctx.fillText(_dLbl[difficulty]||'',W/2,31);
+  // LEFT ROW 2: mission name (campaign only)
+  if(campaignMode&&campaignMission){
+    const _mLabel='M.'+campaignMission.id+' '+campaignMission.title;
+    ctx.font='bold 8px "Courier New"';ctx.fillStyle='#ff8c00';ctx.textAlign='left';ctx.fillText(_mLabel,8,31);
+  }
   // RIGHT: hearts
   ctx.font='bold 18px "Courier New"';ctx.fillStyle='#ff4444';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;ctx.textAlign='right';ctx.fillText('♥'.repeat(Math.max(0,lives)),W-8,18);ctx.shadowBlur=0;
   // ── MP OPPONENT HUD ────────────────────────────────────────────────
