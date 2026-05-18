@@ -584,7 +584,7 @@ async function showMenu(){
     } else if(elL)elL.innerHTML=`<small style="opacity:.5;">Pas encore de score</small>`;
   }).catch(()=>{});
   // hero ship svg (selected)
-  const sh=chosenShip,p=sh.palette;
+  const sh=chosenShip||SHIPS[0],p=sh.palette;
   const heroSvg=`<svg viewBox="-50 -42 100 84">
     <defs><radialGradient id="hg" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="${p.hullHi}"/><stop offset="60%" stop-color="${p.hull}"/><stop offset="100%" stop-color="${p.hullDk}"/></radialGradient></defs>
     <ellipse cx="0" cy="34" rx="14" ry="4" fill="${p.accent}" opacity=".55"><animate attributeName="opacity" values=".4;.9;.4" dur="0.4s" repeatCount="indefinite"/></ellipse>
