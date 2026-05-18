@@ -710,6 +710,7 @@ let campaignMission = null;
 let campaignDifficulty = null;
 
 function showCampaign(){
+  stopMusic();
   const diffLabels = {
     easy:   { label:'★ FACILE',      col:'#4ade80', bg:'rgba(20,80,20,.9)'  },
     normal: { label:'★★ NORMAL',     col:'#60a5fa', bg:'rgba(30,50,100,.9)' },
@@ -790,6 +791,7 @@ function showCampaign(){
 function showMissionBriefing(idx){
   const m = CAMPAIGN_MISSIONS[idx];
   if(!m) return;
+  playTrack('briefing');
   campaignMission = m;
 
   const crewMembers = m.briefing.crew
@@ -907,6 +909,7 @@ function confirmResetSlot(diff){
 }
 
 function showCampaignMissions(diff){
+  stopMusic();
   const slot = getCampaignSlot(diff) || { unlockedMission:1, completedMissions:[] };
   OVel.style.display = 'flex';
   OVel.innerHTML = `
@@ -1114,6 +1117,8 @@ function startCampaignMission(){
   wave = 0;
   campaignMode = true;
   startGame();
+  const campMusicMap = { verge:'camp0', aralis:'camp1', krynos:'camp2', pyron:'camp3', nyxar:'camp4' };
+  playTrack(campMusicMap[campaignMission.map] || 'camp0');
 }
 
 function checkCampaignObjective(){
