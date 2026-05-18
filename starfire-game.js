@@ -2883,7 +2883,7 @@ function draw(){
   // CENTER ROW 2: difficulty
   ctx.font='bold 8px "Courier New"';ctx.fillStyle=_dCol[difficulty]||'#fff';ctx.textAlign='center';ctx.fillText(_dLbl[difficulty]||'',W/2,31);
   // RIGHT: hearts
-  ctx.font='bold 18px "Courier New"';ctx.fillStyle='#ff4444';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;ctx.textAlign='right';ctx.fillText('♥'.repeat(lives),W-8,18);ctx.shadowBlur=0;
+  ctx.font='bold 18px "Courier New"';ctx.fillStyle='#ff4444';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;ctx.textAlign='right';ctx.fillText('♥'.repeat(Math.max(0,lives)),W-8,18);ctx.shadowBlur=0;
   // ── MP OPPONENT HUD ────────────────────────────────────────────────
   if(mpMode){
     ctx.fillStyle='rgba(255,100,100,.18)';ctx.fillRect(0,42,W,18);
