@@ -2364,7 +2364,7 @@ function dmgPlayer(){
   if(player.invincible)return false;
   if(player.iframes>0)return false;
   if(player.bonuses.shield>0){player.bonuses.shield=0;expl(player.x,player.y,'#4f4',14);return false;}
-  lives--;waveNoDamage=false;if(campaignMode)window.campaignHadHit=true;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
+  lives-=0.5;waveNoDamage=false;if(campaignMode)window.campaignHadHit=true;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
   if(lives<=0){endGame();return true;}
   player.iframes=120;return false;
 }
@@ -3083,7 +3083,10 @@ function update(){
   for(let i=bullets.length-1;i>=0;i--){
     const b=bullets[i];if(!b.f)continue;let hit=false;
     if(boss&&!bDefeated&&Math.abs(b.x-boss.x)<53&&Math.abs(b.y-boss.y)<49){
-      const dmg=b.isMissile?3:b.type==='homing'?2:1;boss.hp-=dmg;hit=true;spark(b.x,b.y,'#f88');shake(3,5);if(boss.hp<=0)bossDefeatedFn();
+      if(b.type!=='power'&&b.type!=='bounce'&&b.type!=='supernova'){
+        const dmg=b.isMissile?3:b.type==='homing'?2:1;boss.hp-=dmg;spark(b.x,b.y,'#f88');shake(3,5);if(boss.hp<=0)bossDefeatedFn();
+      }
+      hit=true;
     }
     if(!hit){
       for(let j=enemies.length-1;j>=0;j--){
