@@ -2769,6 +2769,7 @@ function spawnBoss(){
   const df=getDiff();const mhp=df.bossHp[currentWorld]??df.bossHp[df.bossHp.length-1];
   boss={x:W/2,y:-95,tY:118,hp:mhp,mhp,sp:.9,dir:1,phase:1,ft:0,sc:500+wave*200};
   bSpawned=true;bDefeated=false;bbTimer=0;
+  checkTrophies('boss_start');
   BBel.style.display='flex';BNel.textContent=`⚠ BOSS — VAGUE ${wave}`;BBIel.style.width='100%';
   playTrack('boss');
 }
@@ -2785,6 +2786,7 @@ function bossDefeatedFn(){
     fSc(player.x,player.y-20,500,'#ffe040');
     logB('supernova');
   },600);
+  checkTrophies('boss_killed');
   bDefeated=true;boss=null;BBel.style.display='none';bSpawned=false;bbTimer=0;
   // Bouclier de 3 secondes offert automatiquement après la mort du boss
   if(player){player.bonuses.shield=180;logB('shield');}
@@ -3146,6 +3148,7 @@ function update(){
   });
   powerBubbles=powerBubbles.filter(b=>b.life>0);
 
+  if(boss) trophyStats.bossTimer += 1/60; // en secondes
   wTimer++;
   if(isBW){if(bDefeated&&!bSpawned&&!rouletteQueued&&wTimer>100)spawnBoss();}
   else{const wEnd=600;if(!rouletteQueued&&wTimer>wEnd)advanceWave();}
