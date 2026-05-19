@@ -805,6 +805,31 @@ const TROPHIES = [
 
 // ── SAUVEGARDE TROPHÉES ────────────────────────────────────────────
 const TROPHY_KEY = 'sf_trophies';
+const TROPHY_STATS_KEY = 'sf_trophy_stats';
+
+function getTrophyStats(){
+  try {
+    const raw = localStorage.getItem(TROPHY_STATS_KEY);
+    return raw ? JSON.parse(raw) : {
+      enemiesKilled:0, bonusCollected:0,
+      powerUsedRaptor:0, powerUsedSentinel:0,
+      powerUsedTitan:0, ramKills:0,
+    };
+  } catch(e) {
+    return {enemiesKilled:0, bonusCollected:0,
+      powerUsedRaptor:0, powerUsedSentinel:0,
+      powerUsedTitan:0, ramKills:0};
+  }
+}
+
+function saveTrophyStats(stats){
+  try {
+    localStorage.setItem(TROPHY_STATS_KEY, JSON.stringify(stats));
+  } catch(e) {}
+}
+
+window.getTrophyStats  = getTrophyStats;
+window.saveTrophyStats = saveTrophyStats;
 
 function getTrophies(){
   try {

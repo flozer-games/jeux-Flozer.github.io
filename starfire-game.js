@@ -1404,21 +1404,34 @@ function checkTrophies(event, data={}){
     case 'enemy_killed':
       if(!inCampaign){
         trophyStats.enemiesKilled++;
+        saveTrophyStats(trophyStats);
         if(trophyStats.enemiesKilled >= 350) tryUnlock('exterminateur');
       }
       break;
     case 'bonus_collected':
       if(!inCampaign){
         trophyStats.bonusCollected++;
+        saveTrophyStats(trophyStats);
         if(trophyStats.bonusCollected >= 20) tryUnlock('collectionneur');
       }
       break;
     case 'power_used':
       if(!inCampaign){
-        trophyStats.powerUsed++;
-        if(data.ship === 'raptor'   && trophyStats.powerUsed >= 20) tryUnlock('maitre_raptor');
-        if(data.ship === 'sentinel' && trophyStats.powerUsed >= 20) tryUnlock('maitre_sentinel');
-        if(data.ship === 'titan'    && trophyStats.powerUsed >= 20) tryUnlock('maitre_titan');
+        if(data.ship === 'raptor'){
+          trophyStats.powerUsedRaptor++;
+          saveTrophyStats(trophyStats);
+          if(trophyStats.powerUsedRaptor >= 20) tryUnlock('maitre_raptor');
+        }
+        if(data.ship === 'sentinel'){
+          trophyStats.powerUsedSentinel++;
+          saveTrophyStats(trophyStats);
+          if(trophyStats.powerUsedSentinel >= 20) tryUnlock('maitre_sentinel');
+        }
+        if(data.ship === 'titan'){
+          trophyStats.powerUsedTitan++;
+          saveTrophyStats(trophyStats);
+          if(trophyStats.powerUsedTitan >= 20) tryUnlock('maitre_titan');
+        }
       }
       break;
     case 'combo':
@@ -1438,6 +1451,7 @@ function checkTrophies(event, data={}){
     case 'ram_kill':
       if(!inCampaign && !data.shieldActive){
         trophyStats.ramKills++;
+        saveTrophyStats(trophyStats);
         if(trophyStats.ramKills >= 50) tryUnlock('percuteur');
       }
       break;
@@ -1465,14 +1479,17 @@ function tryUnlock(id){
 }
 
 function resetTrophyStats(){
-  // Réinitialise les propriétés sans recréer l'objet
-  // pour que window.trophyStats reste synchronisé
-  trophyStats.wavesNoDamage  = 0;
-  trophyStats.enemiesKilled  = 0;
-  trophyStats.bonusCollected = 0;
-  trophyStats.powerUsed      = 0;
-  trophyStats.ramKills       = 0;
-  trophyStats.bossTimer      = 0;
+  // Charge les stats persistantes depuis localStorage
+  const saved = getTrophyStats();
+  trophyStats.wavesNoDamage     = 0;              // reset à chaque partie
+  trophyStats.bossTimer         = 0;              // reset à chaque partie
+  trophyStats.powerUsed         = 0;              // géré par vaisseau
+  trophyStats.enemiesKilled     = saved.enemiesKilled     || 0;
+  trophyStats.bonusCollected    = saved.bonusCollected    || 0;
+  trophyStats.ramKills          = saved.ramKills          || 0;
+  trophyStats.powerUsedRaptor   = saved.powerUsedRaptor   || 0;
+  trophyStats.powerUsedSentinel = saved.powerUsedSentinel || 0;
+  trophyStats.powerUsedTitan    = saved.powerUsedTitan    || 0;
 }
 
 window.checkTrophies    = checkTrophies;
