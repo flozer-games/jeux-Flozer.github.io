@@ -1339,6 +1339,102 @@ function campaignMissionSuccess(){
     </div>`;
 }
 
+// ── VÉRIFICATION TROPHÉES ─────────────────────────────────────────
+let trophyStats = {
+  wavesNoDamage: 0,
+  enemiesKilled: 0,
+  bonusCollected: 0,
+  powerUsed: 0,
+  ramKills: 0,
+  bossTimer: 0,
+};
+
+function checkTrophies(event, data={}){
+  const inCampaign = typeof campaignMode !== 'undefined' && campaignMode;
+
+  switch(event){
+    case 'wave_clear':
+      if(!inCampaign){
+        if(data.noDamage) trophyStats.wavesNoDamage++;
+        else trophyStats.wavesNoDamage = 0;
+        if(trophyStats.wavesNoDamage >= 15) tryUnlock('intouchable');
+      }
+      break;
+    case 'enemy_killed':
+      if(!inCampaign){
+        trophyStats.enemiesKilled++;
+        if(trophyStats.enemiesKilled >= 350) tryUnlock('exterminateur');
+      }
+      break;
+    case 'bonus_collected':
+      if(!inCampaign){
+        trophyStats.bonusCollected++;
+        if(trophyStats.bonusCollected >= 20) tryUnlock('collectionneur');
+      }
+      break;
+    case 'power_used':
+      if(!inCampaign){
+        trophyStats.powerUsed++;
+        if(data.ship === 'raptor'   && trophyStats.powerUsed >= 20) tryUnlock('maitre_raptor');
+        if(data.ship === 'sentinel' && trophyStats.powerUsed >= 20) tryUnlock('maitre_sentinel');
+        if(data.ship === 'titan'    && trophyStats.powerUsed >= 20) tryUnlock('maitre_titan');
+      }
+      break;
+    case 'combo':
+      if(!inCampaign && data.combo >= 12) tryUnlock('combo_king');
+      break;
+    case 'score':
+      if(data.score >= 50000)  tryUnlock('legende');
+      if(data.score >= 100000) tryUnlock('millionnaire');
+      break;
+    case 'boss_killed':
+      if(!inCampaign && trophyStats.bossTimer <= 30) tryUnlock('sans_pitie');
+      trophyStats.bossTimer = 0;
+      break;
+    case 'boss_start':
+      trophyStats.bossTimer = 0;
+      break;
+    case 'ram_kill':
+      if(!inCampaign && !data.shieldActive){
+        trophyStats.ramKills++;
+        if(trophyStats.ramKills >= 50) tryUnlock('percuteur');
+      }
+      break;
+    case 'campaign_complete':
+      tryUnlock('veteran');
+      if(data.noDeath) tryUnlock('sans_filet');
+      if(data.noHit)   tryUnlock('fantome');
+      checkTrilogie();
+      break;
+  }
+}
+
+function checkTrilogie(){
+  const diffs = ['easy','normal','hard'];
+  const allDone = diffs.every(d => {
+    const slot = getCampaignSlot(d);
+    return slot && slot.completedMissions && slot.completedMissions.length === 15;
+  });
+  if(allDone) tryUnlock('trilogie');
+}
+
+function tryUnlock(id){
+  const isNew = unlockTrophy(id);
+  if(isNew) showTrophyPopup(id);
+}
+
+function resetTrophyStats(){
+  trophyStats = {
+    wavesNoDamage:0, enemiesKilled:0,
+    bonusCollected:0, powerUsed:0,
+    ramKills:0, bossTimer:0,
+  };
+}
+
+window.checkTrophies    = checkTrophies;
+window.resetTrophyStats = resetTrophyStats;
+window.trophyStats      = trophyStats;
+
 function campaignGameOver(){
   if(!campaignMission) return;
   const m = campaignMission;
