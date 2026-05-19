@@ -2543,7 +2543,7 @@ function trySpawnPowerFrag(x, y){
   }
 
   if(powerBar >= 1) return;
-  if(Math.random() < 0.12){
+  if(Math.random() < 0.07){
     bonuses.push({x,y,type:'powerfrag',shipKey,sp:1.8,pulse:0,r:13,color:cfg.col});
   }
 }
