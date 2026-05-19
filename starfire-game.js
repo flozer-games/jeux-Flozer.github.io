@@ -1030,8 +1030,7 @@ function showTrophyPopup(id){
   popup.innerHTML = `
     <div style="font-size:24px;">${t.icon}</div>
     <div>
-      <div style="font-size:11px;color:#ffd87a;letter-spacing:3px;">🏆 TROPHÉE DÉBLOQUÉ</div>
-      <div style="font-size:18px;color:#fff;letter-spacing:2px;margin-top:2px;">${t.label}</div>
+      <div style="font-size:18px;color:#ffd87a;letter-spacing:3px;">🏆 TROPHÉE DÉBLOQUÉ</div>
     </div>
   `;
 
