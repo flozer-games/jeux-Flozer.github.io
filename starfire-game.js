@@ -1465,11 +1465,14 @@ function tryUnlock(id){
 }
 
 function resetTrophyStats(){
-  trophyStats = {
-    wavesNoDamage:0, enemiesKilled:0,
-    bonusCollected:0, powerUsed:0,
-    ramKills:0, bossTimer:0,
-  };
+  // Réinitialise les propriétés sans recréer l'objet
+  // pour que window.trophyStats reste synchronisé
+  trophyStats.wavesNoDamage  = 0;
+  trophyStats.enemiesKilled  = 0;
+  trophyStats.bonusCollected = 0;
+  trophyStats.powerUsed      = 0;
+  trophyStats.ramKills       = 0;
+  trophyStats.bossTimer      = 0;
 }
 
 window.checkTrophies    = checkTrophies;
@@ -2473,9 +2476,13 @@ function spark(x,y,col){for(let i=0;i<7;i++){const a=Math.random()*Math.PI*2,sp=
 function fSc(x,y,v,col){floats.push({x,y,val:v,col:col||'#ff0',life:1,vy:-1.4});}
 function killScore(x,y,sc,col){
   combo=Math.min(COMBO_MAX,combo+1);comboTimer=COMBO_DECAY;
+  checkTrophies('combo',{combo});
+  checkTrophies('enemy_killed');
+  console.log('[TROPHY] enemiesKilled:', trophyStats.enemiesKilled); // ← temporaire
   const mult=combo>1?(1+(combo-1)*.25):1;
   const total=Math.round(sc*mult);
   score+=total;
+  checkTrophies('score',{score});
   fSc(x,y,total,col);
   if(combo>=2)floats.push({x,y:y-24,val:'×'+combo,col:'#ffd87a',life:.9,vy:-2.2,big:true});
   checkCampaignObjective();
@@ -3093,7 +3100,7 @@ function update(){
       continue;
     }
     if(Math.abs(b.x-player.x)<24&&Math.abs(b.y-player.y)<24){
-      logB(b.type);snd.bonus();const def=BD.find(x=>x.type===b.type);
+      logB(b.type);snd.bonus();checkTrophies('bonus_collected');const def=BD.find(x=>x.type===b.type);
       // affiche le nom du bonus collecté au centre
       if(def)floats.push({x:W/2,y:H-85,val:def.label,col:def.color,life:1.3,vy:-0.2,big:true,outline:true});
       if(b.type==='bomb')bombAll();
@@ -3115,7 +3122,7 @@ function update(){
     b.r+=b.maxR/b.life;b.life--;
     enemies=enemies.filter(e=>{
       if(Math.hypot(e.x-b.x,e.y-b.y)<b.r+16){
-        killScore(e.x,e.y,e.sc||50,'#22d3ee');expl(e.x,e.y,'#22d3ee',8,false);playEnemyKill();return false;
+        killScore(e.x,e.y,e.sc||50,'#22d3ee');checkTrophies('enemy_killed');expl(e.x,e.y,'#22d3ee',8,false);playEnemyKill();return false;
       }
       return true;
     });
@@ -3657,6 +3664,7 @@ function createJoystick(){
 }
 
 function startGame(){
+  resetTrophyStats();
   currentWorld=MAPS.findIndex(m=>m.id===chosenMap.id);
   if(currentWorld<0)currentWorld=0;
   initAC(); playTrack(['camp0','camp1','camp2','camp3','camp4'][currentWorld]||'camp0');
