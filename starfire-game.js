@@ -601,17 +601,15 @@ async function showMenu(){
     <div class="scan"></div>
     <div class="menu-shell cpt" style="gap:20px;padding-bottom:40px;position:relative;">
       <button onclick="showTrophies()" style="
-        position:absolute;top:44px;left:-8px;
-        display:flex;align-items:center;gap:8px;
-        padding:8px 14px;
+        position:absolute;top:50%;left:-58px;transform:translateY(-50%);
+        display:flex;align-items:center;justify-content:center;
+        padding:12px;
         background:rgba(255,216,122,.08);
         border:2px solid #ffd87a;border-radius:4px;
-        font-family:'VT323','Courier New',monospace;
-        font-size:15px;letter-spacing:2px;color:#ffd87a;
-        cursor:pointer;transition:all .15s;"
-        onmouseover="this.style.transform='translateY(-2px)'"
-        onmouseout="this.style.transform='translateY(0)'">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+        color:#ffd87a;cursor:pointer;transition:all .15s;"
+        onmouseover="this.style.background='rgba(255,216,122,.18)'"
+        onmouseout="this.style.background='rgba(255,216,122,.08)'">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
           stroke="#ffd87a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
           <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
@@ -620,7 +618,6 @@ async function showMenu(){
           <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
           <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
         </svg>
-        TROPHÉES
       </button>
       <div class="tag-strip"><span><i></i>SECTEUR ZÉTA-9</span><span><i></i>HYPERSPACE STABLE</span><span><i></i>HOSTILES DÉTECTÉS</span></div>
       <div style="position:relative;margin-top:6px;">
