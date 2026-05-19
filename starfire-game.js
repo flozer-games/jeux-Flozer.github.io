@@ -1261,6 +1261,7 @@ function selectCampaignShip(shipId){
 
 function startCampaignMission(){
   if(!campaignMission) return;
+  if(campaignMission.id === 1){ window.campaignHadDeath = false; window.campaignHadHit = false; }
 
   const campMap = MAPS.find(m => m.id === campaignMission.map);
   if(campMap){ chosenMap = campMap; }
@@ -1311,6 +1312,12 @@ function campaignMissionSuccess(){
   playTrack('victory');
   let progress = {unlockedMission: m.id+1, completedMissions:[]};
   try { progress = completeMission(m.id); } catch(e){ console.warn('[CAMPAGNE] save error:', e); }
+  if(m.id === 15){
+    checkTrophies('campaign_complete', {
+      noDeath: !window.campaignHadDeath,
+      noHit:   !window.campaignHadHit,
+    });
+  }
   const halfHeartBonus = progress.completedMissions.length % 3 === 0;
   if(halfHeartBonus) lives = Math.min(lives + 0.5, 9);
   startMenuBg();
@@ -1494,6 +1501,7 @@ window.trophyStats      = trophyStats;
 
 function campaignGameOver(){
   if(!campaignMission) return;
+  window.campaignHadDeath = true;
   const m = campaignMission;
   campaignMode = false;
   stopMusic();
@@ -2356,7 +2364,7 @@ function dmgPlayer(){
   if(player.invincible)return false;
   if(player.iframes>0)return false;
   if(player.bonuses.shield>0){player.bonuses.shield=0;expl(player.x,player.y,'#4f4',14);return false;}
-  lives--;waveNoDamage=false;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
+  lives--;waveNoDamage=false;if(campaignMode)window.campaignHadHit=true;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
   if(lives<=0){endGame();return true;}
   player.iframes=120;return false;
 }
@@ -2545,6 +2553,7 @@ function activatePower(){
   const maxUses=POWER_MAX_USES[currentWorld];
   if(powerUsedCount>=maxUses)return;
   powerBar=0;powerUsedCount++;powerActive=true;
+  checkTrophies('power_used', { ship: chosenShip.id });
   const shipKey=chosenShip.id.toLowerCase();
   const _pwcfg=getPwCfg(shipKey);
   const _pwlbl=POWER_LABELS[shipKey]||{name:'POUVOIR',col:'#fff'};
@@ -3104,7 +3113,7 @@ function update(){
   }
   for(let j=enemies.length-1;j>=0;j--){
     const e=enemies[j];if(e.y>H+42){enemies.splice(j,1);continue;}
-    if(Math.abs(e.x-player.x)<24&&Math.abs(e.y-player.y)<28){expl(e.x,e.y,e.col,22,true);snd.expl();enemies.splice(j,1);if(dmgPlayer())return;}
+    if(Math.abs(e.x-player.x)<24&&Math.abs(e.y-player.y)<28){expl(e.x,e.y,e.col,22,true);snd.expl();enemies.splice(j,1);checkTrophies('ram_kill',{shieldActive:player.bonuses.shield>0});if(dmgPlayer())return;}
   }
   if(boss&&!bDefeated&&Math.abs(boss.x-player.x)<38&&Math.abs(boss.y-player.y)<54){if(dmgPlayer())return;}
 
