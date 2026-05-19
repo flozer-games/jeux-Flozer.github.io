@@ -777,3 +777,52 @@ function completeMission(missionId){
   saveCampaignSlot(diff, slot);
   return slot;
 }
+
+// ── TROPHÉES ───────────────────────────────────────────────────────
+const TROPHIES = [
+  // ── CAMPAGNE ──────────────────────────────────────────
+  { id:'veteran',      label:'Vétéran',          desc:'Terminer les 15 missions de la campagne.',                                        mode:'campaign', icon:'🏅' },
+  { id:'trilogie',     label:'Trilogie',          desc:'Terminer la campagne dans les 3 difficultés.',                                   mode:'campaign', icon:'🎖' },
+  { id:'sans_filet',   label:'Sans Filet',        desc:'Terminer la campagne sans mourir une seule fois.',                               mode:'campaign', icon:'🛡' },
+  { id:'fantome',      label:'Fantôme',           desc:'Terminer la campagne sans être touché une seule fois.',                          mode:'campaign', icon:'👻' },
+
+  // ── VAGUES INFINIES ────────────────────────────────────
+  { id:'intouchable',     label:'Intouchable',     desc:'Survivre 15 vagues sans perdre une vie.',                                       mode:'infinite', icon:'⚡' },
+  { id:'combo_king',      label:'Combo King',      desc:'Atteindre un combo x12.',                                                       mode:'infinite', icon:'🔥' },
+  { id:'exterminateur',   label:'Exterminateur',   desc:'Détruire 350 ennemis en une seule partie.',                                     mode:'infinite', icon:'💀' },
+  { id:'legende',         label:'Légende',         desc:'Atteindre 50 000 points en une partie.',                                        mode:'infinite', icon:'⭐' },
+  { id:'sans_pitie',      label:'Sans Pitié',      desc:'Détruire un boss en moins de 30 secondes.',                                     mode:'infinite', icon:'💥' },
+  { id:'percuteur',       label:'Percuteur',       desc:'Percuter 50 ennemis (sans bouclier actif, perte de vie obligatoire).',           mode:'infinite', icon:'💢' },
+  { id:'collectionneur',  label:'Collectionneur',  desc:'Ramasser 20 bonus en une seule partie.',                                        mode:'infinite', icon:'🎁' },
+  { id:'maitre_raptor',   label:'Maître Raptor',   desc:'Utiliser le pouvoir Supernova Dash 20 fois.',                                   mode:'infinite', icon:'🚀' },
+  { id:'maitre_sentinel', label:'Maître Sentinel', desc:'Utiliser le pouvoir Storm Lock 20 fois.',                                       mode:'infinite', icon:'🔮' },
+  { id:'maitre_titan',    label:'Maître Titan',    desc:'Utiliser le pouvoir Ricochet Fury 20 fois.',                                    mode:'infinite', icon:'⚙' },
+  { id:'millionnaire',    label:'Millionnaire',    desc:'Atteindre 100 000 points (tous modes).',                                        mode:'infinite', icon:'💎' },
+
+  // ── PLATINE ────────────────────────────────────────────
+  { id:'platine',         label:'Légende Absolue', desc:'Tous les trophées débloqués.',                                                  mode:'platine',  icon:'🏆' },
+];
+
+// ── SAUVEGARDE TROPHÉES ────────────────────────────────────────────
+const TROPHY_KEY = 'sf_trophies';
+
+function getTrophies(){
+  try {
+    const raw = localStorage.getItem(TROPHY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function unlockTrophy(id){
+  const unlocked = getTrophies();
+  if(unlocked.includes(id)) return false;
+  unlocked.push(id);
+  try { localStorage.setItem(TROPHY_KEY, JSON.stringify(unlocked)); } catch(e) {}
+  const allIds = TROPHIES.filter(t => t.id !== 'platine').map(t => t.id);
+  if(allIds.every(i => unlocked.includes(i))) unlockTrophy('platine');
+  return true;
+}
+
+function hasTrophy(id){
+  return getTrophies().includes(id);
+}
