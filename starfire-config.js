@@ -826,3 +826,20 @@ function unlockTrophy(id){
 function hasTrophy(id){
   return getTrophies().includes(id);
 }
+
+// ── EXPOSITION GLOBALE POUR DEBUG CONSOLE ─────────────────────────
+window.SHIPS             = SHIPS;
+window.MAPS              = MAPS;
+window.CAMPAIGN_MAPS     = CAMPAIGN_MAPS;
+window.CAMPAIGN_MISSIONS = CAMPAIGN_MISSIONS;
+window.CREW              = CREW;
+window.TROPHIES          = TROPHIES;
+window.WP                = WP;
+window.BD                = BD;
+window.WORLD_WAVES       = WORLD_WAVES;
+window.getTrophies       = getTrophies;
+window.unlockTrophy      = unlockTrophy;
+window.hasTrophy         = hasTrophy;
+window.getCampaignSlot   = getCampaignSlot;
+window.saveCampaignSlot  = saveCampaignSlot;
+window.completeMission   = completeMission;
