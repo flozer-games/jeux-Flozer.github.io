@@ -1009,6 +1009,47 @@ function showCampaignMissions(diff){
     </div>`;
 }
 
+function showTrophyPopup(id){
+  const t = TROPHIES.find(t => t.id === id);
+  if(!t) return;
+
+  const popup = document.createElement('div');
+  popup.style.cssText = `
+    position:absolute;top:20px;left:50%;
+    transform:translateX(-50%);
+    background:rgba(10,2,24,.95);
+    border:2px solid #ffd87a;border-radius:6px;
+    padding:12px 20px;
+    display:flex;align-items:center;gap:12px;
+    font-family:'VT323','Courier New',monospace;color:#fff;
+    z-index:100;
+    box-shadow:0 0 20px rgba(255,216,122,.3);
+    animation:trophySlide .4s ease;
+    white-space:nowrap;
+  `;
+  popup.innerHTML = `
+    <div style="font-size:24px;">${t.icon}</div>
+    <div>
+      <div style="font-size:11px;color:#ffd87a;letter-spacing:3px;">🏆 TROPHÉE DÉBLOQUÉ</div>
+      <div style="font-size:18px;color:#fff;letter-spacing:2px;margin-top:2px;">${t.label}</div>
+    </div>
+  `;
+
+  if(!document.getElementById('trophy-anim-style')){
+    const style = document.createElement('style');
+    style.id = 'trophy-anim-style';
+    style.textContent = `@keyframes trophySlide{0%{opacity:0;transform:translateX(-50%) translateY(-20px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+    document.head.appendChild(style);
+  }
+
+  document.getElementById('wrap').appendChild(popup);
+  setTimeout(()=>{
+    popup.style.transition = 'opacity .5s';
+    popup.style.opacity = '0';
+    setTimeout(()=> popup.remove(), 500);
+  }, 3000);
+}
+
 function showTrophies(){
   const unlocked = getTrophies();
   const campTrophies = TROPHIES.filter(t => t.mode === 'campaign');
