@@ -1009,6 +1009,81 @@ function showCampaignMissions(diff){
     </div>`;
 }
 
+function showTrophies(){
+  const unlocked = getTrophies();
+  const campTrophies = TROPHIES.filter(t => t.mode === 'campaign');
+  const infiniteTrophies = TROPHIES.filter(t => t.mode === 'infinite');
+  const platine = TROPHIES.find(t => t.mode === 'platine');
+
+  OVel.style.display = 'flex';
+  OVel.innerHTML = `
+    <div style="width:100%;max-width:540px;padding:20px;
+      box-sizing:border-box;font-family:'VT323','Courier New',monospace;
+      color:#fff;overflow-y:auto;max-height:820px;">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:22px;color:#ffd87a;letter-spacing:4px;
+          text-shadow:0 0 12px rgba(255,200,80,.8);">
+          🏆 TROPHÉES
+        </div>
+        <div style="font-size:13px;color:#ffffff55;margin-top:6px;">
+          ${unlocked.length} / ${TROPHIES.length} débloqués
+        </div>
+      </div>
+
+      <div style="font-size:13px;color:#cc00ff;letter-spacing:3px;margin-bottom:10px;">
+        — CAMPAGNE —
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        ${campTrophies.map(t => trophyCard(t, unlocked)).join('')}
+      </div>
+
+      <div style="font-size:13px;color:#cc00ff;letter-spacing:3px;margin-bottom:10px;">
+        — VAGUES INFINIES —
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        ${infiniteTrophies.map(t => trophyCard(t, unlocked)).join('')}
+      </div>
+
+      <div style="font-size:13px;color:#ffd87a;letter-spacing:3px;margin-bottom:10px;">
+        — PLATINE —
+      </div>
+      <div style="margin-bottom:20px;">
+        ${trophyCard(platine, unlocked)}
+      </div>
+
+      <button onclick="showMenu()" style="
+        width:100%;padding:12px;background:transparent;
+        color:#9944cc;border:1px solid #660088;border-radius:3px;
+        font-family:'VT323','Courier New',monospace;
+        font-size:16px;letter-spacing:2px;cursor:pointer;">
+        ← RETOUR MENU
+      </button>
+    </div>`;
+}
+
+function trophyCard(t, unlocked){
+  const got = unlocked.includes(t.id);
+  return `
+    <div style="display:flex;align-items:center;gap:12px;
+      padding:12px;border-radius:4px;
+      background:${got ? 'rgba(255,216,122,.1)' : 'rgba(255,255,255,.04)'};
+      border:1px solid ${got ? '#ffd87a' : '#333'};">
+      <div style="font-size:24px;opacity:${got ? 1 : 0.3};">${t.icon}</div>
+      <div style="flex:1;">
+        <div style="font-size:16px;color:${got ? '#ffd87a' : '#666'};letter-spacing:2px;">
+          ${t.label}
+        </div>
+        <div style="font-size:13px;color:${got ? '#ffffff88' : '#444'};margin-top:2px;">
+          ${got ? t.desc : '???'}
+        </div>
+      </div>
+      <div style="font-size:12px;color:${got ? '#22c55e' : '#444'};letter-spacing:1px;">
+        ${got ? '✅' : '🔒'}
+      </div>
+    </div>`;
+}
+
 function showCampaignDifficulty(){
   OVel.style.display = 'flex';
   OVel.innerHTML = `
