@@ -1394,12 +1394,8 @@ function checkTrophies(event, data={}){
   const inCampaign = typeof campaignMode !== 'undefined' && campaignMode;
 
   switch(event){
-    case 'wave_clear':
-      if(!inCampaign){
-        if(data.noDamage) trophyStats.wavesNoDamage++;
-        else trophyStats.wavesNoDamage = 0;
-        if(trophyStats.wavesNoDamage >= 15) tryUnlock('intouchable');
-      }
+    case 'intouchable_check':
+      if(!inCampaign && trophyStats.wavesNoDamage >= 15) tryUnlock('intouchable');
       break;
     case 'enemy_killed':
       if(!inCampaign){
@@ -2360,7 +2356,7 @@ function dmgPlayer(){
   if(player.invincible)return false;
   if(player.iframes>0)return false;
   if(player.bonuses.shield>0){player.bonuses.shield=0;expl(player.x,player.y,'#4f4',14);return false;}
-  lives--;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
+  lives--;waveNoDamage=false;snd.pHit();playHitPlayer();expl(player.x,player.y,'#f44',22);
   if(lives<=0){endGame();return true;}
   player.iframes=120;return false;
 }
@@ -2796,6 +2792,10 @@ function bossDefeatedFn(){
   advanceWave();
 }
 function advanceWave(){
+  if(waveNoDamage) trophyStats.wavesNoDamage++;
+  else trophyStats.wavesNoDamage = 0;
+  waveNoDamage = true; // reset pour la prochaine vague
+  checkTrophies('intouchable_check');
   wave++; wTimer=0; score+=wave*50;
   if(wave>0 && wave%5===0 && wave%10!==0) spawnGridFormation();
 
@@ -3683,8 +3683,10 @@ function createJoystick(){
   zone.addEventListener('touchcancel',endJoy,{passive:false});
 }
 
+let waveNoDamage = true; // devient false si le joueur est touché dans la vague
 function startGame(){
   resetTrophyStats();
+  waveNoDamage = true;
   currentWorld=MAPS.findIndex(m=>m.id===chosenMap.id);
   if(currentWorld<0)currentWorld=0;
   initAC(); playTrack(['camp0','camp1','camp2','camp3','camp4'][currentWorld]||'camp0');
