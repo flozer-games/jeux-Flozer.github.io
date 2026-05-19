@@ -1049,6 +1049,7 @@ function showTrophyPopup(id){
     setTimeout(()=> popup.remove(), 500);
   }, 3000);
 }
+window.showTrophyPopup = showTrophyPopup;
 
 function showTrophies(){
   const unlocked = getTrophies();
