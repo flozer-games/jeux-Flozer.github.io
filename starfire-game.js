@@ -1015,7 +1015,7 @@ function showTrophyPopup(id){
 
   const popup = document.createElement('div');
   popup.style.cssText = `
-    position:absolute;top:20px;left:50%;
+    position:absolute;top:50px;left:50%;
     transform:translateX(-50%);
     background:rgba(10,2,24,.95);
     border:2px solid #ffd87a;border-radius:6px;
