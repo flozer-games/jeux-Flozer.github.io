@@ -2499,7 +2499,6 @@ function killScore(x,y,sc,col){
   combo=Math.min(COMBO_MAX,combo+1);comboTimer=COMBO_DECAY;
   checkTrophies('combo',{combo});
   checkTrophies('enemy_killed');
-  console.log('[TROPHY] enemiesKilled:', trophyStats.enemiesKilled); // ← temporaire
   const mult=combo>1?(1+(combo-1)*.25):1;
   const total=Math.round(sc*mult);
   score+=total;
