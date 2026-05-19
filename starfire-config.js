@@ -783,7 +783,7 @@ const TROPHIES = [
   // ── CAMPAGNE ──────────────────────────────────────────
   { id:'veteran',      label:'Vétéran',          desc:'Terminer les 15 missions de la campagne.',                                        mode:'campaign', icon:'🏅' },
   { id:'trilogie',     label:'Trilogie',          desc:'Terminer la campagne dans les 3 difficultés.',                                   mode:'campaign', icon:'🎖' },
-  { id:'sans_filet',   label:'Immortel',        desc:'Terminer la campagne sans mourir une seule fois.',                               mode:'campaign', icon:'🛡' },
+  { id:'sans_filet',   label:'Indéstructible',        desc:'Terminer la campagne sans mourir une seule fois.',                               mode:'campaign', icon:'🛡' },
   { id:'fantome',      label:'Fantôme',           desc:'Terminer la campagne sans être touché une seule fois.',                          mode:'campaign', icon:'👻' },
 
   // ── VAGUES INFINIES ────────────────────────────────────
