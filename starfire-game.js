@@ -601,7 +601,7 @@ async function showMenu(){
     <div class="scan"></div>
     <div class="menu-shell cpt" style="gap:20px;padding-bottom:40px;position:relative;">
       <button onclick="showTrophies()" style="
-        position:absolute;top:50%;left:-58px;transform:translateY(-50%);
+        position:absolute;top:50%;left:-44px;transform:translateY(-50%);
         display:flex;align-items:center;justify-content:center;
         padding:12px;
         background:rgba(255,216,122,.08);
