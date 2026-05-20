@@ -3519,7 +3519,22 @@ ctx.fillText('♥'.repeat(_fullH)+_halfH,W-8,18);ctx.shadowBlur=0;
   ctx.restore(); // screen shake
 }
 
-function loop(){if(GS!=='playing')return;update();draw();RAF=requestAnimationFrame(loop);}
+let lastTime = 0;
+const TARGET_FPS = 60;
+const FRAME_TIME = 1000 / TARGET_FPS;
+
+function loop(timestamp){
+  if(GS !== 'playing') return;
+  // Limite à 60 FPS même sur écrans 120Hz
+  const delta = timestamp - lastTime;
+  if(delta < FRAME_TIME - 1){
+    RAF = requestAnimationFrame(loop);
+    return;
+  }
+  lastTime = timestamp;
+  update(); draw();
+  RAF = requestAnimationFrame(loop);
+}
 
 // ── PAUSE SYSTEM ───────────────────────────────────────────────────
 const ABANDON_MSGS=[
@@ -3675,7 +3690,11 @@ function createJoystick(){
       const tx2=(touch.clientX-rect.left)*scale;
       const ty2=(touch.clientY-rect.top)*scale;
       const dx=tx2-joystick.baseX,dy=ty2-joystick.baseY;
-      const dist=Math.hypot(dx,dy),maxDist=45;
+      // maxDist en pixels canvas — adapté à la taille physique de l'écran
+      const rect2=wrap.getBoundingClientRect();
+      const physicalMaxDist=60; // pixels physiques
+      const maxDist=physicalMaxDist*(W/rect2.width);
+      const dist=Math.hypot(dx,dy);
       const ratio=Math.min(dist,maxDist)/(dist||1);
       joystick.dx=dx*ratio/maxDist;
       joystick.dy=dy*ratio/maxDist;
