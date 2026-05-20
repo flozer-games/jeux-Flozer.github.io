@@ -5,7 +5,7 @@ const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
 // H calculé par l'HTML avant le chargement du moteur (voir _gameH dans Starfire.html)
 // isMobile = pointeur principal imprecis (doigt) → active le joystick virtuel
-const isMobile=window.matchMedia('(pointer:coarse)').matches;
+const isMobile=window.matchMedia('(pointer:coarse)').matches||('ontouchstart' in window&&navigator.maxTouchPoints>0);
 const W=640,H=840;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpRT=false,gpStart=false;
@@ -1058,19 +1058,30 @@ function showTrophies(){
 
   OVel.style.display = 'flex';
   OVel.innerHTML = `
-    <div style="width:100%;max-width:540px;padding:20px;
+    <div style="width:100%;max-width:540px;height:100%;
       box-sizing:border-box;font-family:'VT323','Courier New',monospace;
-      color:#fff;overflow-y:auto;max-height:820px;">
+      color:#fff;display:flex;flex-direction:column;">
 
-      <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:22px;color:#ffd87a;letter-spacing:4px;
-          text-shadow:0 0 12px rgba(255,200,80,.8);">
-          🏆 TROPHÉES
-        </div>
-        <div style="font-size:13px;color:#ffffff55;margin-top:6px;">
-          ${unlocked.length} / ${TROPHIES.length} débloqués
+      <!-- Header fixe — toujours visible -->
+      <div style="flex-shrink:0;padding:16px 20px 10px;border-bottom:1px solid #330044;">
+        <button onclick="showMenu()" style="
+          background:transparent;color:#9944cc;border:1px solid #660088;border-radius:3px;
+          font-family:'VT323','Courier New',monospace;font-size:16px;letter-spacing:2px;
+          cursor:pointer;padding:6px 16px;margin-bottom:10px;">
+          ← RETOUR MENU
+        </button>
+        <div style="text-align:center;">
+          <div style="font-size:22px;color:#ffd87a;letter-spacing:4px;
+            text-shadow:0 0 12px rgba(255,200,80,.8);">🏆 TROPHÉES</div>
+          <div style="font-size:13px;color:#ffffff55;margin-top:4px;">
+            ${unlocked.length} / ${TROPHIES.length} débloqués
+          </div>
         </div>
       </div>
+
+      <!-- Corps scrollable — touch-action pan-y pour iOS/Android -->
+      <div style="flex:1;overflow-y:auto;padding:16px 20px;
+        touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;">
 
       <div style="font-size:13px;color:#cc00ff;letter-spacing:3px;margin-bottom:10px;">
         — CAMPAGNE —
@@ -1093,13 +1104,7 @@ function showTrophies(){
         ${trophyCard(platine, unlocked)}
       </div>
 
-      <button onclick="showMenu()" style="
-        width:100%;padding:12px;background:transparent;
-        color:#9944cc;border:1px solid #660088;border-radius:3px;
-        font-family:'VT323','Courier New',monospace;
-        font-size:16px;letter-spacing:2px;cursor:pointer;">
-        ← RETOUR MENU
-      </button>
+      </div><!-- fin corps scrollable -->
     </div>`;
 }
 
@@ -2970,7 +2975,7 @@ function update(){
   if(player.y<60){player.y=60;player.vy=0;}
   if(player.y>H-32){player.y=H-32;player.vy=0;}
   // Mouvement mobile via joystick virtuel
-  if(isMobile&&joystick.active){
+  if(joystick.active){  // joystick prioritaire quel que soit isMobile
     player.x=Math.max(22,Math.min(W-22,player.x+joystick.dx*spd*1.4));
     player.y=Math.max(60,Math.min(H-32,player.y+joystick.dy*spd*1.4));
     player.vy=0; // annule l'inertie clavier quand le joystick est actif

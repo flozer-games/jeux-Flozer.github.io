@@ -170,7 +170,9 @@ function scaleGame(){
   var vh = window.innerHeight; // tient compte de la barre des tâches
   var scaleX = vw / 640;
   var scaleY = vh / 840;
-  var scale = Math.min(scaleX, scaleY) * 0.97; // marge de sécurité anti-débordement
+  // Portrait mobile : on scale par la largeur pour remplir l'écran en hauteur
+  var isPortrait = vw < vh;
+  var scale = isPortrait ? scaleX * 0.99 : Math.min(scaleX, scaleY) * 0.97;
   var scaledW = 640 * scale;
   var scaledH = 840 * scale;
   wrap.style.transform = 'scale(' + scale + ')';
