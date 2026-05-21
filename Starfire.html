@@ -158,23 +158,37 @@ canvas{display:block;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
+<!-- Calcul H dynamique AVANT les scripts du jeu -->
+<script>
+(function(){
+  var vw = window.innerWidth, vh = window.innerHeight;
+  // Portrait : H adapté pour remplir la hauteur de l'écran (max 1400)
+  window._gameH = (vw < vh)
+    ? Math.min(1400, Math.max(840, Math.round(vh * 640 / vw)))
+    : 840;
+  // Redimensionne les canvas avant que le moteur charge
+  ['c','cm'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.setAttribute('height', window._gameH);
+  });
+  var w = document.getElementById('wrap');
+  if(w) w.style.height = window._gameH + 'px';
+})();
+</script>
 <script src="starfire-config.js"></script>
 <script src="starfire-game.js"></script>
 
 <script>
-window._gameH = 840;
 function scaleGame(){
   var wrap = document.getElementById('wrap');
   if(!wrap) return;
   var vw = window.innerWidth;
-  var vh = window.innerHeight; // tient compte de la barre des tâches
-  var scaleX = vw / 640;
-  var scaleY = vh / 840;
-  // Portrait mobile : on scale par la largeur pour remplir l'écran en hauteur
+  var vh = window.innerHeight;
+  var GH = window._gameH || 840;
   var isPortrait = vw < vh;
-  var scale = isPortrait ? scaleX * 0.99 : Math.min(scaleX, scaleY) * 0.97;
+  var scale = isPortrait ? (vw / 640) * 0.99 : Math.min(vw / 640, vh / GH) * 0.97;
   var scaledW = 640 * scale;
-  var scaledH = 840 * scale;
+  var scaledH = GH * scale;
   wrap.style.transform = 'scale(' + scale + ')';
   wrap.style.transformOrigin = '0 0';
   wrap.style.position = 'fixed';

@@ -6,7 +6,7 @@ const cmEl=document.getElementById('cm'),cmx=cmEl.getContext('2d');
 // H calculé par l'HTML avant le chargement du moteur (voir _gameH dans Starfire.html)
 // isMobile = pointeur principal imprecis (doigt) → active le joystick virtuel
 const isMobile=window.matchMedia('(pointer:coarse)').matches||('ontouchstart' in window&&navigator.maxTouchPoints>0);
-const W=640,H=840;
+const W=640,H=window._gameH||840;
 let joystick={active:false,id:null,baseX:0,baseY:0,dx:0,dy:0};
 let gpIndex=null,gpRT=false,gpStart=false;
 let inputMode='keyboard'; // 'keyboard' | 'gamepad'
@@ -3664,7 +3664,7 @@ function createJoystick(){
   const wrap=document.getElementById('wrap');
   const zone=document.createElement('div');
   zone.id='joystick-zone';
-  zone.style.cssText='position:absolute;left:0;bottom:0;width:55%;height:45%;z-index:50;touch-action:none;';
+  zone.style.cssText='position:absolute;left:0;right:0;top:70px;bottom:0;z-index:50;touch-action:none;';
   wrap.appendChild(zone);
   const base=document.createElement('div');
   base.id='joy-base';
@@ -3729,7 +3729,7 @@ function startGame(){
   // Crée le bouton pause si absent, injecte le style une seule fois
   if(!document.getElementById('pbtn-style')){
     const st=document.createElement('style');st.id='pbtn-style';
-    st.textContent='#pbtn{position:absolute;top:50px;right:7px;z-index:15;background:rgba(0,0,20,.7);border:1px solid #3d5a8a;color:#7a98c4;cursor:pointer;font-size:15px;width:28px;height:28px;border-radius:4px;line-height:28px;text-align:center;padding:0;transition:all .15s;display:none;}#pbtn:hover{border-color:#ffd87a;color:#ffd87a;}';
+    st.textContent='#pbtn{position:absolute;top:50px;right:7px;z-index:60;background:rgba(0,0,20,.7);border:1px solid #3d5a8a;color:#7a98c4;cursor:pointer;font-size:15px;width:28px;height:28px;border-radius:4px;line-height:28px;text-align:center;padding:0;transition:all .15s;display:none;}#pbtn:hover{border-color:#ffd87a;color:#ffd87a;}';
     document.head.appendChild(st);
   }
   let pb=document.getElementById('pbtn');
