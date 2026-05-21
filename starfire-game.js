@@ -3555,6 +3555,7 @@ const ABANDON_MSGS=[
 function togglePause(){
   if(GS==='playing'){
     GS='pause';cancelAnimationFrame(RAF);
+    const _jz=document.getElementById('joystick-zone');if(_jz)_jz.style.pointerEvents='none';
     const _wlPause=getWaveLimit();const wv=_wlPause===Infinity?'∞':_wlPause;
     OVel.innerHTML=`
       <div class="scan"></div>
@@ -3586,7 +3587,9 @@ function togglePause(){
   }
 }
 function resumeGame(){
-  OVel.style.display='none';GS='playing';cancelAnimationFrame(RAF);RAF=requestAnimationFrame(loop);
+  OVel.style.display='none';
+  const _jz=document.getElementById('joystick-zone');if(_jz)_jz.style.pointerEvents='auto';
+  GS='playing';cancelAnimationFrame(RAF);RAF=requestAnimationFrame(loop);
 }
 function abandonGame(){
   GS='dead';stopMusic();
@@ -3830,7 +3833,8 @@ WE.addEventListener('touchmove',e=>{
     player.x=Math.max(22,Math.min(W-22,player.x+dx));
     player.y=Math.max(44,Math.min(H-28,player.y+dy));
   }
-  e.preventDefault();
+  // Hors gameplay (menu, pause, trophées…) : laisser défiler naturellement
+  if(GS==='playing')e.preventDefault();
 },{passive:false});
 WE.addEventListener('touchend',()=>{if(!joystick.active){tx=null;ty=null;}},{passive:false});
 
