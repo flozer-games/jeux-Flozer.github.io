@@ -14,16 +14,16 @@
       color: #f0f0f0;
       font-family: 'Segoe UI', sans-serif;
       min-height: 100vh;
-      padding-top: 70px; /* espace sous la navbar fixe */
+      padding-top: 70px;
     }
 
-    /* ── NAVBAR ── */
+    /* ────────────────────────────
+       NAVBAR
+    ──────────────────────────── */
     .navbar {
-      position: fixed;       /* reste en haut même en scrollant */
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;          /* au-dessus de tout le reste */
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
       height: 64px;
       display: flex;
       align-items: center;
@@ -32,14 +32,12 @@
       transition: background 0.3s, border-bottom 0.3s;
     }
 
-    /* Fond sombre ajouté par JavaScript au scroll */
     .navbar.scrolled {
       background: rgba(13, 13, 13, 0.92);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid #2a2a2a;
     }
 
-    /* Logo à gauche */
     .navbar-logo {
       font-size: 1.2rem;
       font-weight: 700;
@@ -49,7 +47,6 @@
     .navbar-logo .accent { color: #a78bfa; }
     .navbar-logo .white  { color: #ffffff; }
 
-    /* Liens à droite */
     .navbar-links {
       display: flex;
       gap: 32px;
@@ -62,28 +59,161 @@
       font-size: 0.9rem;
       transition: color 0.2s;
     }
-
     .navbar-links a:hover { color: #a78bfa; }
 
-    /* ── HEADER ── */
+    /* ────────────────────────────
+       HEADER — pleine hauteur
+    ──────────────────────────── */
     header {
+      min-height: calc(100vh - 70px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 60px 20px 40px;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
     }
 
-    header h1 {
-      font-size: 3rem;
+    #stars-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .header-badge {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.3);
       color: #a78bfa;
+      font-size: 0.75rem;
       letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 32px;
+      animation: fadeInDown 0.6s ease both;
     }
 
-    header p {
-      margin-top: 12px;
+    .header-title {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(2.8rem, 9vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: 4px;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      animation: fadeInDown 0.7s ease 0.1s both;
+    }
+
+    .title-gradient {
+      background: linear-gradient(135deg, #c4b5fd, #a78bfa, #7c3aed, #a78bfa, #c4b5fd);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-move 5s ease infinite;
+    }
+
+    @keyframes gradient-move {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .header-subtitle {
+      position: relative;
+      z-index: 1;
       color: #888;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      margin-bottom: 48px;
+      min-height: 2rem;
+      animation: fadeInDown 0.8s ease 0.2s both;
     }
 
-    /* ── SECTIONS ── */
+    .cursor {
+      color: #a78bfa;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .header-cta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInDown 0.9s ease 0.3s both;
+    }
+
+    .btn-primary {
+      background: #a78bfa;
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #7c3aed;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #a78bfa;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(167, 139, 250, 0.5);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(167, 139, 250, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      color: #333;
+      font-size: 1.4rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(10px); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ────────────────────────────
+       SECTIONS
+    ──────────────────────────── */
     .section-title {
       text-align: center;
       font-size: 1.4rem;
@@ -92,7 +222,6 @@
       letter-spacing: 1px;
     }
 
-    /* ── GRILLE DE CARTES ── */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -102,7 +231,6 @@
       padding: 0 20px 60px;
     }
 
-    /* ── CARTES ── */
     .card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
@@ -152,7 +280,9 @@
       margin-bottom: 10px;
     }
 
-    /* ── FOOTER ── */
+    /* ────────────────────────────
+       FOOTER
+    ──────────────────────────── */
     footer {
       text-align: center;
       padding: 20px;
@@ -180,8 +310,19 @@
 
   <!-- ── HEADER ── -->
   <header>
-    <h1>jeux Flozer</h1>
-    <p>Mes jeux & projets — fait avec passion 🎮</p>
+    <canvas id="stars-canvas"></canvas>
+    <div class="header-badge">✦ Portfolio · 2025</div>
+    <h1 class="header-title">
+      <span class="title-gradient">jeux Flozer</span>
+    </h1>
+    <p class="header-subtitle">
+      <span id="typewriter"></span><span class="cursor">|</span>
+    </p>
+    <div class="header-cta">
+      <a href="#jeux" class="btn-primary">Voir les jeux ▶</a>
+      <a href="#projets" class="btn-secondary">Projets →</a>
+    </div>
+    <div class="scroll-indicator">↓</div>
   </header>
 
   <!-- ── SECTION JEUX ── -->
@@ -211,18 +352,90 @@
     Fait par jeux Flozer · <a href="https://github.com/flozer-games">GitHub</a>
   </footer>
 
-  <!-- ── JAVASCRIPT : fond navbar au scroll ── -->
   <script>
-    const navbar = document.getElementById('navbar')
 
-    // Quand l'utilisateur scroll, on ajoute la classe "scrolled"
+    // ── NAVBAR : fond sombre au scroll ──────────────────
+    const navbar = document.getElementById('navbar')
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
-        navbar.classList.add('scrolled')
-      } else {
-        navbar.classList.remove('scrolled')
+      navbar.classList.toggle('scrolled', window.scrollY > 20)
+    }, { passive: true })
+
+
+    // ── ÉTOILES : canvas animé en fond ──────────────────
+    const canvas = document.getElementById('stars-canvas')
+    const ctx    = canvas.getContext('2d')
+
+    function resizeCanvas() {
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+    resizeCanvas()
+    window.addEventListener('resize', resizeCanvas)
+
+    // 120 étoiles avec position et vitesse aléatoires
+    const stars = Array.from({ length: 120 }, () => ({
+      x:     Math.random() * canvas.width,
+      y:     Math.random() * canvas.height,
+      r:     Math.random() * 1.2 + 0.3,
+      alpha: Math.random() * Math.PI * 2, // phase de départ aléatoire
+      speed: Math.random() * 0.01 + 0.004
+    }))
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      stars.forEach(star => {
+        star.alpha += star.speed
+        const opacity = (Math.sin(star.alpha) + 1) / 2 // 0 à 1 en douceur
+        ctx.beginPath()
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(167, 139, 250, ${opacity * 0.8})`
+        ctx.fill()
+      })
+      requestAnimationFrame(drawStars) // boucle infinie
+    }
+    drawStars()
+
+
+    // ── TYPEWRITER : texte qui se tape tout seul ────────
+    const phrases = [
+      'Fait avec passion 🎮',
+      'Jeux indépendants',
+      "Shoot'em up spatial",
+      'Toujours en création...'
+    ]
+
+    let phraseIndex = 0
+    let charIndex   = 0
+    let isDeleting  = false
+    const el        = document.getElementById('typewriter')
+
+    function type() {
+      const phrase = phrases[phraseIndex]
+
+      // On ajoute ou on retire une lettre selon le mode
+      el.textContent = isDeleting
+        ? phrase.slice(0, charIndex - 1)
+        : phrase.slice(0, charIndex + 1)
+
+      isDeleting ? charIndex-- : charIndex++
+
+      // Phrase complète → pause 2s avant d'effacer
+      if (!isDeleting && charIndex === phrase.length) {
+        setTimeout(() => { isDeleting = true; type() }, 2000)
+        return
       }
-    })
+
+      // Tout effacé → phrase suivante
+      if (isDeleting && charIndex === 0) {
+        isDeleting  = false
+        phraseIndex = (phraseIndex + 1) % phrases.length
+      }
+
+      setTimeout(type, isDeleting ? 45 : 90)
+    }
+
+    type()
+
   </script>
 
 </body>
