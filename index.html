@@ -4,24 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexaryon — Portfolio</title>
-  <!-- Police stylée pour les sous-titres -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
 
+    /* ══════════════════════════════════════
+       VARIABLES — toutes les couleurs ici
+       Modifier une variable = change partout
+    ══════════════════════════════════════ */
+    :root {
+      --bg:          #0B0F19;
+      --bg-card:     rgba(17, 24, 39, 0.55);
+      --border:      rgba(139, 92, 246, 0.15);
+      --accent:      #8B5CF6;
+      --accent-alt:  #A855F7;
+      --cyan:        #22D3EE;
+      --text:        #E5E7EB;
+      --text-muted:  #6B7280;
+    }
+
+    /* ══════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #0d0d0d;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
       min-height: 100vh;
       padding-top: 70px;
+      overflow-x: hidden;
     }
 
-    /* ────────────────────────────
+    /* ── Glow violet en haut à gauche ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -25%;
+      left: -15%;
+      width: 55%;
+      height: 55%;
+      background: radial-gradient(ellipse, rgba(139, 92, 246, 0.08) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Glow cyan en bas à droite ── */
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%;
+      right: -15%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(ellipse, rgba(34, 211, 238, 0.05) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Grille géométrique très discrète ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ══════════════════════════════════════
        NAVBAR
-    ──────────────────────────── */
+    ══════════════════════════════════════ */
     .navbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -29,42 +85,45 @@
       height: 64px;
       display: flex;
       align-items: center;
-      padding: 0 32px;
+      padding: 0 40px;
       justify-content: space-between;
       transition: background 0.3s, border-bottom 0.3s;
     }
 
     .navbar.scrolled {
-      background: rgba(13, 13, 13, 0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid #2a2a2a;
+      background: rgba(11, 15, 25, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
     }
 
     .navbar-logo {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 4px;
       text-decoration: none;
-      color: #a78bfa;
+      color: var(--accent);
     }
 
     .navbar-links {
       display: flex;
-      gap: 28px;
+      gap: 32px;
       list-style: none;
     }
 
     .navbar-links a {
-      color: #bbb;
+      color: #D1D5DB;
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 1px;
       transition: color 0.2s;
     }
     .navbar-links a:hover { color: #fff; }
 
-    /* ────────────────────────────
-       HEADER
-    ──────────────────────────── */
+    /* ══════════════════════════════════════
+       HEADER — pleine hauteur
+    ══════════════════════════════════════ */
     header {
       min-height: calc(100vh - 70px);
       display: flex;
@@ -77,6 +136,7 @@
       overflow: hidden;
     }
 
+    /* Canvas particules */
     #stars-canvas {
       position: absolute;
       inset: 0;
@@ -85,35 +145,38 @@
       pointer-events: none;
     }
 
+    /* Badge */
     .header-badge {
       position: relative;
       z-index: 1;
       display: inline-block;
-      background: rgba(167, 139, 250, 0.1);
-      border: 1px solid rgba(167, 139, 250, 0.3);
-      color: #a78bfa;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--accent);
+      font-size: 0.72rem;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 6px 18px;
+      padding: 6px 20px;
       border-radius: 20px;
-      margin-bottom: 32px;
+      margin-bottom: 36px;
       animation: fadeInDown 0.6s ease both;
     }
 
+    /* Titre */
     .header-title {
       position: relative;
       z-index: 1;
-      font-size: clamp(3rem, 10vw, 6rem);
-      font-weight: 800;
-      letter-spacing: 6px;
-      line-height: 1.1;
-      margin-bottom: 32px;
+      font-size: clamp(3rem, 10vw, 6.5rem);
+      font-weight: 700;
+      letter-spacing: 8px;
+      line-height: 1.05;
+      margin-bottom: 28px;
       animation: fadeInDown 0.7s ease 0.1s both;
     }
 
+    /* Gradient animé sur le titre */
     .title-gradient {
-      background: linear-gradient(135deg, #c4b5fd, #a78bfa, #7c3aed, #a78bfa, #c4b5fd);
+      background: linear-gradient(135deg, #C4B5FD, #A855F7, #7C3AED, #A855F7, #C4B5FD);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -127,23 +190,32 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Sous-titre principal — 2 lignes */
+    /* Classe utilitaire — même gradient animé sur n'importe quel texte */
+    .gradient-text {
+      background: linear-gradient(135deg, #C4B5FD, #A855F7, #7C3AED, #A855F7, #C4B5FD);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-move 5s ease infinite;
+    }
+
+    /* Les deux phrases */
     .header-subtitle {
       position: relative;
       z-index: 1;
-      margin-bottom: 48px;
+      margin-bottom: 52px;
       animation: fadeInDown 0.8s ease 0.2s both;
     }
 
-    /* Les deux lignes partagent la même police et le même style */
     .subtitle-line1,
     .subtitle-line2 {
       display: block;
-      font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .subtitle-line1 {
-      color: #999;
+      color: #9CA3AF;
       font-size: clamp(1rem, 2.5vw, 1.1rem);
       font-weight: 300;
       letter-spacing: 1.5px;
@@ -151,12 +223,12 @@
     }
 
     .subtitle-line2 {
-      color: #a78bfa;
-      font-size: clamp(0.95rem, 2vw, 1.05rem);
+      font-size: clamp(0.9rem, 2vw, 1rem);
       font-weight: 500;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
     }
 
+    /* Boutons */
     .header-cta {
       position: relative;
       z-index: 1;
@@ -168,48 +240,56 @@
     }
 
     .btn-primary {
-      background: #a78bfa;
+      background: linear-gradient(135deg, #C4B5FD, #A855F7, #7C3AED, #A855F7, #C4B5FD);
+      background-size: 300% 300%;
+      animation: gradient-move 5s ease infinite;
       color: #fff;
       text-decoration: none;
-      padding: 14px 32px;
+      padding: 14px 36px;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.5px;
+      transition: transform 0.2s, box-shadow 0.25s;
     }
 
     .btn-primary:hover {
-      background: #7c3aed;
+      background: var(--cyan);
+      animation: none;
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+      box-shadow: 0 8px 28px rgba(34, 211, 238, 0.3);
     }
 
     .btn-secondary {
       background: transparent;
-      color: #a78bfa;
+      color: var(--accent);
       text-decoration: none;
-      padding: 14px 32px;
+      padding: 14px 36px;
       border-radius: 8px;
-      border: 1px solid rgba(167, 139, 250, 0.4);
-      font-size: 0.95rem;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      font-size: 0.9rem;
       font-weight: 600;
-      transition: background 0.2s, transform 0.2s;
+      letter-spacing: 0.5px;
+      transition: all 0.25s;
     }
 
     .btn-secondary:hover {
-      background: rgba(167, 139, 250, 0.08);
+      background: rgba(34, 211, 238, 0.06);
+      border-color: var(--cyan);
+      color: var(--cyan);
       transform: translateY(-3px);
     }
 
+    /* Flèche scroll */
     .scroll-indicator {
       position: absolute;
       bottom: 32px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1;
-      color: #a78bfa;
-      font-size: 1.6rem;
-      opacity: 0.7;
+      color: var(--accent);
+      font-size: 2.4rem;
+      opacity: 0.85;
       animation: bounce 2s ease-in-out infinite;
     }
 
@@ -223,142 +303,172 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ────────────────────────────
-       SECTIONS & TITRES
-    ──────────────────────────── */
+    /* ══════════════════════════════════════
+       SECTIONS
+    ══════════════════════════════════════ */
     .section-block {
-      max-width: 1000px;
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 0 20px 60px;
+      padding: 0 24px 80px;
     }
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 1.3rem;
-      color: #a78bfa;
-      margin: 60px 0 24px;
+      gap: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 70px 0 28px;
       letter-spacing: 1px;
     }
 
-    /* Ligne décorative à côté du titre */
+    /* Ligne décorative */
     .section-title::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: linear-gradient(to right, #2a2a2a, transparent);
+      background: linear-gradient(to right, rgba(139, 92, 246, 0.3), transparent);
     }
 
-    /* ────────────────────────────
-       GRILLE & CARTES
-    ──────────────────────────── */
+    /* ══════════════════════════════════════
+       CARTES — frosted glass
+    ══════════════════════════════════════ */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
 
     .card {
-      background: #141414;
-      border: 1px solid #222;
-      border-radius: 14px;
-      padding: 24px;
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
       position: relative;
       overflow: hidden;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #a78bfa;
-      box-shadow: 0 8px 32px rgba(167, 139, 250, 0.12);
+    /* Glow interne au hover */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
     }
 
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(139, 92, 246, 0.45);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.12);
+    }
+
+    .card:hover::before { opacity: 1; }
+
     .card h3 {
-      font-size: 1.1rem;
-      color: #e2e2e2;
-      margin-bottom: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #F9FAFB;
+      margin-bottom: 10px;
     }
 
     .card p {
-      color: #666;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
     }
 
     .card-footer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
     }
 
     .card a {
       display: inline-block;
-      background: #a78bfa;
+      background: var(--accent);
       color: #fff;
       text-decoration: none;
-      padding: 7px 16px;
-      border-radius: 6px;
-      font-size: 0.85rem;
+      padding: 8px 18px;
+      border-radius: 7px;
+      font-size: 0.82rem;
       font-weight: 600;
-      transition: background 0.2s, transform 0.2s;
+      letter-spacing: 0.3px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
     .card a:hover {
-      background: #7c3aed;
-      transform: translateY(-1px);
+      background: var(--cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(34, 211, 238, 0.25);
     }
 
-    /* Tags de catégorie */
+    /* Tags */
     .tag {
       display: inline-block;
-      font-size: 0.72rem;
-      padding: 3px 10px;
+      font-size: 0.7rem;
+      padding: 3px 12px;
       border-radius: 20px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       font-weight: 600;
       letter-spacing: 0.5px;
     }
 
-    .tag-game   { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
-    .tag-ai     { background: rgba(34,211,238,0.1);   color: #22d3ee; border: 1px solid rgba(34,211,238,0.2); }
-    .tag-web    { background: rgba(52,211,153,0.1);   color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
-    .tag-tech   { background: rgba(251,146,60,0.1);   color: #fb923c; border: 1px solid rgba(251,146,60,0.2); }
+    .tag-game { background: rgba(139,92,246,0.12); color: #A78BFA; border: 1px solid rgba(139,92,246,0.25); }
+    .tag-ai   { background: rgba(34,211,238,0.08);  color: #22D3EE; border: 1px solid rgba(34,211,238,0.2); }
+    .tag-web  { background: rgba(52,211,153,0.08);  color: #34D399; border: 1px solid rgba(52,211,153,0.2); }
+    .tag-tech { background: rgba(251,146,60,0.08);  color: #FB923C; border: 1px solid rgba(251,146,60,0.2); }
 
-    /* Carte placeholder (projet à venir) */
+    /* Carte placeholder */
     .card.placeholder {
-      opacity: 0.45;
+      opacity: 0.35;
       border-style: dashed;
+      border-color: rgba(139, 92, 246, 0.1);
     }
-
     .card.placeholder:hover {
-      opacity: 0.7;
+      opacity: 0.55;
       box-shadow: none;
+      transform: translateY(-2px);
     }
 
-    /* ────────────────────────────
+    /* ══════════════════════════════════════
        FOOTER
-    ──────────────────────────── */
+    ══════════════════════════════════════ */
     footer {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      padding: 40px 20px;
-      color: #333;
+      padding: 48px 20px;
+      color: #374151;
       font-size: 0.85rem;
-      border-top: 1px solid #1a1a1a;
+      border-top: 1px solid rgba(139, 92, 246, 0.1);
+      letter-spacing: 0.5px;
     }
 
-    footer a { color: #a78bfa; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { color: var(--cyan); }
 
   </style>
 </head>
 <body>
 
+  <!-- Grille géométrique fixe en fond de page -->
+  <div class="grid-bg"></div>
+
   <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
-    <a href="#" class="navbar-logo">Nexaryon</a>
+    <a href="#" class="navbar-logo">NEXARYON</a>
     <ul class="navbar-links">
       <li><a href="#jeux">Jeux</a></li>
       <li><a href="#ia">IA</a></li>
@@ -372,7 +482,7 @@
   <header>
     <canvas id="stars-canvas"></canvas>
 
-    <div class="header-badge">✦ Portfolio · 2025</div>
+    <div class="header-badge"><span class="gradient-text">✦ Portfolio · 2025</span></div>
 
     <h1 class="header-title">
       <span class="title-gradient">Nexaryon</span>
@@ -380,7 +490,7 @@
 
     <div class="header-subtitle">
       <span class="subtitle-line1">Je transforme des idées en expériences,</span>
-      <span class="subtitle-line2">Créer. Tester. Construire. Recommencer.</span>
+      <span class="subtitle-line2 gradient-text">Créer. Tester. Construire. Recommencer.</span>
     </div>
 
     <div class="header-cta">
@@ -391,54 +501,42 @@
     <div class="scroll-indicator">↓</div>
   </header>
 
-  <!-- ── SECTION JEUX VIDÉO ── -->
+  <!-- ── JEUX VIDÉO ── -->
   <div class="section-block">
     <h2 class="section-title" id="jeux">🎮 Jeux vidéo</h2>
     <div class="grid">
-
       <div class="card">
         <span class="tag tag-game">Jeu vidéo</span>
         <h3>Starfire — Saga Stellaire</h3>
         <p>Shoot'em up spatial. Choisis ton vaisseau, explore 5 mondes et survie aux vagues ennemies.</p>
-        <div class="card-footer">
-          <a href="Starfire.html">Jouer ▶</a>
-        </div>
+        <div class="card-footer"><a href="Starfire.html">Jouer ▶</a></div>
       </div>
-
       <div class="card placeholder">
         <span class="tag tag-game">Jeu vidéo</span>
         <h3>Prochain jeu</h3>
         <p>En cours de création...</p>
-        <div class="card-footer">
-          <a href="#">Bientôt</a>
-        </div>
+        <div class="card-footer"><a href="#">Bientôt</a></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── SECTION IA ── -->
+  <!-- ── PROJETS IA ── -->
   <div class="section-block">
     <h2 class="section-title" id="ia">🤖 Projets IA</h2>
     <div class="grid">
-
       <div class="card placeholder">
         <span class="tag tag-ai">IA</span>
-        <h3>Premier projet IA</h3>
-        <p>Un projet créé avec l'intelligence artificielle. À venir.</p>
-        <div class="card-footer">
-          <a href="#">Bientôt</a>
-        </div>
+        <h3>Projet IA locale</h3>
+        <p>Interface conversationnelle tournant en local. Aucune donnée envoyée au cloud.</p>
+        <div class="card-footer"><a href="#">Bientôt</a></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── SECTION DEV WEB ── -->
+  <!-- ── DEV WEB ── -->
   <div class="section-block">
     <h2 class="section-title" id="web">🌐 Dev Web</h2>
     <div class="grid">
-
       <div class="card">
         <span class="tag tag-web">Dev Web</span>
         <h3>Ce portfolio</h3>
@@ -447,33 +545,25 @@
           <a href="https://github.com/flozer-games/jeux-Flozer.github.io" target="_blank" rel="noopener">Voir le code →</a>
         </div>
       </div>
-
       <div class="card placeholder">
         <span class="tag tag-web">Dev Web</span>
         <h3>Prochain site</h3>
         <p>En cours de création...</p>
-        <div class="card-footer">
-          <a href="#">Bientôt</a>
-        </div>
+        <div class="card-footer"><a href="#">Bientôt</a></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ── SECTION TECH FUTURISTE ── -->
+  <!-- ── TECH FUTURISTE ── -->
   <div class="section-block">
     <h2 class="section-title" id="tech">⚡ Tech Futuriste</h2>
     <div class="grid">
-
       <div class="card placeholder">
         <span class="tag tag-tech">Tech</span>
         <h3>Projet expérimental</h3>
         <p>Des idées qui n'existaient pas hier. À venir.</p>
-        <div class="card-footer">
-          <a href="#">Bientôt</a>
-        </div>
+        <div class="card-footer"><a href="#">Bientôt</a></div>
       </div>
-
     </div>
   </div>
 
@@ -484,14 +574,14 @@
 
   <script>
 
-    // ── NAVBAR : fond au scroll ──────────────────────────
+    // ── NAVBAR ──────────────────────────────────────────
     const navbar = document.getElementById('navbar')
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 20)
     }, { passive: true })
 
 
-    // ── ÉTOILES ─────────────────────────────────────────
+    // ── PARTICULES (violet + cyan) ───────────────────────
     const canvas = document.getElementById('stars-canvas')
     const ctx    = canvas.getContext('2d')
 
@@ -502,12 +592,22 @@
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    const stars = Array.from({ length: 140 }, () => ({
+    // 80% violet, 20% cyan — cohérent avec la palette
+    const COLORS = [
+      'rgba(139, 92, 246,',
+      'rgba(168, 85, 247,',
+      'rgba(139, 92, 246,',
+      'rgba(168, 85, 247,',
+      'rgba(34, 211, 238,',  // cyan 1 sur 5
+    ]
+
+    const stars = Array.from({ length: 150 }, (_, i) => ({
       x:     Math.random() * canvas.width,
       y:     Math.random() * canvas.height,
-      r:     Math.random() * 1.2 + 0.3,
+      r:     Math.random() * 1.3 + 0.2,
       alpha: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.01 + 0.004
+      speed: Math.random() * 0.008 + 0.003,
+      color: COLORS[i % COLORS.length]
     }))
 
     function drawStars() {
@@ -517,7 +617,7 @@
         const opacity = (Math.sin(star.alpha) + 1) / 2
         ctx.beginPath()
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(167, 139, 250, ${opacity * 0.8})`
+        ctx.fillStyle = `${star.color}${opacity * 0.85})`
         ctx.fill()
       })
       requestAnimationFrame(drawStars)
