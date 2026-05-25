@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>jeux Flozer — Portfolio</title>
+  <title>Nexaryon — Portfolio</title>
+  <!-- Police stylée pour les sous-titres -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
 
-    /* ── RESET & BASE ── */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -41,28 +43,27 @@
     .navbar-logo {
       font-size: 1.2rem;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       text-decoration: none;
+      color: #a78bfa;
     }
-    .navbar-logo .accent { color: #a78bfa; }
-    .navbar-logo .white  { color: #ffffff; }
 
     .navbar-links {
       display: flex;
-      gap: 32px;
+      gap: 28px;
       list-style: none;
     }
 
     .navbar-links a {
-      color: #888;
+      color: #bbb;
       text-decoration: none;
       font-size: 0.9rem;
       transition: color 0.2s;
     }
-    .navbar-links a:hover { color: #a78bfa; }
+    .navbar-links a:hover { color: #fff; }
 
     /* ────────────────────────────
-       HEADER — pleine hauteur
+       HEADER
     ──────────────────────────── */
     header {
       min-height: calc(100vh - 70px);
@@ -103,11 +104,11 @@
     .header-title {
       position: relative;
       z-index: 1;
-      font-size: clamp(2.8rem, 9vw, 5.5rem);
+      font-size: clamp(3rem, 10vw, 6rem);
       font-weight: 800;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       line-height: 1.1;
-      margin-bottom: 24px;
+      margin-bottom: 32px;
       animation: fadeInDown 0.7s ease 0.1s both;
     }
 
@@ -126,24 +127,34 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Sous-titre principal — 2 lignes */
     .header-subtitle {
       position: relative;
       z-index: 1;
-      color: #888;
-      font-size: clamp(1rem, 3vw, 1.2rem);
       margin-bottom: 48px;
-      min-height: 2rem;
       animation: fadeInDown 0.8s ease 0.2s both;
     }
 
-    .cursor {
-      color: #a78bfa;
-      animation: blink 1s infinite;
+    /* Les deux lignes partagent la même police et le même style */
+    .subtitle-line1,
+    .subtitle-line2 {
+      display: block;
+      font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
+    .subtitle-line1 {
+      color: #999;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      font-weight: 300;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle-line2 {
+      color: #a78bfa;
+      font-size: clamp(0.95rem, 2vw, 1.05rem);
+      font-weight: 500;
+      letter-spacing: 3px;
     }
 
     .header-cta {
@@ -179,7 +190,7 @@
       text-decoration: none;
       padding: 14px 32px;
       border-radius: 8px;
-      border: 1px solid rgba(167, 139, 250, 0.5);
+      border: 1px solid rgba(167, 139, 250, 0.4);
       font-size: 0.95rem;
       font-weight: 600;
       transition: background 0.2s, transform 0.2s;
@@ -196,8 +207,9 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 1;
-      color: #333;
-      font-size: 1.4rem;
+      color: #a78bfa;
+      font-size: 1.6rem;
+      opacity: 0.7;
       animation: bounce 2s ease-in-out infinite;
     }
 
@@ -212,49 +224,74 @@
     }
 
     /* ────────────────────────────
-       SECTIONS
+       SECTIONS & TITRES
     ──────────────────────────── */
-    .section-title {
-      text-align: center;
-      font-size: 1.4rem;
-      color: #a78bfa;
-      margin: 40px 0 20px;
-      letter-spacing: 1px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
+    .section-block {
       max-width: 1000px;
       margin: 0 auto;
       padding: 0 20px 60px;
     }
 
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
+      color: #a78bfa;
+      margin: 60px 0 24px;
+      letter-spacing: 1px;
+    }
+
+    /* Ligne décorative à côté du titre */
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, #2a2a2a, transparent);
+    }
+
+    /* ────────────────────────────
+       GRILLE & CARTES
+    ──────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
     .card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 12px;
+      background: #141414;
+      border: 1px solid #222;
+      border-radius: 14px;
       padding: 24px;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-5px);
       border-color: #a78bfa;
+      box-shadow: 0 8px 32px rgba(167, 139, 250, 0.12);
     }
 
     .card h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #e2e2e2;
       margin-bottom: 8px;
     }
 
     .card p {
-      color: #888;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 16px;
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .card a {
@@ -262,22 +299,43 @@
       background: #a78bfa;
       color: #fff;
       text-decoration: none;
-      padding: 8px 18px;
+      padding: 7px 16px;
       border-radius: 6px;
-      font-size: 0.9rem;
-      transition: background 0.2s;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s;
     }
 
-    .card a:hover { background: #7c3aed; }
+    .card a:hover {
+      background: #7c3aed;
+      transform: translateY(-1px);
+    }
 
+    /* Tags de catégorie */
     .tag {
       display: inline-block;
-      background: #2a2a2a;
-      color: #a78bfa;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       padding: 3px 10px;
       border-radius: 20px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-game   { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+    .tag-ai     { background: rgba(34,211,238,0.1);   color: #22d3ee; border: 1px solid rgba(34,211,238,0.2); }
+    .tag-web    { background: rgba(52,211,153,0.1);   color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .tag-tech   { background: rgba(251,146,60,0.1);   color: #fb923c; border: 1px solid rgba(251,146,60,0.2); }
+
+    /* Carte placeholder (projet à venir) */
+    .card.placeholder {
+      opacity: 0.45;
+      border-style: dashed;
+    }
+
+    .card.placeholder:hover {
+      opacity: 0.7;
+      box-shadow: none;
     }
 
     /* ────────────────────────────
@@ -285,12 +343,14 @@
     ──────────────────────────── */
     footer {
       text-align: center;
-      padding: 20px;
-      color: #444;
+      padding: 40px 20px;
+      color: #333;
       font-size: 0.85rem;
+      border-top: 1px solid #1a1a1a;
     }
 
-    footer a { color: #a78bfa; }
+    footer a { color: #a78bfa; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
 
   </style>
 </head>
@@ -298,12 +358,12 @@
 
   <!-- ── NAVBAR ── -->
   <nav class="navbar" id="navbar">
-    <a href="#" class="navbar-logo">
-      <span class="accent">jeux</span><span class="white">Flozer</span>
-    </a>
+    <a href="#" class="navbar-logo">Nexaryon</a>
     <ul class="navbar-links">
       <li><a href="#jeux">Jeux</a></li>
-      <li><a href="#projets">Projets</a></li>
+      <li><a href="#ia">IA</a></li>
+      <li><a href="#web">Web</a></li>
+      <li><a href="#tech">Tech</a></li>
       <li><a href="https://github.com/flozer-games" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
   </nav>
@@ -311,57 +371,127 @@
   <!-- ── HEADER ── -->
   <header>
     <canvas id="stars-canvas"></canvas>
+
     <div class="header-badge">✦ Portfolio · 2025</div>
+
     <h1 class="header-title">
-      <span class="title-gradient">jeux Flozer</span>
+      <span class="title-gradient">Nexaryon</span>
     </h1>
-    <p class="header-subtitle">
-      <span id="typewriter"></span><span class="cursor">|</span>
-    </p>
-    <div class="header-cta">
-      <a href="#jeux" class="btn-primary">Voir les jeux ▶</a>
-      <a href="#projets" class="btn-secondary">Projets →</a>
+
+    <div class="header-subtitle">
+      <span class="subtitle-line1">Je transforme des idées en expériences,</span>
+      <span class="subtitle-line2">Créer. Tester. Construire. Recommencer.</span>
     </div>
+
+    <div class="header-cta">
+      <a href="#jeux" class="btn-primary">Voir les projets ▶</a>
+      <a href="https://github.com/flozer-games" target="_blank" rel="noopener" class="btn-secondary">GitHub →</a>
+    </div>
+
     <div class="scroll-indicator">↓</div>
   </header>
 
-  <!-- ── SECTION JEUX ── -->
-  <h2 class="section-title" id="jeux">🎮 Jeux</h2>
-  <div class="grid">
-    <div class="card">
-      <span class="tag">Jeu</span>
-      <h3>Starfire — Saga Stellaire</h3>
-      <p>Shoot'em up spatial. Choisis ton vaisseau, explore 5 mondes et survie aux vagues ennemies.</p>
-      <a href="Starfire.html">Jouer ▶</a>
+  <!-- ── SECTION JEUX VIDÉO ── -->
+  <div class="section-block">
+    <h2 class="section-title" id="jeux">🎮 Jeux vidéo</h2>
+    <div class="grid">
+
+      <div class="card">
+        <span class="tag tag-game">Jeu vidéo</span>
+        <h3>Starfire — Saga Stellaire</h3>
+        <p>Shoot'em up spatial. Choisis ton vaisseau, explore 5 mondes et survie aux vagues ennemies.</p>
+        <div class="card-footer">
+          <a href="Starfire.html">Jouer ▶</a>
+        </div>
+      </div>
+
+      <div class="card placeholder">
+        <span class="tag tag-game">Jeu vidéo</span>
+        <h3>Prochain jeu</h3>
+        <p>En cours de création...</p>
+        <div class="card-footer">
+          <a href="#">Bientôt</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- ── SECTION PROJETS ── -->
-  <h2 class="section-title" id="projets">🛠 Projets</h2>
-  <div class="grid">
-    <div class="card">
-      <span class="tag">Projet</span>
-      <h3>Mon premier projet</h3>
-      <p>Description courte du projet. Ce que ça fait, comment ça marche.</p>
-      <a href="#">Voir le projet →</a>
+  <!-- ── SECTION IA ── -->
+  <div class="section-block">
+    <h2 class="section-title" id="ia">🤖 Projets IA</h2>
+    <div class="grid">
+
+      <div class="card placeholder">
+        <span class="tag tag-ai">IA</span>
+        <h3>Premier projet IA</h3>
+        <p>Un projet créé avec l'intelligence artificielle. À venir.</p>
+        <div class="card-footer">
+          <a href="#">Bientôt</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION DEV WEB ── -->
+  <div class="section-block">
+    <h2 class="section-title" id="web">🌐 Dev Web</h2>
+    <div class="grid">
+
+      <div class="card">
+        <span class="tag tag-web">Dev Web</span>
+        <h3>Ce portfolio</h3>
+        <p>Portfolio personnel construit en HTML/CSS/JS vanilla. Design sombre, animations, étoiles.</p>
+        <div class="card-footer">
+          <a href="https://github.com/flozer-games/jeux-Flozer.github.io" target="_blank" rel="noopener">Voir le code →</a>
+        </div>
+      </div>
+
+      <div class="card placeholder">
+        <span class="tag tag-web">Dev Web</span>
+        <h3>Prochain site</h3>
+        <p>En cours de création...</p>
+        <div class="card-footer">
+          <a href="#">Bientôt</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION TECH FUTURISTE ── -->
+  <div class="section-block">
+    <h2 class="section-title" id="tech">⚡ Tech Futuriste</h2>
+    <div class="grid">
+
+      <div class="card placeholder">
+        <span class="tag tag-tech">Tech</span>
+        <h3>Projet expérimental</h3>
+        <p>Des idées qui n'existaient pas hier. À venir.</p>
+        <div class="card-footer">
+          <a href="#">Bientôt</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- ── FOOTER ── -->
   <footer>
-    Fait par jeux Flozer · <a href="https://github.com/flozer-games">GitHub</a>
+    Fait par <a href="https://github.com/flozer-games">Nexaryon</a> · 2025 · Créer. Tester. Construire. Recommencer.
   </footer>
 
   <script>
 
-    // ── NAVBAR : fond sombre au scroll ──────────────────
+    // ── NAVBAR : fond au scroll ──────────────────────────
     const navbar = document.getElementById('navbar')
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 20)
     }, { passive: true })
 
 
-    // ── ÉTOILES : canvas animé en fond ──────────────────
+    // ── ÉTOILES ─────────────────────────────────────────
     const canvas = document.getElementById('stars-canvas')
     const ctx    = canvas.getContext('2d')
 
@@ -372,12 +502,11 @@
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // 120 étoiles avec position et vitesse aléatoires
-    const stars = Array.from({ length: 120 }, () => ({
+    const stars = Array.from({ length: 140 }, () => ({
       x:     Math.random() * canvas.width,
       y:     Math.random() * canvas.height,
       r:     Math.random() * 1.2 + 0.3,
-      alpha: Math.random() * Math.PI * 2, // phase de départ aléatoire
+      alpha: Math.random() * Math.PI * 2,
       speed: Math.random() * 0.01 + 0.004
     }))
 
@@ -385,56 +514,15 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       stars.forEach(star => {
         star.alpha += star.speed
-        const opacity = (Math.sin(star.alpha) + 1) / 2 // 0 à 1 en douceur
+        const opacity = (Math.sin(star.alpha) + 1) / 2
         ctx.beginPath()
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(167, 139, 250, ${opacity * 0.8})`
         ctx.fill()
       })
-      requestAnimationFrame(drawStars) // boucle infinie
+      requestAnimationFrame(drawStars)
     }
     drawStars()
-
-
-    // ── TYPEWRITER : texte qui se tape tout seul ────────
-    const phrases = [
-      'Fait avec passion 🎮',
-      'Jeux indépendants',
-      "Shoot'em up spatial",
-      'Toujours en création...'
-    ]
-
-    let phraseIndex = 0
-    let charIndex   = 0
-    let isDeleting  = false
-    const el        = document.getElementById('typewriter')
-
-    function type() {
-      const phrase = phrases[phraseIndex]
-
-      // On ajoute ou on retire une lettre selon le mode
-      el.textContent = isDeleting
-        ? phrase.slice(0, charIndex - 1)
-        : phrase.slice(0, charIndex + 1)
-
-      isDeleting ? charIndex-- : charIndex++
-
-      // Phrase complète → pause 2s avant d'effacer
-      if (!isDeleting && charIndex === phrase.length) {
-        setTimeout(() => { isDeleting = true; type() }, 2000)
-        return
-      }
-
-      // Tout effacé → phrase suivante
-      if (isDeleting && charIndex === 0) {
-        isDeleting  = false
-        phraseIndex = (phraseIndex + 1) % phrases.length
-      }
-
-      setTimeout(type, isDeleting ? 45 : 90)
-    }
-
-    type()
 
   </script>
 
