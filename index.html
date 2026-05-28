@@ -281,22 +281,7 @@
     }
 
     /* Flèche scroll */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-      color: var(--accent);
-      font-size: 2.4rem;
-      opacity: 0.85;
-      animation: bounce 2s ease-in-out infinite;
-    }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50%       { transform: translateX(-50%) translateY(10px); }
-    }
 
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-24px); }
@@ -395,23 +380,96 @@
       align-items: center;
     }
 
-    .card a {
+    /* ── Zone image / placeholder en haut de carte ── */
+    .card-image {
+      height: 148px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      opacity: 0.85;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Shimmer subtil sur le placeholder */
+    .card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+    }
+
+    /* Gradient par catégorie */
+    .img-game { background: linear-gradient(135deg, rgba(139,92,246,0.35), rgba(11,15,25,0.95)); }
+    .img-ai   { background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(11,15,25,0.95)); }
+    .img-web  { background: linear-gradient(135deg, rgba(52,211,153,0.25), rgba(11,15,25,0.95)); }
+    .img-tech { background: linear-gradient(135deg, rgba(251,146,60,0.25),  rgba(11,15,25,0.95)); }
+
+    /* Image réelle si dispo */
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* ── Stats ── */
+    .card-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .card-stat {
+      font-size: 0.72rem;
+      color: #4B5563;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Boutons de carte ── */
+    .card-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-card {
       display: inline-block;
-      background: var(--accent);
-      color: #fff;
       text-decoration: none;
       padding: 8px 18px;
       border-radius: 7px;
       font-size: 0.82rem;
       font-weight: 600;
       letter-spacing: 0.3px;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
     }
 
-    .card a:hover {
+    .btn-card-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-card-primary:hover {
       background: var(--cyan);
-      transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(34, 211, 238, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .btn-card-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-card-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
     }
 
     /* Tags */
@@ -459,6 +517,105 @@
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { color: var(--cyan); }
 
+    /* ══════════════════════════════════════
+       HAMBURGER & MENU MOBILE
+    ══════════════════════════════════════ */
+
+    /* Bouton hamburger — caché sur desktop */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+
+    /* Animation en croix quand ouvert */
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Menu déroulant mobile */
+    .nav-mobile {
+      display: none; /* activé via media query */
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      background: rgba(11, 15, 25, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+
+    .nav-mobile.open {
+      max-height: 400px;
+      padding: 12px 0 28px;
+    }
+
+    .nav-mobile ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      padding: 0 28px;
+    }
+
+    .nav-mobile ul li a {
+      display: block;
+      color: #D1D5DB;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.08);
+      transition: color 0.2s;
+    }
+
+    .nav-mobile ul li:last-child a { border-bottom: none; }
+    .nav-mobile ul li a:hover { color: var(--accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .navbar-links { display: none; }   /* cache les liens desktop */
+      .hamburger    { display: flex; }   /* affiche le bouton burger */
+      .nav-mobile   { display: block; } /* active le menu mobile */
+    }
+       État initial : invisible et décalé vers le bas
+       Intersection Observer ajoute .visible au bon moment
+    ══════════════════════════════════════ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Délai en cascade — chaque carte arrive 100ms après la précédente */
+    .fade-up:nth-child(2) { transition-delay: 0.1s; }
+    .fade-up:nth-child(3) { transition-delay: 0.2s; }
+    .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
   </style>
 </head>
 <body>
@@ -476,7 +633,24 @@
       <li><a href="#tech">Tech</a></li>
       <li><a href="https://github.com/flozer-games" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
+    <!-- Bouton hamburger visible uniquement sur mobile -->
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
+
+  <!-- Menu mobile déroulant (duplique les liens) -->
+  <div class="nav-mobile" id="nav-mobile">
+    <ul>
+      <li><a href="#jeux">Jeux</a></li>
+      <li><a href="#ia">IA</a></li>
+      <li><a href="#web">Web</a></li>
+      <li><a href="#tech">Tech</a></li>
+      <li><a href="https://github.com/flozer-games" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
 
   <!-- ── HEADER ── -->
   <header>
@@ -498,72 +672,125 @@
       <a href="https://github.com/flozer-games" target="_blank" rel="noopener" class="btn-secondary">GitHub →</a>
     </div>
 
-    <div class="scroll-indicator">↓</div>
+
   </header>
 
   <!-- ── JEUX VIDÉO ── -->
   <div class="section-block">
-    <h2 class="section-title" id="jeux">🎮 Jeux vidéo</h2>
+    <h2 class="section-title fade-up" id="jeux">🎮 Jeux vidéo</h2>
     <div class="grid">
-      <div class="card">
+
+      <div class="card fade-up">
+        <div class="card-image img-game">🎮</div>
         <span class="tag tag-game">Jeu vidéo</span>
         <h3>Starfire — Saga Stellaire</h3>
         <p>Shoot'em up spatial. Choisis ton vaisseau, explore 5 mondes et survie aux vagues ennemies.</p>
-        <div class="card-footer"><a href="Starfire.html">Jouer ▶</a></div>
+        <div class="card-stats">
+          <span class="card-stat">Shoot'em up</span>
+          <span class="card-stat">5 mondes</span>
+          <span class="card-stat">3 vaisseaux</span>
+        </div>
+        <div class="card-links">
+          <a href="Starfire.html" class="btn-card btn-card-primary">Jouer ▶</a>
+          <a href="https://github.com/flozer-games" target="_blank" rel="noopener" class="btn-card btn-card-secondary">Code →</a>
+        </div>
       </div>
-      <div class="card placeholder">
+
+      <div class="card placeholder fade-up">
+        <div class="card-image img-game">🕹️</div>
         <span class="tag tag-game">Jeu vidéo</span>
         <h3>Prochain jeu</h3>
         <p>En cours de création...</p>
-        <div class="card-footer"><a href="#">Bientôt</a></div>
+        <div class="card-stats">
+          <span class="card-stat">À venir</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="btn-card btn-card-primary">Bientôt</a>
+        </div>
       </div>
+
     </div>
   </div>
 
   <!-- ── PROJETS IA ── -->
   <div class="section-block">
-    <h2 class="section-title" id="ia">🤖 Projets IA</h2>
+    <h2 class="section-title fade-up" id="ia">🤖 Projets IA</h2>
     <div class="grid">
-      <div class="card placeholder">
+
+      <div class="card placeholder fade-up">
+        <div class="card-image img-ai">🤖</div>
         <span class="tag tag-ai">IA</span>
         <h3>Projet IA locale</h3>
         <p>Interface conversationnelle tournant en local. Aucune donnée envoyée au cloud.</p>
-        <div class="card-footer"><a href="#">Bientôt</a></div>
+        <div class="card-stats">
+          <span class="card-stat">Local</span>
+          <span class="card-stat">Privé</span>
+          <span class="card-stat">À venir</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="btn-card btn-card-primary">Bientôt</a>
+        </div>
       </div>
+
     </div>
   </div>
 
   <!-- ── DEV WEB ── -->
   <div class="section-block">
-    <h2 class="section-title" id="web">🌐 Dev Web</h2>
+    <h2 class="section-title fade-up" id="web">🌐 Dev Web</h2>
     <div class="grid">
-      <div class="card">
+
+      <div class="card fade-up">
+        <div class="card-image img-web">🌐</div>
         <span class="tag tag-web">Dev Web</span>
         <h3>Ce portfolio</h3>
         <p>Portfolio personnel construit en HTML/CSS/JS vanilla. Design sombre, animations, étoiles.</p>
-        <div class="card-footer">
-          <a href="https://github.com/flozer-games/jeux-Flozer.github.io" target="_blank" rel="noopener">Voir le code →</a>
+        <div class="card-stats">
+          <span class="card-stat">HTML</span>
+          <span class="card-stat">CSS</span>
+          <span class="card-stat">JS Vanilla</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="btn-card btn-card-primary">Voir le site</a>
+          <a href="https://github.com/flozer-games/jeux-Flozer.github.io" target="_blank" rel="noopener" class="btn-card btn-card-secondary">Code →</a>
         </div>
       </div>
-      <div class="card placeholder">
+
+      <div class="card placeholder fade-up">
+        <div class="card-image img-web">💻</div>
         <span class="tag tag-web">Dev Web</span>
         <h3>Prochain site</h3>
         <p>En cours de création...</p>
-        <div class="card-footer"><a href="#">Bientôt</a></div>
+        <div class="card-stats">
+          <span class="card-stat">À venir</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="btn-card btn-card-primary">Bientôt</a>
+        </div>
       </div>
+
     </div>
   </div>
 
   <!-- ── TECH FUTURISTE ── -->
   <div class="section-block">
-    <h2 class="section-title" id="tech">⚡ Tech Futuriste</h2>
+    <h2 class="section-title fade-up" id="tech">⚡ Tech Futuriste</h2>
     <div class="grid">
-      <div class="card placeholder">
+
+      <div class="card placeholder fade-up">
+        <div class="card-image img-tech">⚡</div>
         <span class="tag tag-tech">Tech</span>
         <h3>Projet expérimental</h3>
         <p>Des idées qui n'existaient pas hier. À venir.</p>
-        <div class="card-footer"><a href="#">Bientôt</a></div>
+        <div class="card-stats">
+          <span class="card-stat">Expérimental</span>
+          <span class="card-stat">À venir</span>
+        </div>
+        <div class="card-links">
+          <a href="#" class="btn-card btn-card-primary">Bientôt</a>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -579,6 +806,24 @@
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 20)
     }, { passive: true })
+
+
+    // ── HAMBURGER MENU ──────────────────────────────────
+    const hamburger = document.getElementById('hamburger')
+    const navMobile = document.getElementById('nav-mobile')
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open')
+      navMobile.classList.toggle('open')
+    })
+
+    // Ferme le menu quand on clique sur un lien
+    navMobile.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open')
+        navMobile.classList.remove('open')
+      })
+    })
 
 
     // ── PARTICULES (violet + cyan) ───────────────────────
@@ -623,6 +868,28 @@
       requestAnimationFrame(drawStars)
     }
     drawStars()
+
+
+    // ── ANIMATIONS AU SCROLL ────────────────────────────
+    // Intersection Observer : surveille quand un élément
+    // entre dans la zone visible de l'écran
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible')
+            // On arrête d'observer une fois visible — plus léger
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.12, // déclenche quand 12% de l'élément est visible
+      }
+    )
+
+    // On observe tous les éléments avec la classe fade-up
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el))
 
   </script>
 
